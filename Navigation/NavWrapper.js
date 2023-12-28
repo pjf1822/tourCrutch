@@ -1,9 +1,9 @@
 import { useUser } from "../UserContext";
-import { SignedInNav } from "./SignedInNav";
+import { AppNavigation } from "./AppNavigation";
 import { AuthNavigation } from "./AuthNavigation";
 
 export const NavWrapper = () => {
   const { user } = useUser();
 
-  return user ? <SignedInNav /> : <AuthNavigation />;
+  return user ? <AppNavigation /> : <AuthNavigation />;
 };
