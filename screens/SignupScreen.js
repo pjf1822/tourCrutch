@@ -1,28 +1,42 @@
-import { View, Text, TextInput } from "react-native";
-import React from "react";
+import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
+import React, { useState } from "react";
+import { useUser } from "../UserContext";
+import { FIREBASE_AUTH } from "../firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
+import { handleSignUp } from "../authFunctionUtils";
 
 const SignupScreen = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("df");
 
-  const handleSubmit = () => {
-    console.log("hey");
-  };
+  const auth = FIREBASE_AUTH;
+  const { setUser } = useUser();
+  const navigation = useNavigation();
+
   return (
     <View>
       <TextInput
-        value={username}
-        onChangeText={() => {
-          setUsername(value);
+        value={email}
+        onChangeText={(value) => {
+          setEmail(value);
         }}
       />
       <TextInput
         value={password}
-        onChangeText={() => {
+        onChangeText={(value) => {
           setPassword(value);
         }}
       />
-      <Button title="signup" onPress={handleSubmit} />
+      <Button
+        title="signup"
+        onPress={() =>
+          handleSignUp(auth, email, password, displayName, setUser)
+        }
+      />
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text>Go to Login Page</Text>
+      </TouchableOpacity>
     </View>
   );
 };

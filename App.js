@@ -1,9 +1,7 @@
 import { SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-
 import { RootSiblingParent } from "react-native-root-siblings";
-import { UserProvider, useUser } from "./UserContext";
-import { SignedInNav } from "./Navigation/SignedInNav";
+import { UserProvider } from "./UserContext";
 import { NavWrapper } from "./Navigation/NavWrapper";
 
 export default function App() {
