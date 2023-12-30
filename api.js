@@ -29,7 +29,7 @@ export const useCreateVenue = () => {
   });
 };
 export const useUpdateVenueInfo = () => {
-  return useMutation(({ id, updatedData }) => {
+  return useMutation(async ({ id, updatedData }) => {
     return fetch(`${apiUrl}/editvenue/${id}`, {
       method: "PUT",
       headers: {

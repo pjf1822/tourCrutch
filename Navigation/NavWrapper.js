@@ -6,9 +6,10 @@ import VenueDetailScreen from "../screens/VenueDetailScreen";
 import NewVenueScreen from "../screens/NewVenueScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AppHeader from "../components/AppHeader";
 
+// AUTH STACK
 const AuthStack = createNativeStackNavigator();
-
 const AuthNavigator = () => (
   <AuthStack.Navigator
     screenOptions={{
@@ -18,6 +19,21 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="Signup" component={SignupScreen} />
     <AuthStack.Screen name="Login" component={LoginScreen} />
   </AuthStack.Navigator>
+);
+
+// APP STACK
+const AppStack = createNativeStackNavigator();
+const AppNavigator = ({ navigation }) => (
+  <AppStack.Navigator
+    screenOptions={{
+      headerShown: true,
+      header: () => <AppHeader navigation={navigation} />,
+    }}
+  >
+    <AppStack.Screen name="Home" component={HomeScreen} />
+    <AppStack.Screen name="VenueDetail" component={VenueDetailScreen} />
+    <AppStack.Screen name="NewVenue" component={NewVenueScreen} />
+  </AppStack.Navigator>
 );
 
 export const NavWrapper = () => {
@@ -32,9 +48,7 @@ export const NavWrapper = () => {
     >
       {user ? (
         <>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="VenueDetail" component={VenueDetailScreen} />
-          <Stack.Screen name="NewVenue" component={NewVenueScreen} />
+          <Stack.Screen name="App" component={AppNavigator} />
         </>
       ) : (
         <>
