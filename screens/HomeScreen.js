@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
 
-  console.log(user);
+  console.log(user, "the user");
   const signOut = async () => {
     try {
       await AsyncStorage.removeItem("userCredentials");
@@ -29,9 +29,9 @@ const HomeScreen = ({ navigation }) => {
     setVenues(response);
   };
 
-  useEffect(() => {
-    getAllVenues();
-  }, []);
+  // useEffect(() => {
+  //   getAllVenues();
+  // }, []);
 
   const fuse = new Fuse(venues, {
     keys: ["name", "address"],
