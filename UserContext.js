@@ -1,24 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./firebaseConfig";
+import GlobalLoader from "./GlobalLoader";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authCompleted, setAuthCompleted] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
       setUser(authUser);
       setAuthCompleted(true);
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  if (!authCompleted) {
-    return null;
+  if (loading) {
+    return <GlobalLoader />; // You can also return a loading spinner or some other UI while loading
   }
 
   return (

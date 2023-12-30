@@ -28,9 +28,7 @@ export const handleSignUp = async (
     setUser(userWithDisplayName);
 
     const userCredentials = JSON.stringify({
-      email: response?.user?.email,
-      uid: response?.user?.uid,
-      displayName: response?.user?.displayName,
+      accessToken: response?.user?.accessToken,
     });
 
     await AsyncStorage.setItem("userCredentials", userCredentials);
@@ -101,8 +99,7 @@ export const handleSignIn = async (auth, email, password, setUser) => {
     }
 
     const userCredentials = JSON.stringify({
-      email: response?.user?.email,
-      uid: response?.user?.uid,
+      accessToken: response?.user?.accessToken,
     });
     await AsyncStorage.setItem("userCredentials", userCredentials);
     setUser(response.user);
