@@ -5,6 +5,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import Toast from "react-native-root-toast";
+import { FIREBASE_AUTH } from "./firebaseConfig";
 
 export const handleSignUp = async (
   auth,

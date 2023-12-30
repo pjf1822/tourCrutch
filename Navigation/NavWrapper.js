@@ -7,6 +7,19 @@ import NewVenueScreen from "../screens/NewVenueScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+const AuthStack = createNativeStackNavigator();
+
+const AuthNavigator = () => (
+  <AuthStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <AuthStack.Screen name="Signup" component={SignupScreen} />
+    <AuthStack.Screen name="Login" component={LoginScreen} />
+  </AuthStack.Navigator>
+);
+
 export const NavWrapper = () => {
   const Stack = createNativeStackNavigator();
   const { user } = useUser();
@@ -25,8 +38,7 @@ export const NavWrapper = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Auth" component={AuthNavigator} />
         </>
       )}
     </Stack.Navigator>
