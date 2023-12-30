@@ -5,6 +5,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import Toast from "react-native-root-toast";
+import { FIREBASE_AUTH } from "./firebaseConfig";
 
 export const handleSignUp = async (
   auth,
@@ -113,5 +114,14 @@ export const handleSignIn = async (auth, email, password, setUser) => {
       textColor: "beige",
       opacity: 1,
     });
+  }
+};
+
+export const signOut = async () => {
+  try {
+    await AsyncStorage.removeItem("userCredentials");
+    await FIREBASE_AUTH.signOut();
+  } catch (error) {
+    console.error("Error signing out:", error);
   }
 };
