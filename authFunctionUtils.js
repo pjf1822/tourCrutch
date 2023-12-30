@@ -115,3 +115,12 @@ export const handleSignIn = async (auth, email, password, setUser) => {
     });
   }
 };
+
+export const signOut = async () => {
+  try {
+    await AsyncStorage.removeItem("userCredentials");
+    await FIREBASE_AUTH.signOut();
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+};

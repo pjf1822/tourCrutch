@@ -1,12 +1,19 @@
-import { View, Text, TextInput, Button } from "react-native";
-import { Formik, useFormikContext } from "formik";
-import * as ImagePicker from "expo-image-picker";
+import { View, TextInput, Button } from "react-native";
+import { Formik } from "formik";
 import React from "react";
-import { createVenue } from "../api";
+import { useCreateVenue } from "../api";
 
-const NewVenueScreen = () => {
-  const handleSubmit = async (values) => {};
-  // Handle form submission hereconst formData = new FormData();
+const NewVenueScreen = ({ navigation }) => {
+  const createVenueMutation = useCreateVenue();
+
+  const handleSubmit = async (values) => {
+    try {
+      const result = await createVenueMutation.mutateAsync(values);
+      navigation.navigate("Home", { venueCreated: true });
+    } catch (error) {
+      console.error("Failed to create venue:", error);
+    }
+  };
 
   return (
     <View>

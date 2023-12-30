@@ -1,56 +1,46 @@
-const url = "http://localhost:8000";
+import { useMutation, useQuery } from "react-query";
 
-export const fetchVenues = async () => {
-  try {
-    const res = await fetch(`http://localhost:8000/api/venues/getallvenues`);
+const apiUrl = "http://localhost:8000/api/venues";
 
+export const useFetchVenues = () => {
+  return useQuery("venues", async () => {
+    const res = await fetch(`${apiUrl}/getallvenues`);
     if (!res.ok) {
       throw new Error("Failed to fetch venues");
     }
-
-    return await res.json();
-  } catch (error) {
-    console.error("An error occurred while fetching the transactionss:", error);
-    throw error;
-  }
+    return res.json();
+  });
 };
-export const createVenue = async (venueData) => {
-  console.log(venueData, "venuedatat");
-  try {
-    const res = await fetch(`${url}/api/venues/createvenue`, {
+
+export const useCreateVenue = () => {
+  return useMutation(async (venueData) => {
+    return fetch(`${apiUrl}/createvenue`, {
       method: "POST",
-      body: venueData,
-    });
-    if (!res.ok) {
-      throw new Error("Failed to create venue");
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("An error occurred while creating the venue:", error);
-    throw error;
-  }
-};
-export const updateVenueInfo = async (id, updatedData) => {
-  try {
-    const res = await fetch(
-      `http://localhost:8000/api/venues/editvenue/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
+      body: JSON.stringify(venueData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to create venue");
       }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch venues");
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("An error occurred while updating the venue:", error);
-    throw error; // Re-throw the error so it can be handled by the calling code
-  }
+      return res.json();
+    });
+  });
+};
+export const useUpdateVenueInfo = () => {
+  return useMutation(({ id, updatedData }) => {
+    return fetch(`${apiUrl}/editvenue/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to update venue");
+      }
+      return res.json();
+    });
+  });
 };
