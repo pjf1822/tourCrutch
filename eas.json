@@ -11,7 +11,7 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": { "env": {
+    "production": {  "env": {
       "FIREBASE_API_KEY": "@FIREBASE_API_KEY",
       "FIREBASE_AUTH_DOMAIN": "@FIREBASE_AUTH_DOMAIN",
       "FIREBASE_PROJECT_ID": "@FIREBASE_PROJECT_ID",
