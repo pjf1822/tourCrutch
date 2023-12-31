@@ -6,7 +6,7 @@ import VenueDetailScreen from "../screens/VenueDetailScreen";
 import NewVenueScreen from "../screens/NewVenueScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Image, Text } from "react-native";
+import { Image, Text, TouchableOpacity } from "react-native";
 import AppHeader from "../components/AppHeader";
 import {
   createDrawerNavigator,
@@ -49,9 +49,17 @@ const AppNavigator = ({ navigation }) => {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} user={user} />}
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
         headerTitle: "",
-      }}
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+            <Image
+              source={require("../assets/logo.png")}
+              style={{ width: 40, height: 40, marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        ),
+      })}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen
