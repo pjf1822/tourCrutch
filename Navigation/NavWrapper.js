@@ -6,7 +6,15 @@ import VenueDetailScreen from "../screens/VenueDetailScreen";
 import NewVenueScreen from "../screens/NewVenueScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Image, Text } from "react-native";
 import AppHeader from "../components/AppHeader";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer";
+import { useRoute } from "@react-navigation/native";
 
 // AUTH STACK
 const AuthStack = createNativeStackNavigator();
@@ -20,21 +28,43 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="Login" component={LoginScreen} />
   </AuthStack.Navigator>
 );
+function CustomDrawerContent({ user, ...props }) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <Text>{user?.email}</Text>
+      <DrawerItemList {...props} />
+
+      <DrawerItem label="Help" onPress={() => console.log("fuck")} />
+    </DrawerContentScrollView>
+  );
+}
 
 // APP STACK
-const AppStack = createNativeStackNavigator();
-const AppNavigator = ({ navigation }) => (
-  <AppStack.Navigator
-    screenOptions={{
-      headerShown: true,
-      header: () => <AppHeader navigation={navigation} />,
-    }}
-  >
-    <AppStack.Screen name="Home" component={HomeScreen} />
-    <AppStack.Screen name="VenueDetail" component={VenueDetailScreen} />
-    <AppStack.Screen name="NewVenue" component={NewVenueScreen} />
-  </AppStack.Navigator>
-);
+const Drawer = createDrawerNavigator();
+
+const AppNavigator = ({ navigation }) => {
+  const route = useRoute();
+  const { user } = route.params || {};
+
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} user={user} />}
+      screenOptions={{
+        headerTitle: "",
+      }}
+    >
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen
+        name="VenueDetail"
+        component={VenueDetailScreen}
+        options={{
+          drawerItemStyle: { height: 0 },
+        }}
+      />
+      <Drawer.Screen name="NewVenue" component={NewVenueScreen} />
+    </Drawer.Navigator>
+  );
+};
 
 export const NavWrapper = () => {
   const Stack = createNativeStackNavigator();
@@ -48,7 +78,11 @@ export const NavWrapper = () => {
     >
       {user ? (
         <>
-          <Stack.Screen name="App" component={AppNavigator} />
+          <Stack.Screen
+            name="App"
+            component={AppNavigator}
+            initialParams={{ user: { email: user?.email } }}
+          />
         </>
       ) : (
         <>

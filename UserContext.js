@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
+      console.log(authUser?.email);
       setUser(authUser);
       setAuthCompleted(true);
       setLoading(false);
@@ -21,7 +22,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <GlobalLoader />; // You can also return a loading spinner or some other UI while loading
+    return <GlobalLoader />;
   }
 
   return (

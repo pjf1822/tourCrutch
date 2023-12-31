@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation, route }) => {
         value={search}
         onChangeText={(search) => setSearch(search)}
       />
-      <Text>{user.email}</Text>
+      <Text>{user?.email}</Text>
       {(userLoading || isLoading) && <GlobalLoader />}
       {!userLoading && !isLoading && (
         <FlatList
