@@ -16,7 +16,8 @@ const SignupScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={{ marginTop: 100 }}>
+      <Text>{TEST_THING}</Text>
       <TextInput
         value={email}
         onChangeText={(value) => {

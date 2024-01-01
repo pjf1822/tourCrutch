@@ -3,23 +3,16 @@ import { Formik } from "formik";
 import React from "react";
 import { useCreateVenue } from "../api";
 import { useUser } from "../UserContext";
+import { showToast } from "../helpers";
+import { createVenue } from "../crudUtils/venue";
 
 const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();
   const { user } = useUser();
 
-  const handleSubmit = async (values) => {
-    try {
-      const result = await createVenueMutation.mutateAsync({
-        ...values,
-        userUID: user.uid,
-      });
-      navigation.navigate("Home", { venueCreated: true });
-    } catch (error) {
-      console.error("Failed to create venue:", error);
-    }
+  const handleSubmit = (values) => {
+    createVenue(values, user, createVenueMutation, navigation);
   };
-
   return (
     <View>
       <Formik
@@ -30,7 +23,7 @@ const NewVenueScreen = ({ navigation }) => {
         }}
         onSubmit={handleSubmit}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
+        {({ handleChange, handleBlur, handleSubmit, values, navigation }) => (
           <View>
             <TextInput
               placeholder="Name"

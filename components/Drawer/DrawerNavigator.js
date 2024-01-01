@@ -9,10 +9,19 @@ import {
 import HomeScreen from "../../screens/HomeScreen";
 import VenueDetailScreen from "../../screens/VenueDetailScreen";
 import NewVenueScreen from "../../screens/NewVenueScreen";
-import { signOut } from "firebase/auth";
 import SettingsScreen from "../../screens/SettingsScreen";
+import { FIREBASE_AUTH } from "../../firebaseConfig.js";
+import { showToast } from "../../helpers";
 
 function CustomDrawerContent({ user, ...props }) {
+  const signOut = async () => {
+    try {
+      await FIREBASE_AUTH.signOut();
+      showToast("Signed out!", true, "top");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
   return (
     <DrawerContentScrollView {...props}>
       <Text>{user?.email}</Text>

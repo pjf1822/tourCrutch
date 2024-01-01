@@ -13,7 +13,7 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={{ marginTop: 100 }}>
       <Text>LoginScreen</Text>
       <TextInput
         value={email}
