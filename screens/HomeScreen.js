@@ -3,12 +3,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
-import Fuse from "fuse.js";
 import { useUser } from "../UserContext";
 import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
 import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
+import { filterVenues } from "../helpers";
 
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
@@ -23,16 +23,11 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [fetchedVenues, isLoading, isError]);
 
-  const fuse = new Fuse(venues, {
-    keys: ["name", "address"],
-    minMatchCharLength: 1,
-    includeScore: true,
-    threshold: 0.3,
-  });
-  const result = search ? fuse.search(search) : venues || [];
+  const result = filterVenues(venues, search);
 
   useFocusEffect(
     useCallback(() => {
+      console.log(route.params);
       if (route?.params?.venueCreated) {
         refetch();
       }

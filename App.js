@@ -4,6 +4,8 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import { UserProvider } from "./UserContext";
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["No native splash screen"]);
 
 export default function App() {
   const queryClient = new QueryClient();

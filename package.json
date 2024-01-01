@@ -18,7 +18,6 @@
     "expo-constants": "~14.4.2",
     "expo-device": "~5.4.0",
     "expo-image-picker": "~14.3.2",
-    "expo-status-bar": "~1.6.0",
     "firebase": "^10.7.1",
     "formik": "^2.4.5",
     "fuse.js": "^7.0.0",
