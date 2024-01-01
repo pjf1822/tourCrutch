@@ -7,12 +7,10 @@ import Fuse from "fuse.js";
 import { useUser } from "../UserContext";
 import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
-import { signOut } from "../authFunctionUtils";
 import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = ({ navigation, route }) => {
-  const { user } = useUser();
   const [search, setSearch] = useState("");
 
   const { loading: userLoading } = useUser();
@@ -37,9 +35,9 @@ const HomeScreen = ({ navigation, route }) => {
     }, [route.params?.venueCreated, refetch])
   );
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <SearchBar
-        placeholder="Hi bitch"
+        placeholder="Hi bitc"
         value={search}
         onChangeText={(search) => setSearch(search)}
       />
