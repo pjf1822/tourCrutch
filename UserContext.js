@@ -12,7 +12,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
-      console.log(authUser?.email);
       setUser(authUser);
       setAuthCompleted(true);
       setLoading(false);

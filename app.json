@@ -7,9 +7,9 @@
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/olav.jpeg",
+      "image": "./assets/olav.png",
       "resizeMode": "contain",
-      "backgroundColor": "black"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"

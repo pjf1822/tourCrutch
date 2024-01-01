@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Button } from "react-native";
-import React, { useCallback, useState } from "react";
+import { View, FlatList } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
@@ -7,17 +7,21 @@ import Fuse from "fuse.js";
 import { useUser } from "../UserContext";
 import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
-import { signOut } from "../authFunctionUtils";
 import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = ({ navigation, route }) => {
-  const { user } = useUser();
   const [search, setSearch] = useState("");
+  const [venues, setVenues] = useState([]);
 
   const { loading: userLoading } = useUser();
+  const { data: fetchedVenues, isLoading, isError, refetch } = useFetchVenues();
 
-  const { data: venues, isLoading, isError, refetch } = useFetchVenues();
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      setVenues(fetchedVenues || []);
+    }
+  }, [fetchedVenues, isLoading, isError]);
 
   const fuse = new Fuse(venues, {
     keys: ["name", "address"],
@@ -29,17 +33,32 @@ const HomeScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      // Check if a new venue has been created
-      if (route.params?.venueCreated) {
-        console.log("we have a new venue");
+      if (route?.params?.venueCreated) {
         refetch();
       }
-    }, [route.params?.venueCreated, refetch])
+      if (route.params?.venueDeleted) {
+        const deletedVenueId = route?.params?.venueId;
+        setVenues((prevVenues) =>
+          prevVenues.filter((venue) => venue?._id !== deletedVenueId)
+        );
+      }
+    }, [route.params?.venueCreated, route.params?.venueDeleted, refetch])
   );
+
+  useEffect(() => {
+    if (route.params?.venueCreated || route.params?.venueDeleted) {
+      navigation.setParams({
+        venueCreated: false,
+        venueDeleted: false,
+        venueId: null,
+      });
+    }
+  }, [route?.params?.venueCreated, route?.params?.venueDeleted, navigation]);
+
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <SearchBar
-        placeholder="Hi bitch"
+        placeholder="Hi bitc"
         value={search}
         onChangeText={(search) => setSearch(search)}
       />

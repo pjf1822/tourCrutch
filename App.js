@@ -1,4 +1,4 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { UserProvider } from "./UserContext";
