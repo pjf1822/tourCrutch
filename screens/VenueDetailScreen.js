@@ -3,20 +3,29 @@ import React from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
 import { updateVenueInfo, useDeleteVenue } from "../api";
+import { useUser } from "../UserContext";
 
-const VenueDetailScreen = ({ route }) => {
+const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
+  const { user } = useUser();
+  const deleteVenueMutation = useDeleteVenue();
 
   const handleUpdateVenueInfo = async () => {
     const response = await updateVenueInfo(id, updatedData);
   };
-  const deleteVenueMutation = useDeleteVenue();
-
   const handleDelete = async (venueId) => {
     try {
-      if (venue.createdByUID === users.uid) {
-        const result = await deleteVenueMutation.mutateAsync(venueId);
+      if (!venue?.createdByUID) {
+        throw new Error(
+          "Venue createdByUID not found. Unable to delete venue."
+        );
       }
+      if (venue.createdByUID !== user.uid) {
+        throw new Error("User does not have permission to delete this venue.");
+      }
+
+      const result = await deleteVenueMutation.mutateAsync(venueId);
+      navigation.navigate("Home", { venueDeleted: true, venueId: id });
     } catch (error) {
       console.error("Failed to delete venue:", error);
     }
@@ -36,7 +45,7 @@ const VenueDetailScreen = ({ route }) => {
       <MyButton title="update venue info" onPress={handleUpdateVenueInfo} />
 
       <CommentSection venueId={id} />
-      <MyButton title="Delete Venue" onPress={handleDelete} />
+      <MyButton title="Delete Venue" onPress={() => handleDelete(venue?._id)} />
     </View>
   );
 };
