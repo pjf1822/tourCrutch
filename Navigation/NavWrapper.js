@@ -1,12 +1,13 @@
 import React from "react";
 import { useUser } from "../UserContext";
 import SignupScreen from "../screens/SignupScreen";
-import HomeScreen from "../screens/HomeScreen";
-import VenueDetailScreen from "../screens/VenueDetailScreen";
-import NewVenueScreen from "../screens/NewVenueScreen";
+
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AppHeader from "../components/AppHeader";
+import { Image, Text, TouchableOpacity } from "react-native";
+
+import { useRoute } from "@react-navigation/native";
+import DrawerNavigator from "../components/Drawer/DrawerNavigator";
 
 // AUTH STACK
 const AuthStack = createNativeStackNavigator();
@@ -22,19 +23,13 @@ const AuthNavigator = () => (
 );
 
 // APP STACK
-const AppStack = createNativeStackNavigator();
-const AppNavigator = ({ navigation }) => (
-  <AppStack.Navigator
-    screenOptions={{
-      headerShown: true,
-      header: () => <AppHeader navigation={navigation} />,
-    }}
-  >
-    <AppStack.Screen name="Home" component={HomeScreen} />
-    <AppStack.Screen name="VenueDetail" component={VenueDetailScreen} />
-    <AppStack.Screen name="NewVenue" component={NewVenueScreen} />
-  </AppStack.Navigator>
-);
+
+const AppNavigator = () => {
+  const route = useRoute();
+  const { user } = route.params || {};
+
+  return <DrawerNavigator user={user} />;
+};
 
 export const NavWrapper = () => {
   const Stack = createNativeStackNavigator();
@@ -48,7 +43,11 @@ export const NavWrapper = () => {
     >
       {user ? (
         <>
-          <Stack.Screen name="App" component={AppNavigator} />
+          <Stack.Screen
+            name="App"
+            component={AppNavigator}
+            initialParams={{ user: { email: user?.email } }}
+          />
         </>
       ) : (
         <>

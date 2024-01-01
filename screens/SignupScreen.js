@@ -11,7 +11,6 @@ const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("df");
 
-  console.log(TEST_THING && TEST_THING);
   const auth = FIREBASE_AUTH;
   const { setUser } = useUser();
   const navigation = useNavigation();
@@ -36,7 +35,6 @@ const SignupScreen = () => {
           handleSignUp(auth, email, password, displayName, setUser)
         }
       />
-      {TEST_THING && <Text>{TEST_THING}</Text>}
 
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text>Go to Login Page</Text>

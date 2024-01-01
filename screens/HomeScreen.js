@@ -43,7 +43,6 @@ const HomeScreen = ({ navigation, route }) => {
         value={search}
         onChangeText={(search) => setSearch(search)}
       />
-      <Text>{user.email}</Text>
       {(userLoading || isLoading) && <GlobalLoader />}
       {!userLoading && !isLoading && (
         <FlatList
@@ -60,7 +59,6 @@ const HomeScreen = ({ navigation, route }) => {
         title="Create New Venue"
         onPress={() => navigation.navigate("NewVenue")}
       />
-      <Button title="signout" onPress={() => signOut()} />
     </View>
   );
 };
