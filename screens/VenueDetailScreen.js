@@ -1,4 +1,4 @@
-import { View, Image, TextInput } from "react-native";
+import { View, Image, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
@@ -6,6 +6,7 @@ import { useDeleteVenue, useUpdateVenueInfo } from "../api";
 import { useUser } from "../UserContext";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
+import { regFont } from "../theme";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
@@ -23,18 +24,21 @@ const VenueDetailScreen = ({ route, navigation }) => {
   return (
     <View>
       <TextInput
+        style={styles.itemStyle}
         value={venueInfo.name}
         onChangeText={(newName) =>
           setVenueInfo((prev) => ({ ...prev, name: newName }))
         }
       />
       <TextInput
+        style={styles.itemStyle}
         value={venueInfo.address}
         onChangeText={(newAddress) =>
           setVenueInfo((prev) => ({ ...prev, address: newAddress }))
         }
       />
       <TextInput
+        style={styles.itemStyle}
         value={venueInfo.link}
         onChangeText={(newLink) =>
           setVenueInfo((prev) => ({ ...prev, link: newLink }))
@@ -52,7 +56,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
         onPress={() => {
           const { name, address, link } = venueInfo;
 
-          // Check if there are changes
           if (
             name !== venue?.name ||
             address !== venue?.address ||
@@ -95,3 +98,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
 };
 
 export default VenueDetailScreen;
+
+const styles = StyleSheet.create({
+  itemStyle: {
+    fontFamily: regFont.fontFamily,
+  },
+});
