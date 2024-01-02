@@ -1,22 +1,17 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { comments } from "../dataModels";
 import AddComment from "./AddComment";
 
-const CommentSection = ({ venueId }) => {
-  const filteredComments = comments.filter(
-    (comment) => comment.venueId === venueId
-  );
-
+const CommentSection = ({ venueId, userId, comments, displayName }) => {
   return (
     <View>
-      {filteredComments.map((comment, index) => (
+      {comments?.map((comment, index) => (
         <View key={index}>
           <Text>{comment?.comment}</Text>
-          <Text>{comment?.userId}</Text>
+          <Text>{comment?.userDisplayName}</Text>
         </View>
       ))}
-      <AddComment />
+      <AddComment venueId={venueId} userId={userId} displayName={displayName} />
     </View>
   );
 };

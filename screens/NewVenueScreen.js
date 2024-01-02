@@ -10,8 +10,8 @@ const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();
   const { user } = useUser();
 
-  const handleSubmit = (values) => {
-    createVenue(values, user, createVenueMutation, navigation);
+  const handleSubmit = (values, { resetForm }) => {
+    createVenue(values, user, createVenueMutation, navigation, resetForm);
   };
   return (
     <View>
