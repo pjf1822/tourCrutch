@@ -9,6 +9,7 @@ import MyButton from "../components/MyButton";
 import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
+import { regFont } from "../theme";
 
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
@@ -27,7 +28,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Route Params:", route.params);
+      // console.log("Route Params:", route.params);
 
       if (route?.params?.venueCreated || route?.params?.venueUpdated) {
         refetch();
@@ -58,6 +59,7 @@ const HomeScreen = ({ navigation, route }) => {
         placeholder="Hi bitc"
         value={search}
         onChangeText={(search) => setSearch(search)}
+        style={{ flex: 1, fontFamily: regFont.fontFamily }}
       />
       {(userLoading || isLoading) && <GlobalLoader />}
       {!userLoading && !isLoading && (

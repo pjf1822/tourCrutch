@@ -1,6 +1,7 @@
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
+import { regFont } from "../theme";
 
 const HomePageFlatListItem = ({ item, navigation }) => {
   return (
@@ -10,9 +11,9 @@ const HomePageFlatListItem = ({ item, navigation }) => {
         navigation.navigate("VenueDetail", { id: item?._id, venue: item })
       }
     >
-      <Text>{item?.name}</Text>
-      <Text>{item?.address}</Text>
-      <Text>{item?.link}</Text>
+      <Text style={styles.itemStyle}>{item?.name}</Text>
+      <Text style={styles.itemStyle}>{item?.address}</Text>
+      <Text style={styles.itemStyle}>{item?.link}</Text>
       <Icon name="arrow-right" />
     </TouchableOpacity>
   );
@@ -29,5 +30,8 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
     height: 100,
     backgroundColor: "green",
+  },
+  itemStyle: {
+    fontFamily: regFont.fontFamily,
   },
 });

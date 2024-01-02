@@ -5,11 +5,35 @@ import { UserProvider } from "./UserContext";
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LogBox } from "react-native";
+import * as Font from "expo-font";
+import { useEffect, useState } from "react";
+
 LogBox.ignoreLogs(["No native splash screen"]);
 
 export default function App() {
   const queryClient = new QueryClient();
+  const [appIsReady, setAppIsReady] = useState(false);
 
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await Font.loadAsync({
+          Dot: require("./assets/DotGothic16-Regular.ttf"),
+        });
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  if (!appIsReady) {
+    // You can render a loading indicator or splash screen here
+    return null;
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={{ flex: 1 }}>
