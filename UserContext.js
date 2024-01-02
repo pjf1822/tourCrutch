@@ -3,12 +3,13 @@ import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import { FIREBASE_AUTH, FIREBASE_STORAGE } from "./firebaseConfig";
 import GlobalLoader from "./GlobalLoader";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { showToast } from "./helpers.js";
 
 const UserContext = createContext();
 const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const uploadUserProfilePic = async (imageUri) => {
     try {
@@ -18,17 +19,20 @@ export const StorageProvider = ({ children }) => {
       );
 
       const response = await fetch(imageUri);
-
       const blob = await response.blob();
-
-      const shit = await uploadBytes(storageRef, blob);
-
+      const ready = await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-      const responseTwo = await updateProfile(user, {
+
+      showToast("Uploading", null, "top");
+
+      await updateProfile(user, {
         photoURL: downloadURL,
       });
-      console.log(responseTwo);
+      setUser({ ...user, photoURL: downloadURL });
+      showToast("Profile pic added!", true, "top");
     } catch (error) {
+      showToast("Something went wrong!", false, "top");
+
       console.error(
         "Error uploading image:",
         error.code,
@@ -37,8 +41,6 @@ export const StorageProvider = ({ children }) => {
       );
     }
   };
-
-  // Other storage-related functions...
 
   const storageContextValue = {
     uploadUserProfilePic,
@@ -64,7 +66,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
-      // console.log(authUser, "the auth user");
       setUser(authUser);
       setAuthCompleted(true);
       setLoading(false);

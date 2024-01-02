@@ -2,10 +2,19 @@ import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
 
 export const showToast = (toastMessage, success, position) => {
+  let backgroundColor;
+
+  if (success === true) {
+    backgroundColor = "green";
+  } else if (success === false) {
+    backgroundColor = "red";
+  } else {
+    backgroundColor = "yellow";
+  }
   let toast = Toast.show(toastMessage, {
     duration: Toast.durations.LONG,
     position: position === "top" ? Toast.positions.TOP : Toast.positions.BOTTOM,
-    backgroundColor: success === true ? "green" : "red",
+    backgroundColor: backgroundColor,
     textColor: "white",
     opacity: 1,
     fontSize: 23,

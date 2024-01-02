@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useStorage, useUser } from "../UserContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
+import { showToast } from "../helpers";
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 const SettingsScreen = () => {
   const { user, setUser } = useUser();
@@ -25,10 +27,16 @@ const SettingsScreen = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      // console.log(result, "step one this is the reulst");
 
       if (!result?.canceled) {
-        await uploadUserProfilePic(result.assets[0].uri);
+        const fileSize = result.assets[0].fileSize;
+
+        if (fileSize <= MAX_FILE_SIZE_BYTES) {
+          await uploadUserProfilePic(result.assets[0].uri);
+        } else {
+          showToast("File size too big", false, "top");
+          console.error("Selected file exceeds the maximum allowed size.");
+        }
       }
     } catch (error) {
       console.error("Error picking an image:", error);
@@ -46,6 +54,7 @@ const SettingsScreen = () => {
   return (
     <View>
       <Text style={styles.header}>Account Details </Text>
+      <Image source={{ uri: user?.photoURL }} style={styles.userPhoto} />
       <View style={styles.formWrapper}>
         <View style={styles.entryWrapper}>
           <Text style={styles.label}>Email Account</Text>
@@ -137,5 +146,9 @@ const styles = StyleSheet.create({
     maxHeight: "93%",
     // backgroundColor: colors.blue,
     borderRadius: "10%",
+  },
+  userPhoto: {
+    height: 50,
+    width: 50,
   },
 });

@@ -9,7 +9,10 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import GlobalLoader from "./GlobalLoader";
 
-LogBox.ignoreLogs(["No native splash screen"]);
+LogBox.ignoreLogs([
+  "No native splash screen",
+  'Key "cancelled" in the image picker result is deprecated and will be removed in SDK 48, use "canceled" instead',
+]);
 
 export default function App() {
   const queryClient = new QueryClient();
