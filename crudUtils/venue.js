@@ -22,6 +22,7 @@ export const handleDelete = async (
     }
 
     const result = await deleteVenueMutation.mutateAsync(venueId);
+
     showToast("Venue deleted!", true, "top");
 
     navigation.navigate("Home", { venueDeleted: true, venueId: venueId });
@@ -36,7 +37,8 @@ export const createVenue = async (
   values,
   user,
   createVenueMutation,
-  navigation
+  navigation,
+  resetForm
 ) => {
   try {
     if (!values?.name || !values?.address || !values?.link) {
@@ -53,6 +55,7 @@ export const createVenue = async (
       userUID: user.uid,
     });
     showToast("Created new venue!", true, "top");
+    resetForm();
     navigation.navigate("Home", { venueCreated: true });
   } catch (error) {
     showToast("Could not create new venue", false, "top");

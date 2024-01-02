@@ -2,9 +2,25 @@ import { View } from "react-native";
 import React, { useState } from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
+import { createComment } from "../api";
 
-const AddComment = () => {
+const AddComment = ({ venueId, userId, displayName }) => {
   const [newComment, setNewComment] = useState("");
+
+  const addCommentMutation = createComment(venueId, {
+    userUid: userId,
+    comment: newComment,
+    userDisplayName: displayName,
+  });
+
+  const addComment = async () => {
+    try {
+      const response = await addCommentMutation.mutateAsync();
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to create comment:", error);
+    }
+  };
   return (
     <View>
       <MyTextInput
@@ -12,7 +28,7 @@ const AddComment = () => {
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
       />
-      <MyButton title={"Submitm Cooment"} onPress={() => console.log("hey")} />
+      <MyButton title={"Submitm Cooment"} onPress={addComment} />
     </View>
   );
 };

@@ -5,6 +5,7 @@ import MyButton from "../components/MyButton";
 import { useDeleteVenue, useUpdateVenueInfo } from "../api";
 import { useUser } from "../UserContext";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
+import { showToast } from "../helpers";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
@@ -48,19 +49,35 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
       <MyButton
         title="update venue info"
-        onPress={() =>
-          handleUpdateVenueInfo(
-            navigation,
-            updateVenueInfoMutation,
-            id,
-            venueInfo.name,
-            venueInfo.address,
-            venueInfo.link
-          )
-        }
+        onPress={() => {
+          const { name, address, link } = venueInfo;
+
+          // Check if there are changes
+          if (
+            name !== venue?.name ||
+            address !== venue?.address ||
+            link !== venue?.link
+          ) {
+            handleUpdateVenueInfo(
+              navigation,
+              updateVenueInfoMutation,
+              id,
+              name,
+              address,
+              link
+            );
+          } else {
+            showToast("You didnt change anything bozo", false, "top");
+          }
+        }}
       />
 
-      <CommentSection venueId={id} />
+      <CommentSection
+        venueId={id}
+        userId={user.uid}
+        comments={venue.comments}
+        displayName={user.displayName}
+      />
       <MyButton
         title="Delete Venue"
         onPress={() =>
