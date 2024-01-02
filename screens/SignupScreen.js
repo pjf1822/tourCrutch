@@ -1,10 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
 import React, { useState } from "react";
-import { useUser } from "../UserContext";
 import { FIREBASE_AUTH } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
 import { TEST_THING } from "@env";
+import { useUser } from "../Contexts/UserContext";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");

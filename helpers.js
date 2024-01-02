@@ -43,7 +43,7 @@ export const isValidUrl = (url) => {
   return urlRegex.test(url);
 };
 
-export const pickImage = async (ImagePicker, uploadUserProfilePic) => {
+export const pickImage = async (ImagePicker, user, setUser) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   try {
@@ -58,7 +58,7 @@ export const pickImage = async (ImagePicker, uploadUserProfilePic) => {
       const fileSize = result.assets[0].fileSize;
 
       if (fileSize <= MAX_FILE_SIZE_BYTES) {
-        await uploadUserProfilePic(result.assets[0].uri);
+        await uploadUserProfilePic(result.assets[0].uri, user, setUser);
       } else {
         showToast("File size too big", false, "top");
         console.error("Selected file exceeds the maximum allowed size.");
@@ -69,12 +69,18 @@ export const pickImage = async (ImagePicker, uploadUserProfilePic) => {
   }
 };
 
-export const uploadUserProfilePic = async (user, imageUri, setUser) => {
+export const uploadUserProfilePic = async (imageUri, user, setUser) => {
   const uploadCountString = await AsyncStorage.getItem("uploadCount");
-  const uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
+  let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
 
   if (uploadCount >= 10) {
     showToast("Upload limit exceeded.", false, "top");
+    return;
+  }
+
+  console.log(user, "show me the user");
+  if (!user || !user.getIdToken) {
+    showToast("User information is missing or incomplete.", false, "top");
     return;
   }
   try {
@@ -93,7 +99,6 @@ export const uploadUserProfilePic = async (user, imageUri, setUser) => {
       photoURL: downloadURL,
     });
     await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
-
     showToast("Profile pic added!", true, "top");
   } catch (error) {
     showToast(error, false, "top");

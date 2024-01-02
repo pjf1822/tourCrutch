@@ -2,9 +2,8 @@ import { View, TextInput, Button } from "react-native";
 import { Formik } from "formik";
 import React from "react";
 import { useCreateVenue } from "../api";
-import { useUser } from "../UserContext";
-import { showToast } from "../helpers";
 import { createVenue } from "../crudUtils/venue";
+import { useUser } from "../Contexts/UserContext";
 
 const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();

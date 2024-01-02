@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
-import { useUser } from "../UserContext";
 import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
 import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
 import { regFont } from "../theme";
+import { useUser } from "../Contexts/UserContext";
 
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");

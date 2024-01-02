@@ -1,18 +1,16 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../UserContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
 import { pickImage } from "../helpers";
-import { useStorage } from "../StorageContext";
+import { useStorage } from "../Contexts/StorageContext";
+import { useUser } from "../Contexts/UserContext";
 
 const SettingsScreen = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
-
-  const { uploadUserProfilePic } = useStorage();
 
   useEffect(() => {
     if (user && user?.displayName) {
@@ -59,7 +57,7 @@ const SettingsScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              pickImage(ImagePicker, uploadUserProfilePic);
+              pickImage(ImagePicker, user, setUser);
             }}
           >
             <Text>upload profile pic</Text>

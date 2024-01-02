@@ -1,14 +1,15 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { UserProvider } from "./UserContext";
-import { StorageProvider } from "./StorageContext";
+
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LogBox } from "react-native";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import GlobalLoader from "./GlobalLoader";
+import { StorageProvider } from "./Contexts/StorageContext";
+import { UserProvider } from "./Contexts/UserContext";
 
 LogBox.ignoreLogs([
   "No native splash screen",
