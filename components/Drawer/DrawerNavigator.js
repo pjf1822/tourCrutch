@@ -53,14 +53,18 @@ const DrawerNavigator = ({ user }) => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen
+        name="NewVenue"
+        options={{ drawerLabel: "New Venue" }}
+        component={NewVenueScreen}
+      />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen
         name="VenueDetail"
         component={VenueDetailScreen}
         options={{
           drawerItemStyle: { height: 0 },
         }}
       />
-      <Drawer.Screen name="NewVenue" component={NewVenueScreen} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
   );
 };
