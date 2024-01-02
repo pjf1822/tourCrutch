@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useStorage, useUser } from "../UserContext";
+import { useUser } from "../UserContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
 import { pickImage } from "../helpers";
+import { useStorage } from "../StorageContext";
 
 const SettingsScreen = () => {
   const { user } = useUser();

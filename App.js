@@ -1,7 +1,8 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { StorageProvider, UserProvider } from "./UserContext";
+import { UserProvider } from "./UserContext";
+import { StorageProvider } from "./StorageContext";
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LogBox } from "react-native";
