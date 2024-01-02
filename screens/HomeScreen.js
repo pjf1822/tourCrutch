@@ -27,7 +27,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(route.params);
       if (route?.params?.venueCreated) {
         refetch();
       }
