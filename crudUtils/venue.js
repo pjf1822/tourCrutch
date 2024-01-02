@@ -62,6 +62,7 @@ export const createVenue = async (
 };
 
 export const handleUpdateVenueInfo = async (
+  navigation,
   updateVenueInfoMutation,
   id,
   venueName,
@@ -80,6 +81,7 @@ export const handleUpdateVenueInfo = async (
 
     if (response.message === "Venue updated successfully") {
       showToast("You Updated the venue!", true, "top");
+      navigation.navigate("Home", { venueUpdated: true });
     } else {
       showToast("Failed to update venue", false, "top");
     }

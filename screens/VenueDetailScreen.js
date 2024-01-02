@@ -18,6 +18,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     address: venue?.address,
     link: venue?.link,
   });
+
   return (
     <View>
       <TextInput
@@ -49,6 +50,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         title="update venue info"
         onPress={() =>
           handleUpdateVenueInfo(
+            navigation,
             updateVenueInfoMutation,
             id,
             venueInfo.name,

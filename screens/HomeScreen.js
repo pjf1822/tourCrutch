@@ -62,7 +62,6 @@ const HomeScreen = ({ navigation, route }) => {
       {(userLoading || isLoading) && <GlobalLoader />}
       {!userLoading && !isLoading && (
         <FlatList
-          style={{ backgroundColor: "pink" }}
           data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
           renderItem={({ item, index }) => (
             <HomePageFlatListItem item={item} navigation={navigation} />
