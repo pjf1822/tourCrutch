@@ -9,25 +9,34 @@ import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
   const { user } = useUser();
+
   const deleteVenueMutation = useDeleteVenue();
-  const [venueName, setVenueName] = useState(venue?.name);
-  const [venueAddress, setVenueAddress] = useState(venue?.address);
-  const [venueLink, setVenueLink] = useState(venue?.link);
   const updateVenueInfoMutation = useUpdateVenueInfo();
 
+  const [venueInfo, setVenueInfo] = useState({
+    name: venue?.name,
+    address: venue?.address,
+    link: venue?.link,
+  });
   return (
     <View>
       <TextInput
-        value={venueName}
-        onChangeText={(newName) => setVenueName(newName)}
+        value={venueInfo.name}
+        onChangeText={(newName) =>
+          setVenueInfo((prev) => ({ ...prev, name: newName }))
+        }
       />
       <TextInput
-        value={venueAddress}
-        onChangeText={(newAddress) => setVenueAddress(newAddress)}
+        value={venueInfo.address}
+        onChangeText={(newAddress) =>
+          setVenueInfo((prev) => ({ ...prev, address: newAddress }))
+        }
       />
       <TextInput
-        value={venueLink}
-        onChangeText={(newLink) => setVenueLink(newLink)}
+        value={venueInfo.link}
+        onChangeText={(newLink) =>
+          setVenueInfo((prev) => ({ ...prev, link: newLink }))
+        }
       />
       {venue?.image && (
         <Image
@@ -42,9 +51,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           handleUpdateVenueInfo(
             updateVenueInfoMutation,
             id,
-            venueName,
-            venueAddress,
-            venueLink
+            venueInfo.name,
+            venueInfo.address,
+            venueInfo.link
           )
         }
       />

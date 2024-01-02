@@ -31,6 +31,7 @@ export const useCreateVenue = () => {
 };
 export const useUpdateVenueInfo = () => {
   return useMutation(async ({ id, updatedData }) => {
+    console.log(`${apiUrl}/editvenue/${id}`, "this si the url ");
     return fetch(`${apiUrl}/editvenue/${id}`, {
       method: "PUT",
       headers: {
