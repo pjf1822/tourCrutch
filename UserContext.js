@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
-import { FIREBASE_AUTH, FIREBASE_STORAGE } from "./firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "./firebaseConfig";
 import GlobalLoader from "./GlobalLoader";
-import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
-import { showToast } from "./helpers.js";
+import { uploadUserProfilePic } from "./helpers.js";
 
 const UserContext = createContext();
 const StorageContext = createContext();
@@ -11,41 +10,10 @@ const StorageContext = createContext();
 export const StorageProvider = ({ children }) => {
   const { user, setUser } = useUser();
 
-  const uploadUserProfilePic = async (imageUri) => {
-    try {
-      const storageRef = ref(
-        FIREBASE_STORAGE,
-        `user-profiles/${user?.uid}/profile-pic.jpg`
-      );
-
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
-      const ready = await uploadBytes(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
-
-      showToast("Uploading", null, "top");
-
-      await updateProfile(user, {
-        photoURL: downloadURL,
-      });
-      setUser({ ...user, photoURL: downloadURL });
-      showToast("Profile pic added!", true, "top");
-    } catch (error) {
-      showToast("Something went wrong!", false, "top");
-
-      console.error(
-        "Error uploading image:",
-        error.code,
-        error.message,
-        error.serverResponse
-      );
-    }
-  };
-
   const storageContextValue = {
-    uploadUserProfilePic,
+    uploadUserProfilePic: (imageUri) =>
+      uploadUserProfilePic(user, imageUri, setUser),
   };
-
   return (
     <StorageContext.Provider value={storageContextValue}>
       {children}

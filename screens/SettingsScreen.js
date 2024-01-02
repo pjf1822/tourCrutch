@@ -5,11 +5,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
-import { showToast } from "../helpers";
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+import { pickImage } from "../helpers";
 
 const SettingsScreen = () => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const [displayName, setDisplayName] = useState("");
 
   const { uploadUserProfilePic } = useStorage();
@@ -19,29 +18,6 @@ const SettingsScreen = () => {
       setDisplayName(user?.displayName);
     }
   }, [user]);
-  const pickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result?.canceled) {
-        const fileSize = result.assets[0].fileSize;
-
-        if (fileSize <= MAX_FILE_SIZE_BYTES) {
-          await uploadUserProfilePic(result.assets[0].uri);
-        } else {
-          showToast("File size too big", false, "top");
-          console.error("Selected file exceeds the maximum allowed size.");
-        }
-      }
-    } catch (error) {
-      console.error("Error picking an image:", error);
-    }
-  };
 
   const updatePassword = async () => {
     try {
@@ -82,7 +58,7 @@ const SettingsScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              pickImage();
+              pickImage(ImagePicker, uploadUserProfilePic);
             }}
           >
             <Text>upload profile pic</Text>

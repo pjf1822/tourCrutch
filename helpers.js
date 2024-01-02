@@ -1,5 +1,8 @@
 import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
+import { FIREBASE_STORAGE } from "./firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
 
 export const showToast = (toastMessage, success, position) => {
   let backgroundColor;
@@ -37,4 +40,59 @@ export const isValidUrl = (url) => {
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
 
   return urlRegex.test(url);
+};
+
+export const pickImage = async (ImagePicker, uploadUserProfilePic) => {
+  const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+
+  try {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result?.canceled) {
+      const fileSize = result.assets[0].fileSize;
+
+      if (fileSize <= MAX_FILE_SIZE_BYTES) {
+        await uploadUserProfilePic(result.assets[0].uri);
+      } else {
+        showToast("File size too big", false, "top");
+        console.error("Selected file exceeds the maximum allowed size.");
+      }
+    }
+  } catch (error) {
+    console.error("Error picking an image:", error);
+  }
+};
+
+export const uploadUserProfilePic = async (user, imageUri, setUser) => {
+  try {
+    const storageRef = ref(
+      FIREBASE_STORAGE,
+      `user-profiles/${user?.uid}/profile-pic.jpg`
+    );
+
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const ready = await uploadBytes(storageRef, blob);
+    const downloadURL = await getDownloadURL(storageRef);
+    setUser({ ...user, photoURL: downloadURL });
+
+    await updateProfile(user, {
+      photoURL: downloadURL,
+    });
+    showToast("Profile pic added!", true, "top");
+  } catch (error) {
+    showToast(error, false, "top");
+
+    console.error(
+      "Error uploading image:",
+      error.code,
+      error.message,
+      error.serverResponse
+    );
+  }
 };
