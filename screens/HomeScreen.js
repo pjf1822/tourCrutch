@@ -27,8 +27,9 @@ const HomeScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(route.params);
-      if (route?.params?.venueCreated) {
+      console.log("Route Params:", route.params);
+
+      if (route?.params?.venueCreated || route?.params?.venueUpdated) {
         refetch();
       }
       if (route.params?.venueDeleted) {
@@ -45,6 +46,7 @@ const HomeScreen = ({ navigation, route }) => {
       navigation.setParams({
         venueCreated: false,
         venueDeleted: false,
+        venueUpdated: false,
         venueId: null,
       });
     }

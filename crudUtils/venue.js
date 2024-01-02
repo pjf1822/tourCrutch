@@ -60,3 +60,31 @@ export const createVenue = async (
     console.error("Failed to create venue:", error);
   }
 };
+
+export const handleUpdateVenueInfo = async (
+  updateVenueInfoMutation,
+  id,
+  venueName,
+  venueAddress,
+  venueLink
+) => {
+  try {
+    const response = await updateVenueInfoMutation.mutateAsync({
+      id: id,
+      updatedData: {
+        name: venueName,
+        address: venueAddress,
+        link: venueLink,
+      },
+    });
+
+    if (response.message === "Venue updated successfully") {
+      showToast("You Updated the venue!", true, "top");
+    } else {
+      showToast("Failed to update venue", false, "top");
+    }
+  } catch (error) {
+    console.error("Error updating venue:", error);
+    showToast("An error occurred while updating the venue", false, "top");
+  }
+};

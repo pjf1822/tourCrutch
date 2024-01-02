@@ -1,24 +1,43 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
+import { View, Image, TextInput } from "react-native";
+import React, { useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
-import { updateVenueInfo, useDeleteVenue } from "../api";
+import { useDeleteVenue, useUpdateVenueInfo } from "../api";
 import { useUser } from "../UserContext";
-import { handleDelete } from "../crudUtils/venue";
+import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
   const { user } = useUser();
+
   const deleteVenueMutation = useDeleteVenue();
+  const updateVenueInfoMutation = useUpdateVenueInfo();
 
-  const handleUpdateVenueInfo = async () => {
-    const response = await updateVenueInfo(id, updatedData);
-  };
-
+  const [venueInfo, setVenueInfo] = useState({
+    name: venue?.name,
+    address: venue?.address,
+    link: venue?.link,
+  });
   return (
     <View>
-      <Text>{venue?.name}</Text>
-      <Text>{venue?.address}</Text>
+      <TextInput
+        value={venueInfo.name}
+        onChangeText={(newName) =>
+          setVenueInfo((prev) => ({ ...prev, name: newName }))
+        }
+      />
+      <TextInput
+        value={venueInfo.address}
+        onChangeText={(newAddress) =>
+          setVenueInfo((prev) => ({ ...prev, address: newAddress }))
+        }
+      />
+      <TextInput
+        value={venueInfo.link}
+        onChangeText={(newLink) =>
+          setVenueInfo((prev) => ({ ...prev, link: newLink }))
+        }
+      />
       {venue?.image && (
         <Image
           source={{ uri: venue?.image }}
@@ -26,7 +45,18 @@ const VenueDetailScreen = ({ route, navigation }) => {
         />
       )}
 
-      <MyButton title="update venue info" onPress={handleUpdateVenueInfo} />
+      <MyButton
+        title="update venue info"
+        onPress={() =>
+          handleUpdateVenueInfo(
+            updateVenueInfoMutation,
+            id,
+            venueInfo.name,
+            venueInfo.address,
+            venueInfo.link
+          )
+        }
+      />
 
       <CommentSection venueId={id} />
       <MyButton
