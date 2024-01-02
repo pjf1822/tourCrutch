@@ -3,6 +3,7 @@ import Toast from "react-native-root-toast";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const showToast = (toastMessage, success, position) => {
   let backgroundColor;
@@ -69,6 +70,13 @@ export const pickImage = async (ImagePicker, uploadUserProfilePic) => {
 };
 
 export const uploadUserProfilePic = async (user, imageUri, setUser) => {
+  const uploadCountString = await AsyncStorage.getItem("uploadCount");
+  const uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
+
+  if (uploadCount >= 10) {
+    showToast("Upload limit exceeded.", false, "top");
+    return;
+  }
   try {
     const storageRef = ref(
       FIREBASE_STORAGE,
@@ -84,6 +92,8 @@ export const uploadUserProfilePic = async (user, imageUri, setUser) => {
     await updateProfile(user, {
       photoURL: downloadURL,
     });
+    await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
+
     showToast("Profile pic added!", true, "top");
   } catch (error) {
     showToast(error, false, "top");

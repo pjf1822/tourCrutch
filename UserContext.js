@@ -1,19 +1,59 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "./firebaseConfig";
+import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from "./firebaseConfig";
 import GlobalLoader from "./GlobalLoader";
-import { uploadUserProfilePic } from "./helpers.js";
+import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { showToast } from "./helpers.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserContext = createContext();
 const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
   const { user, setUser } = useUser();
+  const uploadUserProfilePic = async (imageUri) => {
+    const uploadCountString = await AsyncStorage.getItem("uploadCount");
+    const uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
+
+    console.log(uploadCount, "the upload count");
+    if (uploadCount >= 10) {
+      showToast("Upload limit exceeded.", false, "top");
+      return;
+    }
+    try {
+      const storageRef = ref(
+        FIREBASE_STORAGE,
+        `user-profiles/${user?.uid}/profile-pic.jpg`
+      );
+
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const ready = await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+      setUser({ ...user, photoURL: downloadURL });
+
+      await updateProfile(user, {
+        photoURL: downloadURL,
+      });
+      await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
+
+      showToast("Profile pic added!", true, "top");
+    } catch (error) {
+      showToast(error, false, "top");
+
+      console.error(
+        "Error uploading image:",
+        error.code,
+        error.message,
+        error.serverResponse
+      );
+    }
+  };
 
   const storageContextValue = {
-    uploadUserProfilePic: (imageUri) =>
-      uploadUserProfilePic(user, imageUri, setUser),
+    uploadUserProfilePic,
   };
+
   return (
     <StorageContext.Provider value={storageContextValue}>
       {children}
