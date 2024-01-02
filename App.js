@@ -1,12 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { UserProvider } from "./UserContext";
+import { StorageProvider, UserProvider } from "./UserContext";
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LogBox } from "react-native";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
+import GlobalLoader from "./GlobalLoader";
 
 LogBox.ignoreLogs(["No native splash screen"]);
 
@@ -31,8 +32,7 @@ export default function App() {
   }, []);
 
   if (!appIsReady) {
-    // You can render a loading indicator or splash screen here
-    return null;
+    return <GlobalLoader />;
   }
   return (
     <QueryClientProvider client={queryClient}>
@@ -40,7 +40,9 @@ export default function App() {
         <RootSiblingParent>
           <NavigationContainer>
             <UserProvider>
-              <NavWrapper />
+              <StorageProvider>
+                <NavWrapper />
+              </StorageProvider>
             </UserProvider>
           </NavigationContainer>
         </RootSiblingParent>

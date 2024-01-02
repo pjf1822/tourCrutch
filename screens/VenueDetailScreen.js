@@ -77,9 +77,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
       <CommentSection
         venueId={id}
-        userId={user.uid}
+        userId={user?.uid}
         comments={venue.comments}
-        displayName={user.displayName}
+        displayName={user?.displayName}
+        userPhoto={user?.photoURL}
       />
       <MyButton
         title="Delete Venue"

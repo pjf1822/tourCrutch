@@ -1,14 +1,21 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import AddComment from "./AddComment";
 
-const CommentSection = ({ venueId, userId, comments, displayName }) => {
+const CommentSection = ({
+  venueId,
+  userId,
+  comments,
+  displayName,
+  userPhoto,
+}) => {
   return (
     <View>
       {comments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
           <Text>{comment?.comment}</Text>
           <Text>{comment?.userDisplayName}</Text>
+          <Image source={{ uri: userPhoto }} style={styles.userPhoto} />
         </View>
       ))}
       <AddComment venueId={venueId} userId={userId} displayName={displayName} />
@@ -26,7 +33,8 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
     borderWidth: 2,
     borderColor: "green",
-    paddingVertical: 10, // Add padding along the vertical axis (height)
+    paddingVertical: 10,
     paddingHorizontal: 0,
   },
+  userPhoto: { height: 40, width: 40, borderRadius: 25 },
 });
