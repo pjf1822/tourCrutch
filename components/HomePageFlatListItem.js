@@ -4,11 +4,15 @@ import { Icon } from "react-native-elements";
 import { regFont } from "../theme";
 
 const HomePageFlatListItem = ({ item, navigation }) => {
+  console.log(item, "the items ");
   return (
     <TouchableOpacity
       style={styles.flatListItemWrapper}
       onPress={() =>
-        navigation.navigate("VenueDetail", { id: item?._id, venue: item })
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "VenueDetail", params: { venue: item } }],
+        })
       }
     >
       <Text style={styles.itemStyle}>{item?.name}</Text>

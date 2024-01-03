@@ -2,19 +2,19 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
+import Smiley from "../assets/logo.png";
 
-import Smiley from "../assets/logo.png"; // Import the actual image source
 const CommentSection = ({ venueId, userId, comments, displayName }) => {
-  const [userPhotos, setUserPhotos] = useState({});
+  console.log(comments, "this should be one single comment");
   const { getUserProfilePic } = useStorage();
+  const [userPhotos, setUserPhotos] = useState({});
+  const [allComments, setAllComments] = useState(comments);
 
   const fetchUserProfilePic = async () => {
     const photos = {};
 
-    // Loop through comments and fetch user profile pics
-    for (const comment of comments) {
+    for (const comment of allComments) {
       const userUid = comment?.userUid;
-
       try {
         const userProfilePic = await getUserProfilePic(userUid);
         photos[userUid] = userProfilePic;
@@ -26,14 +26,13 @@ const CommentSection = ({ venueId, userId, comments, displayName }) => {
     setUserPhotos(photos);
   };
 
-  // Call the function when needed
   useEffect(() => {
     fetchUserProfilePic();
   }, []);
 
   return (
     <View>
-      {comments?.map((comment, index) => (
+      {allComments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
           <Text>{comment?.comment}</Text>
           <Text>{comment?.userDisplayName}</Text>
@@ -47,7 +46,13 @@ const CommentSection = ({ venueId, userId, comments, displayName }) => {
           )}
         </View>
       ))}
-      <AddComment venueId={venueId} userId={userId} displayName={displayName} />
+      <AddComment
+        venueId={venueId}
+        userId={userId}
+        displayName={displayName}
+        setAllComments={setAllComments}
+        allComments={allComments}
+      />
     </View>
   );
 };

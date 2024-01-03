@@ -9,7 +9,7 @@ import { regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 
 const VenueDetailScreen = ({ route, navigation }) => {
-  const { id, venue } = route.params;
+  const { venue } = route.params;
   const { user } = useUser();
 
   const deleteVenueMutation = useDeleteVenue();
@@ -64,7 +64,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
             handleUpdateVenueInfo(
               navigation,
               updateVenueInfoMutation,
-              id,
+              venue._id,
               name,
               address,
               link
@@ -76,9 +76,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
       />
 
       <CommentSection
-        venueId={id}
+        venueId={venue?._id}
         userId={user?.uid}
-        comments={venue.comments}
+        comments={venue?.comments}
         displayName={user?.displayName}
       />
       <MyButton
