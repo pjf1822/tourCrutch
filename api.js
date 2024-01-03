@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 
-// const apiUrl = "http://localhost:8001/api/venues";
-const apiUrl = "https://tour-crutch-server.onrender.com/api/venues";
+const apiUrl = "http://localhost:8001/api/venues";
+// const apiUrl = "https://tour-crutch-server.onrender.com/api/venues";
 
 export const useFetchVenues = () => {
   return useQuery("venues", async () => {
@@ -63,23 +63,34 @@ export const useDeleteVenue = () => {
 };
 
 export const createComment = (venueId, commentData) => {
-  return useMutation(
-    async () => {
-      return fetch(`${apiUrl}/createcomment/${venueId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(commentData),
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to create comment");
-        }
-        return res.json();
-      });
-    },
-    {
-      // Additional options for useMutation can be added here
-    }
-  );
+  return useMutation(async () => {
+    return fetch(`${apiUrl}/createcomment/${venueId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentData),
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to create comment");
+      }
+      return res.json();
+    });
+  }, {});
+};
+
+export const deleteComment = () => {
+  return useMutation(async ({ venueId, commentId }) => {
+    return fetch(`${apiUrl}/deletecomment/${venueId}/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to delete comment");
+      }
+      return res.json();
+    });
+  }, {});
 };
