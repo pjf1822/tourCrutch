@@ -5,15 +5,52 @@ import { useStorage } from "../Contexts/StorageContext";
 import Smiley from "../assets/logo.png";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { deleteComment } from "../api";
+import { deleteComment, useFetchVenueComments } from "../api";
 import { showToast } from "../helpers";
 
-const CommentSection = ({ venueId, userId, comments, displayName }) => {
+const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
   const [userPhotos, setUserPhotos] = useState({});
-  const [allComments, setAllComments] = useState(comments);
-
+  const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
+
+  console.log(
+    allComments.map((comment) => comment._id),
+    "here is all comments ids"
+  );
+  const {
+    data: venueCommentsData,
+    error,
+    isLoading,
+  } = useFetchVenueComments(venueId);
+
+  useEffect(() => {
+    if (venueCommentsData && venueCommentsData.venueComments) {
+      setAllComments(venueCommentsData.venueComments);
+    }
+  }, [venueCommentsData]);
+
+  useEffect(() => {
+    if (allComments?.length !== 0) {
+      const fetchUserProfilePic = async () => {
+        const photos = {};
+
+        for (const comment of allComments) {
+          const userUid = comment?.userUid;
+          try {
+            const userProfilePic = await getUserProfilePic(userUid);
+            photos[userUid] = userProfilePic;
+          } catch (error) {
+            photos[userUid] = "noPic";
+          }
+        }
+
+        setUserPhotos(photos);
+      };
+
+      fetchUserProfilePic();
+    }
+  }, [allComments]);
 
   const deleteCommentHandler = async (venueId, commentId) => {
     try {
@@ -22,29 +59,15 @@ const CommentSection = ({ venueId, userId, comments, displayName }) => {
         commentId,
       });
       showToast("Comment deleted successfully", true, "top");
-      setAllComments(response?.comments);
+
+      console.log(response._id, "here is the id that we just deleted");
+      setAllComments((prevComments) =>
+        prevComments.filter((comment) => comment._id !== response._id)
+      );
     } catch (error) {
       console.error("Failed to delete comment:", error);
     }
   };
-  const fetchUserProfilePic = async () => {
-    const photos = {};
-
-    for (const comment of allComments) {
-      const userUid = comment?.userUid;
-      try {
-        const userProfilePic = await getUserProfilePic(userUid);
-        photos[userUid] = userProfilePic;
-      } catch (error) {
-        photos[userUid] = "noPic";
-      }
-    }
-    setUserPhotos(photos);
-  };
-
-  useEffect(() => {
-    fetchUserProfilePic();
-  }, []);
 
   return (
     <View>

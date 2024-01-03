@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "react-query";
 
-const apiUrl = "http://localhost:8001/api/venues";
-// const apiUrl = "https://tour-crutch-server.onrender.com/api/venues";
+const apiUrl = "http://localhost:8001/api";
+// const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = () => {
   return useQuery("venues", async () => {
-    const res = await fetch(`${apiUrl}/getallvenues`);
+    const res = await fetch(`${apiUrl}/venues/getallvenues`);
     if (!res.ok) {
       throw new Error("Failed to fetch venues");
     }
@@ -15,7 +15,7 @@ export const useFetchVenues = () => {
 
 export const useCreateVenue = () => {
   return useMutation(async (venueData) => {
-    return fetch(`${apiUrl}/createvenue`, {
+    return fetch(`${apiUrl}/venues/createvenue`, {
       method: "POST",
       body: JSON.stringify(venueData),
       headers: {
@@ -31,7 +31,7 @@ export const useCreateVenue = () => {
 };
 export const useUpdateVenueInfo = () => {
   return useMutation(async ({ id, updatedData }) => {
-    return fetch(`${apiUrl}/editvenue/${id}`, {
+    return fetch(`${apiUrl}/venues/editvenue/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const useUpdateVenueInfo = () => {
 
 export const useDeleteVenue = () => {
   return useMutation(async (venueId) => {
-    return fetch(`${apiUrl}/deletevenue/${venueId}`, {
+    return fetch(`${apiUrl}/venues/deletevenue/${venueId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -62,9 +62,26 @@ export const useDeleteVenue = () => {
   });
 };
 
+export const useFetchVenueComments = (venueId) => {
+  return useQuery(
+    ["venueComments", venueId],
+    async () => {
+      const res = await fetch(`${apiUrl}/comments/getVenueComments/${venueId}`);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch comments for venue ${venueId}`);
+      }
+      return res.json();
+    },
+    {
+      onError: (error) => {
+        console.error("Error fetching venue comments:", error);
+      },
+    }
+  );
+};
 export const createComment = (venueId, commentData) => {
   return useMutation(async () => {
-    return fetch(`${apiUrl}/createcomment/${venueId}`, {
+    return fetch(`${apiUrl}/comments/createcomment/${venueId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +98,7 @@ export const createComment = (venueId, commentData) => {
 
 export const deleteComment = () => {
   return useMutation(async ({ venueId, commentId }) => {
-    return fetch(`${apiUrl}/deletecomment/${venueId}/${commentId}`, {
+    return fetch(`${apiUrl}/comments/deletecomment/${venueId}/${commentId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

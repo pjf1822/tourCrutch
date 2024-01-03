@@ -78,7 +78,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <CommentSection
         venueId={venue?._id}
         userId={user?.uid}
-        comments={venue?.comments}
         displayName={user?.displayName}
       />
       <MyButton
