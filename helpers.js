@@ -58,7 +58,12 @@ export const pickImage = async (ImagePicker, user, setUser) => {
       const fileSize = result.assets[0].fileSize;
 
       if (fileSize <= MAX_FILE_SIZE_BYTES) {
-        await uploadUserProfilePic(result.assets[0].uri, user, setUser);
+        const downloadURL = await uploadUserProfilePic(
+          result.assets[0].uri,
+          user,
+          setUser
+        );
+        return downloadURL;
       } else {
         showToast("File size too big", false, "top");
         console.error("Selected file exceeds the maximum allowed size.");
@@ -73,7 +78,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
   const uploadCountString = await AsyncStorage.getItem("uploadCount");
   let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
 
-  if (uploadCount >= 10) {
+  if (uploadCount >= 20) {
     showToast("Upload limit exceeded.", false, "top");
     return;
   }
@@ -92,13 +97,15 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
     const blob = await response.blob();
     const ready = await uploadBytes(storageRef, blob);
     const downloadURL = await getDownloadURL(storageRef);
-    setUser({ ...user, photoURL: downloadURL });
 
     await updateProfile(user, {
       photoURL: downloadURL,
     });
+
     await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
     showToast("Profile pic added!", true, "top");
+
+    return downloadURL;
   } catch (error) {
     showToast(error, false, "top");
 

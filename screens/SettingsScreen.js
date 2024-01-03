@@ -10,6 +10,7 @@ import { useUser } from "../Contexts/UserContext";
 const SettingsScreen = () => {
   const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
+  const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
 
   useEffect(() => {
     if (user && user?.displayName) {
@@ -25,10 +26,19 @@ const SettingsScreen = () => {
     }
   };
 
+  const handleUpdateProfilePic = async () => {
+    try {
+      const newDownloadURL = await pickImage(ImagePicker, user, setUser);
+      setUserProfilePic(newDownloadURL);
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
   return (
     <View>
       <Text style={styles.header}>Account Details </Text>
-      <Image source={{ uri: user?.photoURL }} style={styles.userPhoto} />
+      <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
       <View style={styles.formWrapper}>
         <View style={styles.entryWrapper}>
           <Text style={styles.label}>Email Account</Text>
@@ -54,11 +64,7 @@ const SettingsScreen = () => {
           >
             <Text>Update Password</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              pickImage(ImagePicker, user, setUser);
-            }}
-          >
+          <TouchableOpacity onPress={handleUpdateProfilePic}>
             <Text>upload profile pic</Text>
           </TouchableOpacity>
           <TouchableOpacity>
