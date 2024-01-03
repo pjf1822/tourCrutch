@@ -8,7 +8,7 @@ import { pickImage } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
 
 const SettingsScreen = () => {
-  const { user, setUser } = useUser();
+  const { user, setUser, fetchUserFromFirebase } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
 
@@ -28,8 +28,8 @@ const SettingsScreen = () => {
 
   const handleUpdateProfilePic = async () => {
     try {
-      const newDownloadURL = await pickImage(ImagePicker, user, setUser);
-      setUserProfilePic(newDownloadURL);
+      await pickImage(ImagePicker, user, setUser);
+      fetchUserFromFirebase();
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }

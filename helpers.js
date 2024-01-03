@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
-import { FIREBASE_STORAGE } from "./firebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from "./firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -58,12 +58,7 @@ export const pickImage = async (ImagePicker, user, setUser) => {
       const fileSize = result.assets[0].fileSize;
 
       if (fileSize <= MAX_FILE_SIZE_BYTES) {
-        const downloadURL = await uploadUserProfilePic(
-          result.assets[0].uri,
-          user,
-          setUser
-        );
-        return downloadURL;
+        await uploadUserProfilePic(result.assets[0].uri, user, setUser);
       } else {
         showToast("File size too big", false, "top");
         console.error("Selected file exceeds the maximum allowed size.");
@@ -78,7 +73,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
   const uploadCountString = await AsyncStorage.getItem("uploadCount");
   let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
 
-  if (uploadCount >= 20) {
+  if (uploadCount >= 40) {
     showToast("Upload limit exceeded.", false, "top");
     return;
   }
@@ -104,8 +99,6 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
 
     await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
     showToast("Profile pic added!", true, "top");
-
-    return downloadURL;
   } catch (error) {
     showToast(error, false, "top");
 

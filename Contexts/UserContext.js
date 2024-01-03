@@ -10,7 +10,8 @@ export const UserProvider = ({ children }) => {
   const [authCompleted, setAuthCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchUserFromFirebase = () => {
+    setLoading(true);
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
       setUser(authUser);
       setAuthCompleted(true);
@@ -18,6 +19,10 @@ export const UserProvider = ({ children }) => {
     });
 
     return () => unsubscribe();
+  };
+
+  useEffect(() => {
+    fetchUserFromFirebase();
   }, []);
 
   if (loading) {
@@ -25,7 +30,7 @@ export const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, fetchUserFromFirebase }}>
       {children}
     </UserContext.Provider>
   );
