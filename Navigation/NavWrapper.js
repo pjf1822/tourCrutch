@@ -45,7 +45,7 @@ export const NavWrapper = () => {
             name="App"
             component={AppNavigator}
             initialParams={{
-              user: { email: user?.email, photoURL: user.photoURL },
+              user: { email: user?.email },
             }}
           />
         </>

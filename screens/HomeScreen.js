@@ -28,8 +28,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      // console.log("Route Params:", route.params);
-
       if (route?.params?.venueCreated || route?.params?.venueUpdated) {
         refetch();
       }
