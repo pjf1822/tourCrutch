@@ -84,7 +84,7 @@ export const handleUpdateVenueInfo = async (
 
     if (response.message === "Venue updated successfully") {
       showToast("You Updated the venue!", true, "top");
-      navigation.navigate("Home", { venueUpdated: true });
+      // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
     } else {
       showToast("Failed to update venue", false, "top");
     }
