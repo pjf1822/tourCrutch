@@ -5,7 +5,6 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
 import { pickImage } from "../helpers";
-import { useStorage } from "../Contexts/StorageContext";
 import { useUser } from "../Contexts/UserContext";
 
 const SettingsScreen = () => {

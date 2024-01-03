@@ -1,11 +1,5 @@
-import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
-import { showToast } from "../helpers.js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { updateProfile } from "firebase/auth";
-import { FIREBASE_STORAGE } from "../firebaseConfig";
 import { createContext, useContext } from "react";
-import { useUser } from "./UserContext.js";
-import { uploadUserProfilePic } from "../helpers.js"; // Adjust the path as needed
+import { uploadUserProfilePic } from "../helpers.js";
 
 const StorageContext = createContext();
 

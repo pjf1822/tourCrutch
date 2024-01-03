@@ -78,7 +78,6 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
     return;
   }
 
-  console.log(user, "show me the user");
   if (!user || !user.getIdToken) {
     showToast("User information is missing or incomplete.", false, "top");
     return;
