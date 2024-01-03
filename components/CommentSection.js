@@ -3,13 +3,30 @@ import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
 import Smiley from "../assets/logo.png";
+import { Icon } from "react-native-elements";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { deleteComment } from "../api";
+import { showToast } from "../helpers";
 
 const CommentSection = ({ venueId, userId, comments, displayName }) => {
-  console.log(comments, "this should be one single comment");
   const { getUserProfilePic } = useStorage();
   const [userPhotos, setUserPhotos] = useState({});
   const [allComments, setAllComments] = useState(comments);
 
+  const deleteCommentMutation = deleteComment();
+
+  const deleteCommentHandler = async (venueId, commentId) => {
+    try {
+      const response = await deleteCommentMutation.mutateAsync({
+        venueId,
+        commentId,
+      });
+      showToast("Comment deleted successfully", true, "top");
+      setAllComments(response?.comments);
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+    }
+  };
   const fetchUserProfilePic = async () => {
     const photos = {};
 
@@ -19,7 +36,6 @@ const CommentSection = ({ venueId, userId, comments, displayName }) => {
         const userProfilePic = await getUserProfilePic(userUid);
         photos[userUid] = userProfilePic;
       } catch (error) {
-        console.error(`Error fetching profile pic for user ${userUid}:`, error);
         photos[userUid] = "noPic";
       }
     }
@@ -34,6 +50,11 @@ const CommentSection = ({ venueId, userId, comments, displayName }) => {
     <View>
       {allComments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
+          <TouchableOpacity
+            onPress={() => deleteCommentHandler(venueId, comment._id)}
+          >
+            <Icon name="close" />
+          </TouchableOpacity>
           <Text>{comment?.comment}</Text>
           <Text>{comment?.userDisplayName}</Text>
           {userPhotos[comment?.userUid] === "noPic" ? (
