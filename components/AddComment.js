@@ -4,13 +4,7 @@ import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { createComment } from "../api";
 
-const AddComment = ({
-  venueId,
-  userId,
-  displayName,
-  setAllComments,
-  allComments,
-}) => {
+const AddComment = ({ venueId, userId, displayName, setAllComments }) => {
   const [newComment, setNewComment] = useState("");
 
   const addCommentMutation = createComment(venueId, {
@@ -22,9 +16,7 @@ const AddComment = ({
   const addComment = async () => {
     try {
       const response = await addCommentMutation.mutateAsync();
-      console.log(response, "the response");
-      // setAllComments(response?.data?.comments);
-      console.log(response, "and here is the reposne");
+      setAllComments(response?.comments);
       setNewComment("");
     } catch (error) {
       console.error("Failed to create comment:", error);

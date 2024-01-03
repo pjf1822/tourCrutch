@@ -4,7 +4,6 @@ import { Icon } from "react-native-elements";
 import { regFont } from "../theme";
 
 const HomePageFlatListItem = ({ item, navigation }) => {
-  console.log(item, "the items ");
   return (
     <TouchableOpacity
       style={styles.flatListItemWrapper}
