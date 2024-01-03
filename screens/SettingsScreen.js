@@ -1,12 +1,16 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../UserContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { regFont } from "../theme";
+import * as ImagePicker from "expo-image-picker";
+import { pickImage } from "../helpers";
+import { useUser } from "../Contexts/UserContext";
 
 const SettingsScreen = () => {
-  const { user, setUser } = useUser();
+  const { user, setUser, fetchUserFromFirebase } = useUser();
   const [displayName, setDisplayName] = useState("");
+  const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
 
   useEffect(() => {
     if (user && user?.displayName) {
@@ -21,9 +25,20 @@ const SettingsScreen = () => {
       console.log(error.message);
     }
   };
+
+  const handleUpdateProfilePic = async () => {
+    try {
+      await pickImage(ImagePicker, user, setUser);
+      fetchUserFromFirebase();
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
   return (
     <View>
       <Text style={styles.header}>Account Details </Text>
+      <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
       <View style={styles.formWrapper}>
         <View style={styles.entryWrapper}>
           <Text style={styles.label}>Email Account</Text>
@@ -48,6 +63,9 @@ const SettingsScreen = () => {
             onPress={updatePassword}
           >
             <Text>Update Password</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleUpdateProfilePic}>
+            <Text>upload profile pic</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <Text>Delete Account</Text>
@@ -76,13 +94,13 @@ const styles = StyleSheet.create({
   header: {
     // color: colors.beige,
     fontSize: 40,
-    // fontFamily: regFont.fontFamily,
+    fontFamily: regFont.fontFamily,
     marginBottom: 20,
   },
   label: {
     // color: colors.beige,
     fontSize: 30,
-    // fontFamily: regFont.fontFamily,
+    fontFamily: regFont.fontFamily,
     marginBottom: 8,
   },
   text: { fontSize: 25 },
@@ -92,7 +110,7 @@ const styles = StyleSheet.create({
   },
   deleteAccountText: {
     fontSize: 25,
-    // fontFamily: regFont.fontFamily,
+    fontFamily: regFont.fontFamily,
   },
   touchableWrapper: {
     // backgroundColor: colors.beige,
@@ -108,5 +126,9 @@ const styles = StyleSheet.create({
     maxHeight: "93%",
     // backgroundColor: colors.blue,
     borderRadius: "10%",
+  },
+  userPhoto: {
+    height: 50,
+    width: 50,
   },
 });

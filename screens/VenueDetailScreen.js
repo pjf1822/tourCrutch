@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
 import { useDeleteVenue, useUpdateVenueInfo } from "../api";
-import { useUser } from "../UserContext";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
 import { regFont } from "../theme";
+import { useUser } from "../Contexts/UserContext";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { id, venue } = route.params;
@@ -77,9 +77,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
       <CommentSection
         venueId={id}
-        userId={user.uid}
+        userId={user?.uid}
         comments={venue.comments}
-        displayName={user.displayName}
+        displayName={user?.displayName}
+        userPhoto={user?.photoURL}
       />
       <MyButton
         title="Delete Venue"

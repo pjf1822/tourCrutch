@@ -1,13 +1,11 @@
 import React from "react";
-import { useUser } from "../UserContext";
 import SignupScreen from "../screens/SignupScreen";
-
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Image, Text, TouchableOpacity } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 import DrawerNavigator from "../components/Drawer/DrawerNavigator";
+import { useUser } from "../Contexts/UserContext";
 
 // AUTH STACK
 const AuthStack = createNativeStackNavigator();
@@ -46,7 +44,9 @@ export const NavWrapper = () => {
           <Stack.Screen
             name="App"
             component={AppNavigator}
-            initialParams={{ user: { email: user?.email } }}
+            initialParams={{
+              user: { email: user?.email },
+            }}
           />
         </>
       ) : (

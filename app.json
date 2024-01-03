@@ -18,14 +18,17 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "The app accesses your photos to choose youre profile pic."
         }
       ]
     ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "13"
+      "buildNumber": "13",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
