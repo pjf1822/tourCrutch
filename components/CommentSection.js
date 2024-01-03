@@ -1,21 +1,50 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
+import { useStorage } from "../Contexts/StorageContext";
 
-const CommentSection = ({
-  venueId,
-  userId,
-  comments,
-  displayName,
-  userPhoto,
-}) => {
+import Smiley from "../assets/logo.png"; // Import the actual image source
+const CommentSection = ({ venueId, userId, comments, displayName }) => {
+  const [userPhotos, setUserPhotos] = useState({});
+  const { getUserProfilePic } = useStorage();
+
+  const fetchUserProfilePic = async () => {
+    const photos = {};
+
+    // Loop through comments and fetch user profile pics
+    for (const comment of comments) {
+      const userUid = comment?.userUid;
+
+      try {
+        const userProfilePic = await getUserProfilePic(userUid);
+        photos[userUid] = userProfilePic;
+      } catch (error) {
+        console.error(`Error fetching profile pic for user ${userUid}:`, error);
+        photos[userUid] = "noPic";
+      }
+    }
+    setUserPhotos(photos);
+  };
+
+  // Call the function when needed
+  useEffect(() => {
+    fetchUserProfilePic();
+  }, []);
+
   return (
     <View>
       {comments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
           <Text>{comment?.comment}</Text>
           <Text>{comment?.userDisplayName}</Text>
-          <Image source={{ uri: userPhoto }} style={styles.userPhoto} />
+          {userPhotos[comment?.userUid] === "noPic" ? (
+            <Image source={Smiley} style={styles.userPhoto} />
+          ) : (
+            <Image
+              source={{ uri: userPhotos[comment?.userUid] }}
+              style={styles.userPhoto}
+            />
+          )}
         </View>
       ))}
       <AddComment venueId={venueId} userId={userId} displayName={displayName} />

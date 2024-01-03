@@ -80,7 +80,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
         userId={user?.uid}
         comments={venue.comments}
         displayName={user?.displayName}
-        userPhoto={user?.photoURL}
       />
       <MyButton
         title="Delete Venue"

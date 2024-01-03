@@ -1,11 +1,12 @@
 import { createContext, useContext } from "react";
-import { uploadUserProfilePic } from "../helpers.js";
+import { uploadUserProfilePic, getUserProfilePic } from "../helpers.js";
 
 const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
   const storageContextValue = {
     uploadUserProfilePic,
+    getUserProfilePic,
   };
   return (
     <StorageContext.Provider value={storageContextValue}>

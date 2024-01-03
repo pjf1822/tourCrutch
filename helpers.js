@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
-import { FIREBASE_AUTH, FIREBASE_STORAGE } from "./firebaseConfig";
+import { FIREBASE_STORAGE } from "./firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -108,5 +108,20 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
       error.message,
       error.serverResponse
     );
+  }
+};
+
+export const getUserProfilePic = async (userUid) => {
+  try {
+    const storageRef = ref(
+      FIREBASE_STORAGE,
+      `user-profiles/${userUid}/profile-pic.jpg`
+    );
+
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
+  } catch (error) {
+    const downloadURL = "noPic";
+    return downloadURL;
   }
 };
