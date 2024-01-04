@@ -1,34 +1,5 @@
 import { isValidUrl, showToast } from "../helpers";
 
-export const handleDelete = async (
-  venueId,
-  createdByUID,
-  userUID,
-  navigation,
-  deleteVenueMutation
-) => {
-  try {
-    if (!createdByUID) {
-      throw new Error("Venue createdByUID not found. Unable to delete venue.");
-    }
-    if (createdByUID !== userUID) {
-      showToast(
-        "User does not have permission to delete this venue!",
-        false,
-        "top"
-      );
-
-      throw new Error("User does not have permission to delete this venue.");
-    }
-    const result = await deleteVenueMutation.mutateAsync(venueId);
-    showToast("Venue deleted!", true, "top");
-
-    navigation.navigate("Home", { venueDeleted: true, venueId: venueId });
-  } catch (error) {
-    showToast(error.message, false, "top");
-  }
-};
-
 export const createVenue = async (
   values,
   user,
@@ -61,14 +32,28 @@ export const createVenue = async (
 export const handleUpdateVenueInfo = async (
   navigation,
   updateVenueInfoMutation,
-  id,
+  venueId,
+  createdByUID,
+  userUID,
   venueName,
   venueAddress,
   venueLink
 ) => {
   try {
+    if (!createdByUID) {
+      throw new Error("Venue createdByUID not found. Unable to update venue.");
+    }
+    if (createdByUID !== userUID) {
+      showToast(
+        "User does not have permission to update this venue!",
+        false,
+        "top"
+      );
+
+      throw new Error("User does not have permission to update this venue.");
+    }
     const response = await updateVenueInfoMutation.mutateAsync({
-      id: id,
+      id: venueId,
       updatedData: {
         name: venueName,
         address: venueAddress,
@@ -78,6 +63,34 @@ export const handleUpdateVenueInfo = async (
 
     showToast("You Updated the venue!", true, "top");
     // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
+  } catch (error) {
+    showToast(error.message, false, "top");
+  }
+};
+
+export const handleDelete = async (
+  venueId,
+  createdByUID,
+  userUID,
+  navigation,
+  deleteVenueMutation
+) => {
+  try {
+    if (!createdByUID) {
+      throw new Error("Venue createdByUID not found. Unable to delete venue.");
+    }
+    if (createdByUID !== userUID) {
+      showToast(
+        "User does not have permission to delete this venue!",
+        false,
+        "top"
+      );
+
+      throw new Error("User does not have permission to delete this venue.");
+    }
+    const result = await deleteVenueMutation.mutateAsync(venueId);
+    showToast("Venue deleted!", true, "top");
+    navigation.navigate("Home", { venueDeleted: true, venueId: venueId });
   } catch (error) {
     showToast(error.message, false, "top");
   }

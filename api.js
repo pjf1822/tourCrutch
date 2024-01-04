@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from "react-query";
 
-const apiUrl = "http://localhost:8001/api";
-// const apiUrl = "https://tour-crutch-server.onrender.com/api";
+// const apiUrl = "http://localhost:8001/api";
+const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = () => {
   return useQuery("venues", async () => {
     const res = await fetch(`${apiUrl}/venues/getallvenues`);
     if (!res.ok) {
-      throw new Error("Failed to fetch venues");
+      const errorResponse = await res.json();
+      throw new Error(errorResponse.message || "Failed to get venues");
     }
     return res.json();
   });
@@ -55,9 +56,10 @@ export const useDeleteVenue = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => {
+    }).then(async (res) => {
       if (!res.ok) {
-        throw new Error("Failed to delete venue");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to delete venue");
       }
       return res.json();
     });
