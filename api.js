@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 
-// const apiUrl = "http://localhost:8001/api";
-const apiUrl = "https://tour-crutch-server.onrender.com/api";
+const apiUrl = "http://localhost:8001/api";
+// const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = () => {
   return useQuery("venues", async () => {
@@ -21,9 +21,10 @@ export const useCreateVenue = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => {
+    }).then(async (res) => {
       if (!res.ok) {
-        throw new Error("Failed to create venue");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to create venue");
       }
       return res.json();
     });
@@ -37,9 +38,10 @@ export const useUpdateVenueInfo = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updatedData),
-    }).then((res) => {
+    }).then(async (res) => {
       if (!res.ok) {
-        throw new Error("Failed to update venue");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to update venue");
       }
       return res.json();
     });

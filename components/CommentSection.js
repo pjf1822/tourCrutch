@@ -14,10 +14,6 @@ const CommentSection = ({ venueId, userId, displayName }) => {
   const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
 
-  console.log(
-    allComments.map((comment) => comment._id),
-    "here is all comments ids"
-  );
   const {
     data: venueCommentsData,
     error,

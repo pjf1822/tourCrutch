@@ -20,16 +20,12 @@ export const handleDelete = async (
 
       throw new Error("User does not have permission to delete this venue.");
     }
-
     const result = await deleteVenueMutation.mutateAsync(venueId);
-
     showToast("Venue deleted!", true, "top");
 
     navigation.navigate("Home", { venueDeleted: true, venueId: venueId });
   } catch (error) {
-    showToast("Venue could not be  deleted!", false, "top");
-
-    console.error("Failed to delete venue:", error);
+    showToast(error.message, false, "top");
   }
 };
 
@@ -58,9 +54,7 @@ export const createVenue = async (
     resetForm();
     navigation.navigate("Home", { venueCreated: true });
   } catch (error) {
-    showToast("Could not create new venue", false, "top");
-
-    console.error("Failed to create venue:", error);
+    showToast(error.message, false, "top");
   }
 };
 
@@ -82,14 +76,9 @@ export const handleUpdateVenueInfo = async (
       },
     });
 
-    if (response.message === "Venue updated successfully") {
-      showToast("You Updated the venue!", true, "top");
-      // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
-    } else {
-      showToast("Failed to update venue", false, "top");
-    }
+    showToast("You Updated the venue!", true, "top");
+    // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
   } catch (error) {
-    console.error("Error updating venue:", error);
-    showToast("An error occurred while updating the venue", false, "top");
+    showToast(error.message, false, "top");
   }
 };
