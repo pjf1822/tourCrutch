@@ -65,6 +65,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
               navigation,
               updateVenueInfoMutation,
               venue._id,
+              venue?.createdByUID,
+              user?.uid,
+
               name,
               address,
               link

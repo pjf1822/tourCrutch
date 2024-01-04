@@ -16,7 +16,6 @@ const HomePageFlatListItem = ({ item, navigation }) => {
     >
       <Text style={styles.itemStyle}>{item?.name}</Text>
       <Text style={styles.itemStyle}>{item?.address}</Text>
-      <Text style={styles.itemStyle}>{item?.link}</Text>
       <Icon name="arrow-right" />
     </TouchableOpacity>
   );
