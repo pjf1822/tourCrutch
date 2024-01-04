@@ -24,6 +24,7 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [fetchedVenues, isLoading, isError]);
 
+  // For the search bar
   const result = filterVenues(venues, search);
 
   useFocusEffect(
@@ -54,7 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1 }}>
       <SearchBar
-        placeholder="Hi bitc"
+        placeholder="search a venue bitch"
         value={search}
         onChangeText={(search) => setSearch(search)}
         style={{ flex: 1, fontFamily: regFont.fontFamily }}

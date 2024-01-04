@@ -1,10 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
+import { View } from "react-native";
 import React, { useState } from "react";
 import { FIREBASE_AUTH } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
 import { TEST_THING } from "@env";
 import { useUser } from "../Contexts/UserContext";
+import MyButton from "../components/MyButton";
+import MyTextInput from "../components/MyTextInput";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -17,29 +19,32 @@ const SignupScreen = () => {
 
   return (
     <View style={{ marginTop: 100 }}>
-      <Text>{TEST_THING}</Text>
-      <TextInput
+      {/* <Text>{TEST_THING}</Text> */}
+      <MyTextInput
         value={email}
         onChangeText={(value) => {
           setEmail(value);
         }}
+        placeholder={"email"}
       />
-      <TextInput
+      <MyTextInput
         value={password}
         onChangeText={(value) => {
           setPassword(value);
         }}
+        placeholder={"password"}
       />
-      <Button
+      <MyButton
         title="signup"
         onPress={() =>
           handleSignUp(auth, email, password, displayName, setUser)
         }
       />
 
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text>Go to Login Page</Text>
-      </TouchableOpacity>
+      <MyButton
+        title="go to Login Page"
+        onPress={() => navigation.navigate("Login")}
+      />
     </View>
   );
 };

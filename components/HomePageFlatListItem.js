@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignContent: "space-between",
-    height: 100,
-    backgroundColor: "green",
+    padding: 10,
   },
   itemStyle: {
     fontFamily: regFont.fontFamily,
+    flex: 1,
   },
 });
