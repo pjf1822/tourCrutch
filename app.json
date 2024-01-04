@@ -2,7 +2,7 @@
   "expo": {
     "name": "tourCrutch",
     "slug": "tourCrutch",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -25,7 +25,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "14",
+      "buildNumber": "15",
       "config": {
         "usesNonExemptEncryption": false
       }
