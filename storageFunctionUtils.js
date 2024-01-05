@@ -2,6 +2,8 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
 export const pickImage = async (ImagePicker, user, setUser) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -80,6 +82,28 @@ export const getUserProfilePic = async (userUid) => {
 
     const downloadURL = await getDownloadURL(storageRef);
     return downloadURL;
+  } catch (error) {
+    const downloadURL = "noPic";
+    return downloadURL;
+  }
+};
+
+export const getVenuePDF = async (venueId) => {
+  try {
+    const storageRef = ref(
+      FIREBASE_STORAGE,
+      `venue-info/${venueId}/tech-pack.pdf`
+    );
+
+    const downloadURL = await getDownloadURL(storageRef);
+    const localUri = `${FileSystem.cacheDirectory}tech-pack.pdf`;
+    await FileSystem.downloadAsync(downloadURL, localUri);
+
+    // Trigger the download
+    await Sharing.shareAsync(localUri, {
+      mimeType: "application/pdf",
+      dialogTitle: "Download PDF",
+    });
   } catch (error) {
     const downloadURL = "noPic";
     return downloadURL;

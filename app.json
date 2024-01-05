@@ -20,6 +20,12 @@
         {
           "photosPermission": "The app accesses your photos to choose youre profile pic."
         }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
       ]
     ],
     "ios": {

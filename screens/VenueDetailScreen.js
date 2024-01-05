@@ -7,6 +7,10 @@ import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
 import { regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
+import * as DocumentPicker from "expo-document-picker";
+import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
+import { FIREBASE_STORAGE } from "../firebaseConfig";
+import { getVenuePDF } from "../storageFunctionUtils";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { venue } = route.params;
@@ -20,6 +24,37 @@ const VenueDetailScreen = ({ route, navigation }) => {
     address: venue?.address,
     link: venue?.link,
   });
+
+  const uploadPDF = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+      });
+      await uploadPDFToFirebase(result.assets[0].uri);
+
+      if (result.type === "success") {
+      } else if (result.type === "cancel") {
+        console.log("Document picking cancelled");
+      }
+    } catch (error) {
+      if (!DocumentPicker.isCancel(error)) {
+        console.error("Error picking a document:", error);
+      }
+    }
+  };
+
+  const uploadPDFToFirebase = async (imageUri) => {
+    try {
+      const storageRef = ref(
+        FIREBASE_STORAGE,
+        `venue-info/${venue._id}/tech-pack.pdf`
+      );
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const ready = await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+    } catch (error) {}
+  };
 
   return (
     <View>
@@ -67,7 +102,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
               venue._id,
               venue?.createdByUID,
               user?.uid,
-
               name,
               address,
               link
@@ -83,6 +117,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         userId={user?.uid}
         displayName={user?.displayName}
       />
+      <MyButton title="Upload Pdf" onPress={uploadPDF} />
       <MyButton
         title="Delete Venue"
         onPress={() =>
@@ -95,6 +130,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
           )
         }
       />
+
+      <MyButton title="Get Venue PDF" onPress={() => getVenuePDF(venue._id)} />
     </View>
   );
 };
