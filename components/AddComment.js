@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { createComment } from "../api";
+import { addComment } from "../crudUtils/comment";
 
 const AddComment = ({
   venueId,
@@ -19,16 +20,6 @@ const AddComment = ({
     userDisplayName: displayName,
   });
 
-  const addComment = async () => {
-    try {
-      const response = await addCommentMutation.mutateAsync();
-      const updatedComments = [...allComments, response];
-      setAllComments(updatedComments);
-      setNewComment("");
-    } catch (error) {
-      console.error("Failed to create comment:", error);
-    }
-  };
   return (
     <View>
       <MyTextInput
@@ -36,7 +27,17 @@ const AddComment = ({
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
       />
-      <MyButton title={"Submitm Cooment"} onPress={addComment} />
+      <MyButton
+        title={"Submitm Cooment"}
+        onPress={() =>
+          addComment(
+            addCommentMutation,
+            allComments,
+            setNewComment,
+            setAllComments
+          )
+        }
+      />
     </View>
   );
 };
