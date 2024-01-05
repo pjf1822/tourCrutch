@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
@@ -6,13 +6,14 @@ import Smiley from "../assets/logo.png";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { deleteComment, useFetchVenueComments } from "../api";
-import { showToast } from "../helpers";
+import { deleteCommentHandler } from "../crudUtils/comment";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
   const [userPhotos, setUserPhotos] = useState({});
   const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
+  const [arePicsLoading, setArePicsLoading] = useState(true);
 
   const {
     data: venueCommentsData,
@@ -42,35 +43,26 @@ const CommentSection = ({ venueId, userId, displayName }) => {
         }
 
         setUserPhotos(photos);
+        setArePicsLoading(false);
       };
 
       fetchUserProfilePic();
     }
   }, [allComments]);
 
-  const deleteCommentHandler = async (venueId, commentId) => {
-    try {
-      const response = await deleteCommentMutation.mutateAsync({
-        venueId,
-        commentId,
-      });
-      showToast("Comment deleted successfully", true, "top");
-
-      console.log(response._id, "here is the id that we just deleted");
-      setAllComments((prevComments) =>
-        prevComments.filter((comment) => comment._id !== response._id)
-      );
-    } catch (error) {
-      console.error("Failed to delete comment:", error);
-    }
-  };
-
   return (
     <View>
       {allComments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
           <TouchableOpacity
-            onPress={() => deleteCommentHandler(venueId, comment._id)}
+            onPress={() =>
+              deleteCommentHandler(
+                venueId,
+                comment._id,
+                deleteCommentMutation,
+                setAllComments
+              )
+            }
           >
             <Icon name="close" />
           </TouchableOpacity>
@@ -79,10 +71,16 @@ const CommentSection = ({ venueId, userId, displayName }) => {
           {userPhotos[comment?.userUid] === "noPic" ? (
             <Image source={Smiley} style={styles.userPhoto} />
           ) : (
-            <Image
-              source={{ uri: userPhotos[comment?.userUid] }}
-              style={styles.userPhoto}
-            />
+            <>
+              {arePicsLoading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <Image
+                  source={{ uri: userPhotos[comment?.userUid] }}
+                  style={styles.userPhoto}
+                />
+              )}
+            </>
           )}
         </View>
       ))}

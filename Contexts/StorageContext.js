@@ -1,5 +1,8 @@
 import { createContext, useContext } from "react";
-import { uploadUserProfilePic, getUserProfilePic } from "../helpers.js";
+import {
+  uploadUserProfilePic,
+  getUserProfilePic,
+} from "../storageFunctionUtils.js";
 
 const StorageContext = createContext();
 

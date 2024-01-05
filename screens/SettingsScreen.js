@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
-import { pickImage } from "../helpers";
+import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
+import MyTextInput from "../components/MyTextInput";
+import MyButton from "../components/MyButton";
+import { pickImage } from "../storageFunctionUtils";
 
 const SettingsScreen = () => {
-  const { user, setUser, fetchUserFromFirebase } = useUser();
+  const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
 
@@ -18,9 +21,28 @@ const SettingsScreen = () => {
     }
   }, [user]);
 
+  const updateUserDisplayName = async () => {
+    try {
+      if (user) {
+        await updateProfile(user, {
+          displayName: displayName,
+        });
+
+        setUser({ ...user, displayName: displayName });
+        showToast("Display name updated!", true, "top");
+      } else {
+        showToast("User info not available!", false, "top");
+      }
+    } catch (error) {
+      showToast("Error updating", false, "top");
+      console.error("Error updating display name:", error.message);
+    }
+  };
+
   const updatePassword = async () => {
     try {
       await sendPasswordResetEmail(user?.auth, user?.email);
+      showToast("Email sent to update password!", true, "top");
     } catch (error) {
       console.log(error.message);
     }
@@ -29,7 +51,6 @@ const SettingsScreen = () => {
   const handleUpdateProfilePic = async () => {
     try {
       await pickImage(ImagePicker, user, setUser);
-      fetchUserFromFirebase();
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }
@@ -47,7 +68,16 @@ const SettingsScreen = () => {
         <View style={styles.entryWrapper}>
           <View style={styles.entryWrapper}>
             <Text style={styles.label}>Display Name</Text>
-            <Text style={styles.text}>{user?.displayName}</Text>
+            <MyTextInput
+              placeholder="displayName"
+              onChangeText={(thing) => setDisplayName(thing)}
+              value={displayName}
+            />
+            <Text>{user.displayName && user.displayName}</Text>
+            <MyButton
+              title={"update displayname"}
+              onPress={updateUserDisplayName}
+            />
           </View>
         </View>
         <View
@@ -128,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: "10%",
   },
   userPhoto: {
-    height: 50,
-    width: 50,
+    height: 80,
+    width: 80,
   },
 });

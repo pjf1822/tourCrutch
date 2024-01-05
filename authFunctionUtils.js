@@ -4,9 +4,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import Toast from "react-native-root-toast";
 import { FIREBASE_AUTH } from "./firebaseConfig";
-
+import { showToast } from "./helpers.js";
 export const handleSignUp = async (
   auth,
   email,
@@ -20,7 +19,6 @@ export const handleSignUp = async (
       email,
       password
     );
-    console.log(response, "the response");
     const userWithDisplayName = { ...response.user, displayName };
 
     await updateProfile(response.user, {
@@ -31,57 +29,26 @@ export const handleSignUp = async (
     const userCredentials = JSON.stringify({
       accessToken: response?.user?.accessToken,
     });
-
+    showToast("Youve signed up!", true, "top");
     await AsyncStorage.setItem("userCredentials", userCredentials);
   } catch (error) {
-    console.log(error, "the error ");
     if (error.message === "Firebase: Error (auth/invalid-email).") {
-      let toast = Toast.show("Invalid Email", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "red",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast("Invalid Email!", false, "top");
     } else if (
       error.message ===
       "Firebase: Password should be at least 6 characters (auth/weak-password)."
     ) {
-      let toast = Toast.show("Password should be at least 6 characters long", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "red",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast("Password should be at least 6 characters long", false, "top");
     } else if (
       error.message === "Firebase: Error (auth/network-request-failed)."
     ) {
-      let toast = Toast.show("Password should be at least 6 characters long", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "red",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast("The server is still spinning sorrryy", false, "top");
     } else if (
       error.message === "Firebase: Error (auth/email-already-in-use)."
     ) {
-      let toast = Toast.show("An account under that name already exists", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "red",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast("An account under that name already exists", false, "top");
     } else {
-      let toast = Toast.show(error.message, {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "red",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast(error.message, false, "top");
     }
   }
 };
@@ -90,13 +57,7 @@ export const handleSignIn = async (auth, email, password, setUser) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
     if (response?.user?.email) {
-      let toast = Toast.show("Sign-in successful!", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: "green",
-        textColor: "beige",
-        opacity: 1,
-      });
+      showToast("Signin successful!", true, "top");
     }
 
     const userCredentials = JSON.stringify({
@@ -105,15 +66,7 @@ export const handleSignIn = async (auth, email, password, setUser) => {
     await AsyncStorage.setItem("userCredentials", userCredentials);
     setUser(response.user);
   } catch (error) {
-    console.log("Sign-in error:", error.message);
-
-    let toast = Toast.show("Sign-in failed. Check your credentials.", {
-      duration: Toast.durations.LONG,
-      position: Toast.positions.TOP,
-      backgroundColor: "red",
-      textColor: "beige",
-      opacity: 1,
-    });
+    showToast("Sign-in failed. Check your credentials.", false, "top");
   }
 };
 
