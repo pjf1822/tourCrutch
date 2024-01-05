@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
@@ -13,6 +13,7 @@ const CommentSection = ({ venueId, userId, displayName }) => {
   const [userPhotos, setUserPhotos] = useState({});
   const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
+  const [arePicsLoading, setArePicsLoading] = useState(true);
 
   const {
     data: venueCommentsData,
@@ -42,6 +43,7 @@ const CommentSection = ({ venueId, userId, displayName }) => {
         }
 
         setUserPhotos(photos);
+        setArePicsLoading(false);
       };
 
       fetchUserProfilePic();
@@ -69,10 +71,16 @@ const CommentSection = ({ venueId, userId, displayName }) => {
           {userPhotos[comment?.userUid] === "noPic" ? (
             <Image source={Smiley} style={styles.userPhoto} />
           ) : (
-            <Image
-              source={{ uri: userPhotos[comment?.userUid] }}
-              style={styles.userPhoto}
-            />
+            <>
+              {arePicsLoading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <Image
+                  source={{ uri: userPhotos[comment?.userUid] }}
+                  style={styles.userPhoto}
+                />
+              )}
+            </>
           )}
         </View>
       ))}
