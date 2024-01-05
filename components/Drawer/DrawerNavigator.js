@@ -40,7 +40,7 @@ const DrawerNavigator = ({ user }) => {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} user={user} />}
       screenOptions={({ navigation }) => ({
-        headerTitle: user.displayName,
+        headerTitle: "",
         headerLeft: () => (
           <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
             <Image

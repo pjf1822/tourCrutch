@@ -10,7 +10,7 @@ import MyTextInput from "../components/MyTextInput";
 import MyButton from "../components/MyButton";
 
 const SettingsScreen = () => {
-  const { user, setUser, fetchUserFromFirebase } = useUser();
+  const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
 
@@ -19,6 +19,7 @@ const SettingsScreen = () => {
       setDisplayName(user?.displayName);
     }
   }, [user]);
+
   const updateUserDisplayName = async () => {
     try {
       if (user) {
@@ -49,7 +50,6 @@ const SettingsScreen = () => {
   const handleUpdateProfilePic = async () => {
     try {
       await pickImage(ImagePicker, user, setUser);
-      fetchUserFromFirebase();
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }
@@ -72,6 +72,7 @@ const SettingsScreen = () => {
               onChangeText={(thing) => setDisplayName(thing)}
               value={displayName}
             />
+            <Text>{user.displayName && user.displayName}</Text>
             <MyButton
               title={"update displayname"}
               onPress={updateUserDisplayName}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import GlobalLoader from "../GlobalLoader";
 import { FIREBASE_AUTH } from "../firebaseConfig";
 
@@ -11,6 +11,8 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUserFromFirebase = () => {
+    console.log("we are fetching the user");
+
     setLoading(true);
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
       setUser(authUser);
@@ -24,6 +26,17 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     fetchUserFromFirebase();
   }, []);
+
+  useEffect(() => {
+    const updateUserProfile = async () => {
+      console.log("we called the useEffect when the user changes");
+      fetchUserFromFirebase();
+    };
+
+    if (user) {
+      updateUserProfile();
+    }
+  }, [user]);
 
   if (loading) {
     return <GlobalLoader />;
