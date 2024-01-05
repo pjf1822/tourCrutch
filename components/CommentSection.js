@@ -6,7 +6,7 @@ import Smiley from "../assets/logo.png";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { deleteComment, useFetchVenueComments } from "../api";
-import { showToast } from "../helpers";
+import { deleteCommentHandler } from "../crudUtils/comment";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
@@ -48,29 +48,19 @@ const CommentSection = ({ venueId, userId, displayName }) => {
     }
   }, [allComments]);
 
-  const deleteCommentHandler = async (venueId, commentId) => {
-    try {
-      const response = await deleteCommentMutation.mutateAsync({
-        venueId,
-        commentId,
-      });
-      showToast("Comment deleted successfully", true, "top");
-
-      console.log(response._id, "here is the id that we just deleted");
-      setAllComments((prevComments) =>
-        prevComments.filter((comment) => comment._id !== response._id)
-      );
-    } catch (error) {
-      console.error("Failed to delete comment:", error);
-    }
-  };
-
   return (
     <View>
       {allComments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
           <TouchableOpacity
-            onPress={() => deleteCommentHandler(venueId, comment._id)}
+            onPress={() =>
+              deleteCommentHandler(
+                venueId,
+                comment._id,
+                deleteCommentMutation,
+                setAllComments
+              )
+            }
           >
             <Icon name="close" />
           </TouchableOpacity>

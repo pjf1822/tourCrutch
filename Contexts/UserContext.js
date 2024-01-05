@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUserFromFirebase = () => {
-    console.log("we are fetching the user");
+    // console.log("we are fetching the user");
 
     setLoading(true);
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const updateUserProfile = async () => {
-      console.log("we called the useEffect when the user changes");
+      // console.log("we called the useEffect when the user changes");
       fetchUserFromFirebase();
     };
 
