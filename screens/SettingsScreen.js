@@ -4,10 +4,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { regFont } from "../theme";
 import * as ImagePicker from "expo-image-picker";
-import { pickImage, showToast } from "../helpers";
+import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyTextInput";
 import MyButton from "../components/MyButton";
+import { pickImage } from "../storageFunctionUtils";
 
 const SettingsScreen = () => {
   const { user, setUser } = useUser();
