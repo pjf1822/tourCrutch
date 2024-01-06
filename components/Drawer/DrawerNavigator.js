@@ -12,6 +12,8 @@ import NewVenueScreen from "../../screens/NewVenueScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import { FIREBASE_AUTH } from "../../firebaseConfig.js";
 import { showToast } from "../../helpers";
+import { regFont } from "../../theme";
+import MyButton from "../MyButton";
 
 function CustomDrawerContent({ user, ...props }) {
   const signOut = async () => {
@@ -24,11 +26,10 @@ function CustomDrawerContent({ user, ...props }) {
   };
   return (
     <DrawerContentScrollView {...props}>
-      <Text>{user?.email}</Text>
+      <Text style={{ fontFamily: regFont.fontFamily }}>{user?.email}</Text>
       <DrawerItemList {...props} />
 
-      <DrawerItem label="Help" onPress={() => console.log("fuck")} />
-      <Button title="signout" onPress={() => signOut()} />
+      <MyButton title="signout" onPress={() => signOut()} />
     </DrawerContentScrollView>
   );
 }

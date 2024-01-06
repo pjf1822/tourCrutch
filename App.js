@@ -4,7 +4,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { LogBox } from "react-native";
+import { LogBox, Image } from "react-native";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import GlobalLoader from "./GlobalLoader";
@@ -37,7 +37,7 @@ export default function App() {
   }, []);
 
   if (!appIsReady) {
-    return <GlobalLoader />;
+    return <Image source={require("./assets/olav.png")} />;
   }
   return (
     <QueryClientProvider client={queryClient}>
