@@ -1,7 +1,12 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
+import { showToast } from "./helpers";
+import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
 export const pickImage = async (ImagePicker, user, setUser) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -83,5 +88,84 @@ export const getUserProfilePic = async (userUid) => {
   } catch (error) {
     const downloadURL = "noPic";
     return downloadURL;
+  }
+};
+
+export const getVenuePDF = async (venueId, pdf) => {
+  try {
+    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${pdf}`);
+    const fileRef = ref(FIREBASE_STORAGE, storageRef);
+    const downloadURL = await getDownloadURL(fileRef);
+    const localUri = `${FileSystem.cacheDirectory}${pdf}`;
+
+    await FileSystem.downloadAsync(downloadURL, localUri);
+
+    await Sharing.shareAsync(localUri, {
+      mimeType: "application/pdf",
+      dialogTitle: "Download PDF",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const uploadPDF = async (
+  navigation,
+  updateVenueInfoMutation,
+  venueId,
+  createdByUID,
+  userUID,
+  venueName,
+  venueAddress,
+  venueLink
+) => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+    });
+    if (result.canceled === false) {
+      const { uri, mimeType, size, name } = result.assets[0];
+      if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
+        await uploadPDFToFirebase(uri, name, venueId);
+
+        const updateVenuePDFs = await handleUpdateVenueInfo(
+          navigation,
+          updateVenueInfoMutation,
+          venueId,
+          createdByUID,
+          userUID,
+          venueName,
+          venueAddress,
+          venueLink,
+          name
+        );
+        return updateVenuePDFs;
+      } else {
+        throw new Error("Invalid file format or size exceeds the limit");
+      }
+    } else if (result.canceled === true) {
+      console.log("Document picking cancelled");
+    }
+  } catch (error) {
+    console.error("Error picking a document:", error);
+  }
+};
+
+export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
+  try {
+    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const ready = await uploadBytes(storageRef, blob, {
+      customMetadata: {
+        fileName: name,
+      },
+    });
+    const downloadURL = await getDownloadURL(storageRef);
+    showToast("Document Uploaded!", true, "top");
+    return downloadURL;
+  } catch (error) {
+    console.log(error, "the failgin error");
+    showToast("Document Upload Failed!", false, "top");
   }
 };

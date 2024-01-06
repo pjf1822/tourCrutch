@@ -1,4 +1,11 @@
-import { View, Image, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  TextInput,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
@@ -7,6 +14,7 @@ import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
 import { regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
+import { getVenuePDF, uploadPDF } from "../storageFunctionUtils";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const { venue } = route.params;
@@ -19,8 +27,26 @@ const VenueDetailScreen = ({ route, navigation }) => {
     name: venue?.name,
     address: venue?.address,
     link: venue?.link,
+    pdfs: venue?.pdfs,
   });
 
+  const handleUploadPdf = async () => {
+    try {
+      const { name, address, link } = venueInfo;
+      const updatedInfo = await uploadPDF(
+        navigation,
+        updateVenueInfoMutation,
+        venue._id,
+        venue?.createdByUID,
+        user?.uid,
+        name,
+        address,
+        link
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View>
       <TextInput
@@ -50,11 +76,20 @@ const VenueDetailScreen = ({ route, navigation }) => {
           style={{ width: 200, height: 200 }}
         />
       )}
+      {venueInfo.pdfs.map((pdf, i) => (
+        <TouchableOpacity key={i} onPress={() => getVenuePDF(venue._id, pdf)}>
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../assets/pdf.png")}
+          />
+          <Text>{pdf}</Text>
+        </TouchableOpacity>
+      ))}
 
       <MyButton
         title="update venue info"
         onPress={() => {
-          const { name, address, link } = venueInfo;
+          const { name, address, link, pdfs } = venueInfo;
 
           if (
             name !== venue?.name ||
@@ -67,10 +102,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
               venue._id,
               venue?.createdByUID,
               user?.uid,
-
               name,
               address,
-              link
+              link,
+              pdfs
             );
           } else {
             showToast("You didnt change anything bozo", false, "top");
@@ -83,6 +118,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         userId={user?.uid}
         displayName={user?.displayName}
       />
+      <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
       <MyButton
         title="Delete Venue"
         onPress={() =>
@@ -95,6 +131,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
           )
         }
       />
+
+      <MyButton title="Get Venue PDF" onPress={() => getVenuePDF(venue._id)} />
     </View>
   );
 };
