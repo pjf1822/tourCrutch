@@ -96,7 +96,6 @@ export const getVenuePDF = async (venueId) => {
     const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}`);
 
     const listResult = await listAll(storageRef);
-
     const fileNames = listResult.items.map((item) => {
       const fileName = item._location.path_.split("/").pop();
       return fileName;
@@ -116,8 +115,7 @@ export const getVenuePDF = async (venueId) => {
       });
     }
   } catch (error) {
-    const downloadURL = "noPic";
-    return downloadURL;
+    console.log(error);
   }
 };
 
