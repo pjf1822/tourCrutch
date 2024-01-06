@@ -23,6 +23,22 @@ const VenueDetailScreen = ({ route, navigation }) => {
     pdfs: venue?.pdfs,
   });
 
+  const renderPDFImages = () => {
+    const pdfImages = [];
+
+    for (let i = 0; i < venueInfo.pdfs; i++) {
+      pdfImages.push(
+        <Image
+          key={i}
+          source={require("../assets/pdf.png")}
+          style={{ width: 40, height: 40 }}
+        />
+      );
+    }
+
+    return pdfImages;
+  };
+
   return (
     <View>
       <TextInput
@@ -52,6 +68,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           style={{ width: 200, height: 200 }}
         />
       )}
+      {renderPDFImages()}
 
       <MyButton
         title="update venue info"

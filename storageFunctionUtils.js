@@ -1,4 +1,4 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
@@ -98,9 +98,9 @@ export const getVenuePDF = async (venueId) => {
     const listResult = await listAll(storageRef);
 
     const fileNames = listResult.items.map((item) => {
-      return item.customMetadata.fileName;
+      const fileName = item._location.path_.split("/").pop();
+      return fileName;
     });
-    console.log(fileNames);
     for (const fileName of fileNames) {
       const fileRef = ref(
         FIREBASE_STORAGE,
@@ -110,7 +110,6 @@ export const getVenuePDF = async (venueId) => {
       const localUri = `${FileSystem.cacheDirectory}${fileName}`;
       await FileSystem.downloadAsync(downloadURL, localUri);
 
-      // Trigger the download
       await Sharing.shareAsync(localUri, {
         mimeType: "application/pdf",
         dialogTitle: "Download PDF",
@@ -141,7 +140,6 @@ export const uploadPDF = async (
       const { uri, mimeType, size, name } = result.assets[0];
 
       if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
-        // return;
         await uploadPDFToFirebase(uri, name, venueId);
         const updatedPDFs = venuePDFs + 1;
 
@@ -156,7 +154,6 @@ export const uploadPDF = async (
           venueLink,
           updatedPDFs
         );
-        console.log("im assuming were not going here");
         return updateVenuePDFs;
       } else {
         throw new Error("Invalid file format or size exceeds the limit");

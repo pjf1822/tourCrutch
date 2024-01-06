@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 
-const apiUrl = "http://localhost:8001/api";
-// const apiUrl = "https://tour-crutch-server.onrender.com/api";
+// const apiUrl = "http://localhost:8001/api";
+const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = () => {
   return useQuery("venues", async () => {
