@@ -4,6 +4,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
+import { showToast } from "./helpers";
+import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
 export const pickImage = async (ImagePicker, user, setUser) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -90,22 +93,97 @@ export const getUserProfilePic = async (userUid) => {
 
 export const getVenuePDF = async (venueId) => {
   try {
-    const storageRef = ref(
-      FIREBASE_STORAGE,
-      `venue-info/${venueId}/tech-pack.pdf`
-    );
+    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}`);
 
-    const downloadURL = await getDownloadURL(storageRef);
-    const localUri = `${FileSystem.cacheDirectory}tech-pack.pdf`;
-    await FileSystem.downloadAsync(downloadURL, localUri);
+    const listResult = await listAll(storageRef);
 
-    // Trigger the download
-    await Sharing.shareAsync(localUri, {
-      mimeType: "application/pdf",
-      dialogTitle: "Download PDF",
+    const fileNames = listResult.items.map((item) => {
+      return item.customMetadata.fileName;
     });
+    console.log(fileNames);
+    for (const fileName of fileNames) {
+      const fileRef = ref(
+        FIREBASE_STORAGE,
+        `venue-info/${venueId}/${fileName}`
+      );
+      const downloadURL = await getDownloadURL(fileRef);
+      const localUri = `${FileSystem.cacheDirectory}${fileName}`;
+      await FileSystem.downloadAsync(downloadURL, localUri);
+
+      // Trigger the download
+      await Sharing.shareAsync(localUri, {
+        mimeType: "application/pdf",
+        dialogTitle: "Download PDF",
+      });
+    }
   } catch (error) {
     const downloadURL = "noPic";
     return downloadURL;
+  }
+};
+
+export const uploadPDF = async (
+  navigation,
+  updateVenueInfoMutation,
+  venueId,
+  createdByUID,
+  userUID,
+  venueName,
+  venueAddress,
+  venueLink,
+  venuePDFs
+) => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+    });
+    if (result.canceled === false) {
+      const { uri, mimeType, size, name } = result.assets[0];
+
+      if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
+        // return;
+        await uploadPDFToFirebase(uri, name, venueId);
+        const updatedPDFs = venuePDFs + 1;
+
+        const updateVenuePDFs = await handleUpdateVenueInfo(
+          navigation,
+          updateVenueInfoMutation,
+          venueId,
+          createdByUID,
+          userUID,
+          venueName,
+          venueAddress,
+          venueLink,
+          updatedPDFs
+        );
+        console.log("im assuming were not going here");
+        return updateVenuePDFs;
+      } else {
+        throw new Error("Invalid file format or size exceeds the limit");
+      }
+    } else if (result.canceled === true) {
+      console.log("Document picking cancelled");
+    }
+  } catch (error) {
+    console.error("Error picking a document:", error);
+  }
+};
+
+export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
+  try {
+    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const ready = await uploadBytes(storageRef, blob, {
+      customMetadata: {
+        fileName: name,
+      },
+    });
+    const downloadURL = await getDownloadURL(storageRef);
+    showToast("Document Uploaded!", true, "top");
+    return downloadURL;
+  } catch (error) {
+    console.log(error, "the failgin error");
+    showToast("Document Upload Failed!", false, "top");
   }
 };

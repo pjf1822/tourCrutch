@@ -37,7 +37,8 @@ export const handleUpdateVenueInfo = async (
   userUID,
   venueName,
   venueAddress,
-  venueLink
+  venueLink,
+  venuePDFCount
 ) => {
   try {
     if (!createdByUID) {
@@ -52,18 +53,21 @@ export const handleUpdateVenueInfo = async (
 
       throw new Error("User does not have permission to update this venue.");
     }
+
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,
       updatedData: {
         name: venueName,
         address: venueAddress,
         link: venueLink,
+        pdfs: venuePDFCount,
       },
     });
 
     showToast("You Updated the venue!", true, "top");
     // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
   } catch (error) {
+    console.log(error, "what did we break");
     showToast(error.message, false, "top");
   }
 };
