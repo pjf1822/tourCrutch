@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CommentSection from "../components/CommentSection";
@@ -21,9 +22,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const updateVenueInfoMutation = useUpdateVenueInfo();
   const { venueId } = route.params;
   const { user } = useUser();
-
-  const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
-
   const [venueInfo, setVenueInfo] = useState({
     name: "",
     address: "",
@@ -32,6 +30,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     createdByUID: "",
   });
+  const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
 
   useEffect(() => {
     if (venueData) {
@@ -63,6 +62,23 @@ const VenueDetailScreen = ({ route, navigation }) => {
       console.error(error);
     }
   };
+  const renderPdfItem = ({ item }) => (
+    <TouchableOpacity onPress={() => getVenuePDF(venueId, item)}>
+      <Image
+        style={{ height: 20, width: 20 }}
+        source={require("../assets/pdf.png")}
+      />
+      <Text>{item}</Text>
+    </TouchableOpacity>
+  );
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (isError) {
+    return <Text>Error fetching venue details</Text>;
+  }
   return (
     <View>
       <TextInput
@@ -86,23 +102,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           setVenueInfo((prev) => ({ ...prev, link: newLink }))
         }
       />
-      {/* {venue?.image && (
-        <Image
-          source={{ uri: venue?.image }}
-          style={{ width: 200, height: 200 }}
-        />
-      )} */}
-
-      {venueInfo.pdfs &&
-        venueInfo.pdfs?.map((pdf, i) => (
-          <TouchableOpacity key={i} onPress={() => getVenuePDF(venueId, pdf)}>
-            <Image
-              style={{ height: 20, width: 20 }}
-              source={require("../assets/pdf.png")}
-            />
-            <Text>{pdf}</Text>
-          </TouchableOpacity>
-        ))}
 
       <MyButton
         title="update venue info"
@@ -150,7 +149,24 @@ const VenueDetailScreen = ({ route, navigation }) => {
         }
       />
 
-      <MyButton title="Get Venue PDF" onPress={() => getVenuePDF(venueId)} />
+      <FlatList
+        data={venueInfo?.pdfs}
+        renderItem={renderPdfItem}
+        keyExtractor={(item, index) => `${item}-${index}`}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        ItemSeparatorComponent={
+          <View
+            style={{
+              height: "100%",
+              width: 1,
+              marginLeft: 10,
+              marginRight: 10,
+              backgroundColor: "black",
+            }}
+          ></View>
+        }
+      />
     </View>
   );
 };
