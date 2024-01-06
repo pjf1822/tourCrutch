@@ -1,4 +1,11 @@
-import { View, Image, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  TextInput,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
@@ -22,22 +29,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     link: venue?.link,
     pdfs: venue?.pdfs,
   });
-
-  const renderPDFImages = () => {
-    const pdfImages = [];
-
-    for (let i = 0; i < venueInfo.pdfs; i++) {
-      pdfImages.push(
-        <Image
-          key={i}
-          source={require("../assets/pdf.png")}
-          style={{ width: 40, height: 40 }}
-        />
-      );
-    }
-
-    return pdfImages;
-  };
+  console.log();
 
   return (
     <View>
@@ -68,7 +60,15 @@ const VenueDetailScreen = ({ route, navigation }) => {
           style={{ width: 200, height: 200 }}
         />
       )}
-      {renderPDFImages()}
+      {venueInfo.pdfs.map((pdf, i) => (
+        <TouchableOpacity key={i} onPress={() => getVenuePDF(venue._id, pdf)}>
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../assets/pdf.png")}
+          />
+          <Text>{pdf}</Text>
+        </TouchableOpacity>
+      ))}
 
       <MyButton
         title="update venue info"
@@ -105,7 +105,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <MyButton
         title="Upload Pdf"
         onPress={() => {
-          const { name, address, link, pdfs } = venueInfo;
+          const { name, address, link } = venueInfo;
           uploadPDF(
             navigation,
             updateVenueInfoMutation,
@@ -114,8 +114,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
             user?.uid,
             name,
             address,
-            link,
-            pdfs
+            link
           );
         }}
       />

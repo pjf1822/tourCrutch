@@ -38,7 +38,7 @@ export const handleUpdateVenueInfo = async (
   venueName,
   venueAddress,
   venueLink,
-  venuePDFCount
+  newPDF
 ) => {
   try {
     if (!createdByUID) {
@@ -60,7 +60,7 @@ export const handleUpdateVenueInfo = async (
         name: venueName,
         address: venueAddress,
         link: venueLink,
-        pdfs: venuePDFCount,
+        newPDF: newPDF,
       },
     });
 

@@ -91,29 +91,19 @@ export const getUserProfilePic = async (userUid) => {
   }
 };
 
-export const getVenuePDF = async (venueId) => {
+export const getVenuePDF = async (venueId, pdf) => {
   try {
-    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}`);
+    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${pdf}`);
+    const fileRef = ref(FIREBASE_STORAGE, storageRef);
+    const downloadURL = await getDownloadURL(fileRef);
+    const localUri = `${FileSystem.cacheDirectory}${pdf}`;
 
-    const listResult = await listAll(storageRef);
-    const fileNames = listResult.items.map((item) => {
-      const fileName = item._location.path_.split("/").pop();
-      return fileName;
+    await FileSystem.downloadAsync(downloadURL, localUri);
+
+    await Sharing.shareAsync(localUri, {
+      mimeType: "application/pdf",
+      dialogTitle: "Download PDF",
     });
-    for (const fileName of fileNames) {
-      const fileRef = ref(
-        FIREBASE_STORAGE,
-        `venue-info/${venueId}/${fileName}`
-      );
-      const downloadURL = await getDownloadURL(fileRef);
-      const localUri = `${FileSystem.cacheDirectory}${fileName}`;
-      await FileSystem.downloadAsync(downloadURL, localUri);
-
-      await Sharing.shareAsync(localUri, {
-        mimeType: "application/pdf",
-        dialogTitle: "Download PDF",
-      });
-    }
   } catch (error) {
     console.log(error);
   }
@@ -127,8 +117,7 @@ export const uploadPDF = async (
   userUID,
   venueName,
   venueAddress,
-  venueLink,
-  venuePDFs
+  venueLink
 ) => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
@@ -136,10 +125,8 @@ export const uploadPDF = async (
     });
     if (result.canceled === false) {
       const { uri, mimeType, size, name } = result.assets[0];
-
       if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
         await uploadPDFToFirebase(uri, name, venueId);
-        const updatedPDFs = venuePDFs + 1;
 
         const updateVenuePDFs = await handleUpdateVenueInfo(
           navigation,
@@ -150,7 +137,7 @@ export const uploadPDF = async (
           venueName,
           venueAddress,
           venueLink,
-          updatedPDFs
+          name
         );
         return updateVenuePDFs;
       } else {
