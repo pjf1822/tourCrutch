@@ -29,8 +29,24 @@ const VenueDetailScreen = ({ route, navigation }) => {
     link: venue?.link,
     pdfs: venue?.pdfs,
   });
-  console.log();
 
+  const handleUploadPdf = async () => {
+    try {
+      const { name, address, link } = venueInfo;
+      const updatedInfo = await uploadPDF(
+        navigation,
+        updateVenueInfoMutation,
+        venue._id,
+        venue?.createdByUID,
+        user?.uid,
+        name,
+        address,
+        link
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View>
       <TextInput
@@ -102,22 +118,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         userId={user?.uid}
         displayName={user?.displayName}
       />
-      <MyButton
-        title="Upload Pdf"
-        onPress={() => {
-          const { name, address, link } = venueInfo;
-          uploadPDF(
-            navigation,
-            updateVenueInfoMutation,
-            venue._id,
-            venue?.createdByUID,
-            user?.uid,
-            name,
-            address,
-            link
-          );
-        }}
-      />
+      <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
       <MyButton
         title="Delete Venue"
         onPress={() =>
