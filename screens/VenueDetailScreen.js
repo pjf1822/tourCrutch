@@ -6,10 +6,10 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
-import { useDeleteVenue, useUpdateVenueInfo } from "../api";
+import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
 import { regFont } from "../theme";
@@ -17,18 +17,34 @@ import { useUser } from "../Contexts/UserContext";
 import { getVenuePDF, uploadPDF } from "../storageFunctionUtils";
 
 const VenueDetailScreen = ({ route, navigation }) => {
-  const { venue } = route.params;
-  const { user } = useUser();
-
   const deleteVenueMutation = useDeleteVenue();
   const updateVenueInfoMutation = useUpdateVenueInfo();
+  const { venueId } = route.params;
+  const { user } = useUser();
+
+  const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
 
   const [venueInfo, setVenueInfo] = useState({
-    name: venue?.name,
-    address: venue?.address,
-    link: venue?.link,
-    pdfs: venue?.pdfs,
+    name: "",
+    address: "",
+    link: "",
+    pdfs: [],
+    comments: [],
+    createdByUID: "",
   });
+
+  useEffect(() => {
+    if (venueData) {
+      setVenueInfo({
+        name: venueData.name,
+        address: venueData.address,
+        link: venueData.link,
+        pdfs: venueData.pdfs || [],
+        comments: venueData.comments,
+        createdByUID: venueData.createdByUID,
+      });
+    }
+  }, [venueData]);
 
   const handleUploadPdf = async () => {
     try {
@@ -36,8 +52,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
       const updatedInfo = await uploadPDF(
         navigation,
         updateVenueInfoMutation,
-        venue._id,
-        venue?.createdByUID,
+        venueId,
+        venueInfo?.createdByUID,
         user?.uid,
         name,
         address,
@@ -70,21 +86,23 @@ const VenueDetailScreen = ({ route, navigation }) => {
           setVenueInfo((prev) => ({ ...prev, link: newLink }))
         }
       />
-      {venue?.image && (
+      {/* {venue?.image && (
         <Image
           source={{ uri: venue?.image }}
           style={{ width: 200, height: 200 }}
         />
-      )}
-      {venueInfo.pdfs.map((pdf, i) => (
-        <TouchableOpacity key={i} onPress={() => getVenuePDF(venue._id, pdf)}>
-          <Image
-            style={{ height: 20, width: 20 }}
-            source={require("../assets/pdf.png")}
-          />
-          <Text>{pdf}</Text>
-        </TouchableOpacity>
-      ))}
+      )} */}
+
+      {venueInfo.pdfs &&
+        venueInfo.pdfs?.map((pdf, i) => (
+          <TouchableOpacity key={i} onPress={() => getVenuePDF(venueId, pdf)}>
+            <Image
+              style={{ height: 20, width: 20 }}
+              source={require("../assets/pdf.png")}
+            />
+            <Text>{pdf}</Text>
+          </TouchableOpacity>
+        ))}
 
       <MyButton
         title="update venue info"
@@ -92,20 +110,20 @@ const VenueDetailScreen = ({ route, navigation }) => {
           const { name, address, link, pdfs } = venueInfo;
 
           if (
-            name !== venue?.name ||
-            address !== venue?.address ||
-            link !== venue?.link
+            name !== venueData?.name ||
+            address !== venueData?.address ||
+            link !== venueData?.link
           ) {
             handleUpdateVenueInfo(
               navigation,
               updateVenueInfoMutation,
-              venue._id,
-              venue?.createdByUID,
+              venueId,
+              venueInfo?.createdByUID,
               user?.uid,
               name,
               address,
               link,
-              pdfs
+              null
             );
           } else {
             showToast("You didnt change anything bozo", false, "top");
@@ -114,7 +132,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
       />
 
       <CommentSection
-        venueId={venue?._id}
+        venueId={venueId}
         userId={user?.uid}
         displayName={user?.displayName}
       />
@@ -123,8 +141,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
         title="Delete Venue"
         onPress={() =>
           handleDelete(
-            venue?._id,
-            venue?.createdByUID,
+            venueId,
+            venueInfo?.createdByUID,
             user?.uid,
             navigation,
             deleteVenueMutation
@@ -132,7 +150,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         }
       />
 
-      <MyButton title="Get Venue PDF" onPress={() => getVenuePDF(venue._id)} />
+      <MyButton title="Get Venue PDF" onPress={() => getVenuePDF(venueId)} />
     </View>
   );
 };

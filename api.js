@@ -13,6 +13,16 @@ export const useFetchVenues = () => {
     return res.json();
   });
 };
+export const useFetchVenueById = (venueId) => {
+  return useQuery(["venue", venueId], async () => {
+    const res = await fetch(`${apiUrl}/venues/${venueId}`);
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      throw new Error(errorResponse.message || "Failed to get venue");
+    }
+    return res.json();
+  });
+};
 
 export const useCreateVenue = () => {
   return useMutation(async (venueData) => {

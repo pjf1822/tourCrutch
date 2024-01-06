@@ -10,7 +10,7 @@ const HomePageFlatListItem = ({ item, navigation }) => {
       onPress={() =>
         navigation.reset({
           index: 0,
-          routes: [{ name: "VenueDetail", params: { venue: item } }],
+          routes: [{ name: "VenueDetail", params: { venueId: item._id } }],
         })
       }
     >
