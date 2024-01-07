@@ -12,6 +12,8 @@ import NewVenueScreen from "../../screens/NewVenueScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import { FIREBASE_AUTH } from "../../firebaseConfig.js";
 import { showToast } from "../../helpers";
+import { myColors, regFont } from "../../theme";
+import MyButton from "../MyButton";
 
 function CustomDrawerContent({ user, ...props }) {
   const signOut = async () => {
@@ -23,12 +25,13 @@ function CustomDrawerContent({ user, ...props }) {
     }
   };
   return (
-    <DrawerContentScrollView {...props}>
-      <Text>{user?.email}</Text>
+    <DrawerContentScrollView
+      style={{ backgroundColor: myColors.shadow }}
+      {...props}
+    >
+      <Text style={{ fontFamily: regFont.fontFamily }}>{user?.email}</Text>
       <DrawerItemList {...props} />
-
-      <DrawerItem label="Help" onPress={() => console.log("fuck")} />
-      <Button title="signout" onPress={() => signOut()} />
+      <MyButton title="signout" onPress={() => signOut()} />
     </DrawerContentScrollView>
   );
 }
@@ -41,6 +44,7 @@ const DrawerNavigator = ({ user }) => {
       drawerContent={(props) => <CustomDrawerContent {...props} user={user} />}
       screenOptions={({ navigation }) => ({
         headerTitle: "",
+        headerStyle: { backgroundColor: myColors.blue },
         headerLeft: () => (
           <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
             <Image
@@ -51,13 +55,42 @@ const DrawerNavigator = ({ user }) => {
         ),
       })}
     >
-      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen
+        name="Home"
+        options={{
+          drawerLabelStyle: {
+            fontFamily: regFont.fontFamily,
+          },
+          drawerActiveTintColor: myColors.shadow,
+          drawerActiveBackgroundColor: myColors.darkBlue,
+          drawerInactiveTintColor: myColors.blue,
+          drawerInactiveBackgroundColor: myColors.sand,
+        }}
+        component={HomeScreen}
+      />
       <Drawer.Screen
         name="NewVenue"
-        options={{ drawerLabel: "New Venue" }}
+        options={{
+          drawerLabel: "New Venue",
+          drawerLabelStyle: { fontFamily: regFont.fontFamily },
+          drawerActiveTintColor: myColors.shadow,
+          drawerActiveBackgroundColor: myColors.darkBlue,
+          drawerInactiveTintColor: myColors.blue,
+          drawerInactiveBackgroundColor: myColors.sand,
+        }}
         component={NewVenueScreen}
       />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen
+        options={{
+          drawerLabelStyle: { fontFamily: regFont.fontFamily },
+          drawerActiveTintColor: myColors.shadow,
+          drawerActiveBackgroundColor: myColors.darkBlue,
+          drawerInactiveTintColor: myColors.blue,
+          drawerInactiveBackgroundColor: myColors.sand,
+        }}
+        name="Settings"
+        component={SettingsScreen}
+      />
       <Drawer.Screen
         name="VenueDetail"
         component={VenueDetailScreen}

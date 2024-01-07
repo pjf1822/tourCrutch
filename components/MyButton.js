@@ -1,6 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { regFont } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const MyButton = ({ title, onPress }) => {
   return (
@@ -17,11 +17,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "green",
+    backgroundColor: myColors.blue,
     borderTopWidth: 1,
-    borderColor: "black",
+    borderColor: myColors.sand,
+    padding: 10,
   },
   textStyle: {
     fontFamily: regFont.fontFamily,
+    color: myColors.shadow,
   },
 });

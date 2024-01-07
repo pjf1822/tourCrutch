@@ -43,7 +43,9 @@ export const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUserFromFirebase }}>
+    <UserContext.Provider
+      value={{ user, setUser, fetchUserFromFirebase, loading }}
+    >
       {children}
     </UserContext.Provider>
   );
