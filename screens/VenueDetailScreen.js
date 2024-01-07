@@ -13,7 +13,7 @@ import MyButton from "../components/MyButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
-import { regFont } from "../theme";
+import { myColors, regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { getVenuePDF, uploadPDF } from "../storageFunctionUtils";
 
@@ -79,8 +79,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
   if (isError) {
     return <Text>Error fetching venue details</Text>;
   }
+
   return (
-    <View>
+    <View style={styles.pageWrapper}>
       <TextInput
         style={styles.itemStyle}
         value={venueInfo.name}
@@ -158,7 +159,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         ItemSeparatorComponent={
           <View
             style={{
-              height: "100%",
+              // height: "100%",
               width: 1,
               marginLeft: 10,
               marginRight: 10,
@@ -174,6 +175,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
 export default VenueDetailScreen;
 
 const styles = StyleSheet.create({
+  pageWrapper: {
+    backgroundColor: myColors.blue,
+    flex: 1,
+  },
   itemStyle: {
     fontFamily: regFont.fontFamily,
   },

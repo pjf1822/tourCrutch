@@ -53,32 +53,32 @@ const HomeScreen = ({ navigation, route }) => {
   }, [route?.params?.venueCreated, route?.params?.venueDeleted, navigation]);
   return (
     <View style={{ flex: 1 }}>
-      {userLoading || isLoading ? (
+      {/* {userLoading || isLoading ? (
         <GlobalLoader />
-      ) : (
-        <>
-          <SearchBar
-            placeholder="search a venue"
-            value={search}
-            onChangeText={(search) => setSearch(search)}
-            style={{ flex: 1, fontFamily: regFont.fontFamily }}
+      ) : ( */}
+      <>
+        <SearchBar
+          placeholder="search a venue"
+          value={search}
+          onChangeText={(search) => setSearch(search)}
+          style={{ flex: 1, fontFamily: regFont.fontFamily }}
+        />
+        {!userLoading && !isLoading && (
+          <FlatList
+            data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
+            renderItem={({ item, index }) => (
+              <HomePageFlatListItem item={item} navigation={navigation} />
+            )}
+            ItemSeparatorComponent={<FlatListSeparator />}
+            keyExtractor={(item, index) => item?._id || index.toString()}
           />
-          {!userLoading && !isLoading && (
-            <FlatList
-              data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
-              renderItem={({ item, index }) => (
-                <HomePageFlatListItem item={item} navigation={navigation} />
-              )}
-              ItemSeparatorComponent={<FlatListSeparator />}
-              keyExtractor={(item, index) => item?._id || index.toString()}
-            />
-          )}
-          <MyButton
-            title="Create New Venue"
-            onPress={() => navigation.navigate("NewVenue")}
-          />
-        </>
-      )}
+        )}
+        <MyButton
+          title="Create New Venue"
+          onPress={() => navigation.navigate("NewVenue")}
+        />
+      </>
+      {/* )} */}
     </View>
   );
 };
