@@ -5,7 +5,6 @@ import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
 import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
-import GlobalLoader from "../GlobalLoader";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
 import { regFont } from "../theme";
@@ -15,7 +14,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
 
-  const { loading: userLoading } = useUser();
+  const { loading: userLoading, setLoading: setUserLoading } = useUser();
   const { data: fetchedVenues, isLoading, isError, refetch } = useFetchVenues();
 
   useEffect(() => {
@@ -51,11 +50,9 @@ const HomeScreen = ({ navigation, route }) => {
       });
     }
   }, [route?.params?.venueCreated, route?.params?.venueDeleted, navigation]);
+
   return (
     <View style={{ flex: 1 }}>
-      {/* {userLoading || isLoading ? (
-        <GlobalLoader />
-      ) : ( */}
       <>
         <SearchBar
           placeholder="search a venue"
@@ -78,7 +75,6 @@ const HomeScreen = ({ navigation, route }) => {
           onPress={() => navigation.navigate("NewVenue")}
         />
       </>
-      {/* )} */}
     </View>
   );
 };

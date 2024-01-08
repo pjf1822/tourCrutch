@@ -117,7 +117,8 @@ export const uploadPDF = async (
   userUID,
   venueName,
   venueAddress,
-  venueLink
+  venueLink,
+  venuePDFs
 ) => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
@@ -125,6 +126,9 @@ export const uploadPDF = async (
     });
     if (result.canceled === false) {
       const { uri, mimeType, size, name } = result.assets[0];
+      if (venuePDFs.includes(name)) {
+        throw new Error("File with the same name already exists.");
+      }
       if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
         await uploadPDFToFirebase(uri, name, venueId);
 
@@ -147,7 +151,9 @@ export const uploadPDF = async (
       console.log("Document picking cancelled");
     }
   } catch (error) {
-    console.error("Error picking a document:", error);
+    console;
+    showToast(error.message, false, "top");
+    console.error("Error picking a document:", error.message);
   }
 };
 

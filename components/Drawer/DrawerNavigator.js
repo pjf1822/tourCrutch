@@ -1,10 +1,9 @@
 import React from "react";
-import { Text, TouchableOpacity, Image, Button } from "react-native";
+import { Text, TouchableOpacity, Image } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from "@react-navigation/drawer";
 import HomeScreen from "../../screens/HomeScreen";
 import VenueDetailScreen from "../../screens/VenueDetailScreen";

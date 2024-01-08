@@ -1,15 +1,16 @@
 import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
+import { myColors } from "./theme";
 
 export const showToast = (toastMessage, success, position) => {
   let backgroundColor;
 
   if (success === true) {
-    backgroundColor = "green";
+    backgroundColor = myColors.sand;
   } else if (success === false) {
-    backgroundColor = "red";
+    backgroundColor = myColors.blue;
   } else {
-    backgroundColor = "yellow";
+    backgroundColor = myColors.darkBlue;
   }
   let toast = Toast.show(toastMessage, {
     duration: Toast.durations.LONG,
