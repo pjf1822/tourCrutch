@@ -2,7 +2,6 @@ import React from "react";
 import SignupScreen from "../screens/SignupScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import { useRoute } from "@react-navigation/native";
 import DrawerNavigator from "../components/Drawer/DrawerNavigator";
 import { useUser } from "../Contexts/UserContext";

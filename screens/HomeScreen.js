@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
@@ -7,7 +7,7 @@ import { useFetchVenues } from "../api";
 import MyButton from "../components/MyButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
-import { regFont } from "../theme";
+import { myColors, regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 
 const HomeScreen = ({ navigation, route }) => {
@@ -52,30 +52,42 @@ const HomeScreen = ({ navigation, route }) => {
   }, [route?.params?.venueCreated, route?.params?.venueDeleted, navigation]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <>
-        <SearchBar
-          placeholder="search a venue"
-          value={search}
-          onChangeText={(search) => setSearch(search)}
-          style={{ flex: 1, fontFamily: regFont.fontFamily }}
+    <View style={styles.homePageWrapper}>
+      <SearchBar
+        placeholder="search a venue"
+        value={search}
+        onChangeText={(search) => setSearch(search)}
+        style={{
+          flex: 1,
+          fontFamily: regFont.fontFamily,
+          backgroundColor: myColors.blue,
+        }}
+        containerStyle={{ backgroundColor: myColors.shadow }}
+        inputContainerStyle={{ backgroundColor: myColors.sand }}
+        inputStyle={{ backgroundColor: myColors.darkBlue }}
+      />
+      {!userLoading && !isLoading && (
+        <FlatList
+          data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
+          renderItem={({ item, index }) => (
+            <HomePageFlatListItem item={item} navigation={navigation} />
+          )}
+          ItemSeparatorComponent={<FlatListSeparator />}
+          keyExtractor={(item, index) => item?._id || index.toString()}
         />
-        {!userLoading && !isLoading && (
-          <FlatList
-            data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
-            renderItem={({ item, index }) => (
-              <HomePageFlatListItem item={item} navigation={navigation} />
-            )}
-            ItemSeparatorComponent={<FlatListSeparator />}
-            keyExtractor={(item, index) => item?._id || index.toString()}
-          />
-        )}
-        <MyButton
-          title="Create New Venue"
-          onPress={() => navigation.navigate("NewVenue")}
-        />
-      </>
+      )}
+      <MyButton
+        title="Create New Venue"
+        onPress={() => navigation.navigate("NewVenue")}
+      />
     </View>
   );
 };
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+  homePageWrapper: {
+    flex: 1,
+    backgroundColor: myColors.sand,
+  },
+});

@@ -122,7 +122,11 @@ const VenueDetailScreen = ({ route, navigation }) => {
         <FlatList
           data={venueInfo?.pdfs}
           renderItem={({ item }) => (
-            <RenderPDFItem venueId={venueId} item={item} />
+            <RenderPDFItem
+              venueId={venueId}
+              item={item}
+              updateVenueInfoMutation={updateVenueInfoMutation}
+            />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}
           horizontal

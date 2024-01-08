@@ -44,8 +44,12 @@ const DrawerNavigator = ({ user }) => {
       screenOptions={({ navigation }) => ({
         headerTitle: "",
         headerStyle: { backgroundColor: myColors.blue },
+
         headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+          <TouchableOpacity
+            onPress={() => navigation.toggleDrawer()}
+            style={{ marginBottom: 20 }}
+          >
             <Image
               source={require("../../assets/logo.png")}
               style={{ width: 40, height: 40, marginLeft: 10 }}

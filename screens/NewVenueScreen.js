@@ -4,6 +4,7 @@ import React from "react";
 import { useCreateVenue } from "../api";
 import { createVenue } from "../crudUtils/venue";
 import { useUser } from "../Contexts/UserContext";
+import MyTextInput from "../components/MyTextInput";
 
 const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();
@@ -24,19 +25,19 @@ const NewVenueScreen = ({ navigation }) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, navigation }) => (
           <View>
-            <TextInput
+            <MyTextInput
               placeholder="Name"
               onChangeText={handleChange("name")}
               onBlur={handleBlur("name")}
               value={values.name}
             />
-            <TextInput
+            <MyTextInput
               placeholder="Address"
               onChangeText={handleChange("address")}
               onBlur={handleBlur("address")}
               value={values.address}
             />
-            <TextInput
+            <MyTextInput
               placeholder="Venue Link"
               onChangeText={handleChange("link")}
               onBlur={handleBlur("link")}
