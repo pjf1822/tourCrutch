@@ -21,7 +21,7 @@ const firebaseConfig = {
   appId: FIREBASE_APP_ID,
 };
 
-export const FIREBASE_APP = initializeApp(firebaseConfig, "tourCrutch");
+export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = initializeAuth(FIREBASE_APP, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });

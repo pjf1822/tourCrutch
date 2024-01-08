@@ -9,11 +9,17 @@ import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyTextInput";
 import MyButton from "../components/MyButton";
 import { pickImage } from "../storageFunctionUtils";
+import { Overlay } from "react-native-elements";
+import DeleteAccountModal from "../components/DeleteAccountModal";
 
 const SettingsScreen = () => {
   const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   useEffect(() => {
     if (user && user?.displayName) {
@@ -58,6 +64,17 @@ const SettingsScreen = () => {
 
   return (
     <View>
+      <Overlay
+        isVisible={visible}
+        onBackdropPress={toggleOverlay}
+        overlayStyle={styles.overlay}
+      >
+        <DeleteAccountModal
+          user={user}
+          setUser={setUser}
+          toggleOverlay={toggleOverlay}
+        />
+      </Overlay>
       <Text style={styles.header}>Account Details </Text>
       <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
 
@@ -98,7 +115,7 @@ const SettingsScreen = () => {
           <TouchableOpacity onPress={handleUpdateProfilePic}>
             <Text>upload profile pic</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={toggleOverlay}>
             <Text>Delete Account</Text>
           </TouchableOpacity>
         </View>
