@@ -7,7 +7,6 @@ import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
 
 const RenderPDFItem = ({
-  navigation,
   updateVenueInfoMutation,
   venueId,
   createdByUID,
@@ -21,7 +20,6 @@ const RenderPDFItem = ({
 
   const handleLongPress = async () => {
     const result = await handleUpdateVenueInfo(
-      navigation,
       updateVenueInfoMutation,
       venueId,
       createdByUID,
@@ -31,9 +29,6 @@ const RenderPDFItem = ({
       link,
       "REMOVE"
     );
-    if (result.message === "Venue updated successfully") {
-      showToast("Deleted the Doc", true, "top");
-    }
   };
   return (
     <TouchableOpacity

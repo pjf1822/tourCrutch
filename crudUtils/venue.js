@@ -25,12 +25,11 @@ export const createVenue = async (
     resetForm();
     navigation.navigate("Home", { venueCreated: true });
   } catch (error) {
-    showToast(error.message, false, "top");
+    showToast(error?.message, false, "top");
   }
 };
 
 export const handleUpdateVenueInfo = async (
-  navigation,
   updateVenueInfoMutation,
   venueId,
   createdByUID,
@@ -41,16 +40,7 @@ export const handleUpdateVenueInfo = async (
   newPDF
 ) => {
   try {
-    if (!createdByUID) {
-      throw new Error("Venue createdByUID not found. Unable to update venue.");
-    }
-    if (createdByUID !== userUID) {
-      showToast(
-        "User does not have permission to update this venue!",
-        false,
-        "top"
-      );
-
+    if (!createdByUID || createdByUID !== userUID) {
       throw new Error("User does not have permission to update this venue.");
     }
 
@@ -63,13 +53,10 @@ export const handleUpdateVenueInfo = async (
         newPDF: newPDF,
       },
     });
-    return response;
-
     showToast("You Updated the venue!", true, "top");
-    // navigation.navigate("Home", { venueUpdated: true });   do we really need this?
   } catch (error) {
     console.log(error, "what did we break");
-    showToast(error.message, false, "top");
+    showToast(error?.message, false, "top");
   }
 };
 
@@ -97,6 +84,6 @@ export const handleDelete = async (
     showToast("Venue deleted!", true, "top");
     navigation.navigate("Home", { venueDeleted: true, venueId: venueId });
   } catch (error) {
-    showToast(error.message, false, "top");
+    showToast(error?.message, false, "top");
   }
 };

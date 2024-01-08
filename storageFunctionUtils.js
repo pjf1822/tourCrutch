@@ -110,7 +110,6 @@ export const getVenuePDF = async (venueId, pdf) => {
 };
 
 export const uploadPDF = async (
-  navigation,
   updateVenueInfoMutation,
   venueId,
   createdByUID,
@@ -133,7 +132,6 @@ export const uploadPDF = async (
         await uploadPDFToFirebase(uri, name, venueId);
 
         const updateVenuePDFs = await handleUpdateVenueInfo(
-          navigation,
           updateVenueInfoMutation,
           venueId,
           createdByUID,
@@ -151,9 +149,8 @@ export const uploadPDF = async (
       console.log("Document picking cancelled");
     }
   } catch (error) {
-    console;
-    showToast(error.message, false, "top");
-    console.error("Error picking a document:", error.message);
+    showToast(error?.message, false, "top");
+    console.error("Error picking a document:", error?.message);
   }
 };
 
