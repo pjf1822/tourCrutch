@@ -3,10 +3,11 @@ export const regFont = {
 };
 
 export const myColors = {
-  sand: "#e1b382",
-  shadow: "#c89666",
-  blue: "#2d545e",
-  darkBlue: "#12343b",
+  black: "#1a1516",
+  white: "#edefe1",
+  red: "#66212b",
+  beige: "#faf2d8",
+  pink: "#cb7259",
 };
 
 export const upperMargin = { margy: 9 };

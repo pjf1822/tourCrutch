@@ -115,6 +115,9 @@ export const uploadPDF = async (
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
+    if (result.canceled === true) {
+      return;
+    }
 
     if (result.canceled === false) {
       const { uri, mimeType, size, name } = result.assets[0];

@@ -14,7 +14,7 @@ import {
   getAuth,
 } from "firebase/auth";
 import { showToast } from "../helpers";
-import { myColors } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
   const [email, setEmail] = useState("");
@@ -34,16 +34,13 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
       setUser(null);
       toggleOverlay();
     } catch (error) {
-      console.log(error.message, "we ended up in here");
       if (error.message.includes("auth/requires-recent-login")) {
         showToast("Please type in your email and password", false, "top");
         setOpenCreds(true);
       } else if (error.message.includes("(auth/invalid-email)")) {
         showToast("Invalid Credentials", false, "top");
-        console.log(error.message, "or are we here");
       }
       {
-        console.log(error.message, "are we here");
       }
     }
   };
@@ -56,7 +53,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         value={email}
         onChangeText={(text) => setEmail(text)}
         placeholder="Enter your email"
-        placeholderTextColor={openCreds ? myColors.sand : "gray"}
+        placeholderTextColor={openCreds ? myColors.beige : "gray"}
       />
       <TextInput
         disabled={openCreds}
@@ -65,13 +62,15 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         onChangeText={(text) => setPassword(text)}
         placeholder="Enter your password"
         secureTextEntry={true}
-        placeholderTextColor={openCreds ? myColors.sand : "gray"}
+        placeholderTextColor={openCreds ? myColors.beige : "gray"}
       />
       <Text
         style={{
           color: myColors.blue,
           width: "100%",
+          fontFamily: regFont.fontFamily,
           textAlign: "center",
+          fontSize: 17,
         }}
       >
         ARE YOU SURE ?
@@ -96,6 +95,8 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
             style={{
               color: myColors.blue,
               width: "100%",
+              fontFamily: regFont.fontFamily,
+              fontSize: 17,
             }}
           >
             YES
@@ -113,6 +114,8 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
             style={{
               color: myColors.darkBlue,
               width: "100%",
+              fontFamily: regFont.fontFamily,
+              fontSize: 17,
             }}
           >
             NO
@@ -131,19 +134,22 @@ const styles = StyleSheet.create({
     width: "100%",
     borderColor: myColors.blue,
     borderWidth: 2,
-    marginBottom: 12,
+    marginTop: 2,
+    marginBottom: 10,
     paddingHorizontal: 8,
-    // backgroundColor: colors.beige,
+    backgroundColor: myColors.beige,
     borderRadius: 10,
+    padding: 10,
+    fontSize: 17,
   },
   disabledInputStyle: {
     height: 40,
     width: "100%",
-    // borderColor: colors.blue,
+    borderColor: myColors.black,
     borderWidth: 2,
     marginBottom: 12,
     paddingHorizontal: 8,
-    // backgroundColor: colors.beige,
+    backgroundColor: myColors.black,
     borderRadius: 10,
   },
 });

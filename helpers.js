@@ -4,19 +4,22 @@ import { myColors } from "./theme";
 
 export const showToast = (toastMessage, success, position) => {
   let backgroundColor;
+  let textColor;
 
   if (success === true) {
-    backgroundColor = myColors.sand;
+    backgroundColor = myColors.beige;
+    textColor = myColors.black;
   } else if (success === false) {
-    backgroundColor = myColors.blue;
+    backgroundColor = myColors.red;
+    textColor = myColors.white;
   } else {
-    backgroundColor = myColors.darkBlue;
+    backgroundColor = myColors.pink;
   }
   let toast = Toast.show(toastMessage, {
     duration: Toast.durations.LONG,
     position: position === "top" ? Toast.positions.TOP : Toast.positions.BOTTOM,
     backgroundColor: backgroundColor,
-    textColor: "white",
+    textColor: textColor,
     opacity: 1,
     fontSize: 23,
   });

@@ -20,63 +20,55 @@ const LoginScreen = () => {
   const auth = FIREBASE_AUTH;
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <ImageBackground
       source={require("../assets/DJ.jpg")}
       style={styles.background}
-      onLoadEnd={() => {
-        setImageLoaded(true);
-        console.log("on load end");
-      }}
     >
-      {imageLoaded && (
-        <>
-          <Image
-            style={{
-              height: 150,
-              width: 150,
-              alignSelf: "center",
-              marginTop: windowHeight / 10,
+      <Image
+        style={{
+          height: 150,
+          width: 150,
+          alignSelf: "center",
+          marginTop: windowHeight / 10,
+        }}
+        source={require("../assets/logito.png")}
+      />
+      <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
+        <View>
+          <MyTextInput
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
             }}
-            source={require("../assets/logito.png")}
+            placeholder={"email"}
           />
-          <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
-            <View>
-              <MyTextInput
-                value={email}
-                onChangeText={(value) => {
-                  setEmail(value);
-                }}
-                placeholder={"email"}
-              />
-              <View style={styles.spacer}></View>
+          <View style={styles.spacer}></View>
 
-              <MyTextInput
-                value={password}
-                onChangeText={(value) => {
-                  setPassword(value);
-                }}
-                placeholder={"password"}
-              />
-              <View style={styles.spacer}></View>
+          <MyTextInput
+            value={password}
+            onChangeText={(value) => {
+              setPassword(value);
+            }}
+            placeholder={"Password"}
+            secureTextEntry={true}
+          />
+          <View style={styles.spacer}></View>
 
-              <MyButton
-                title="Log In"
-                onPress={() => handleSignIn(auth, email, password, setUser)}
-              />
-            </View>
+          <MyButton
+            title="Log In"
+            onPress={() => handleSignIn(auth, email, password, setUser)}
+          />
+        </View>
 
-            <View style={{ paddingBottom: 40 }}>
-              <MyButton
-                title="Go to sign up page"
-                onPress={() => navigation.navigate("Signup")}
-              />
-            </View>
-          </View>
-        </>
-      )}
+        <View style={{ paddingBottom: windowHeight / 13 }}>
+          <MyButton
+            title="Go to sign up page"
+            onPress={() => navigation.navigate("Signup")}
+          />
+        </View>
+      </View>
     </ImageBackground>
   );
 };

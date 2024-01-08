@@ -89,7 +89,14 @@ const SettingsScreen = () => {
           />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>
-        <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
+        <Image
+          source={
+            userProfilePic
+              ? { uri: userProfilePic }
+              : require("../assets/logito.png")
+          }
+          style={styles.userPhoto}
+        />
 
         <View style={styles.formWrapper}>
           <View style={styles.entryWrapper}>
@@ -119,24 +126,14 @@ const SettingsScreen = () => {
               width: "100%",
             }}
           >
-            <TouchableOpacity
-              style={styles.touchableWrapper}
-              onPress={updatePassword}
-            >
-              <Text style={styles.label}>Update Password</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touchableWrapper}
+            <MyButton title="Update Password" onPress={updatePassword} />
+            <View style={styles.spacer}></View>
+            <MyButton
+              title="Upload Profile Pic"
               onPress={handleUpdateProfilePic}
-            >
-              <Text style={styles.label}>upload profile pic</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touchableWrapper}
-              onPress={toggleOverlay}
-            >
-              <Text style={styles.label}>Delete Account</Text>
-            </TouchableOpacity>
+            />
+            <View style={styles.spacer}></View>
+            <MyButton title="Delete Account" onPress={toggleOverlay} />
           </View>
         </View>
       </View>
@@ -155,15 +152,18 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     width: "100%",
   },
   header: {
-    color: myColors.sand,
+    color: myColors.beige,
     fontSize: 40,
     fontFamily: regFont.fontFamily,
     marginBottom: 20,
     alignSelf: "center",
+    backgroundColor: myColors.black,
+    padding: 10,
+    borderRadius: 30,
   },
   label: {
     color: myColors.sand,
@@ -171,29 +171,23 @@ const styles = StyleSheet.create({
     fontFamily: regFont.fontFamily,
     marginBottom: 8,
   },
-  text: { fontSize: 25 },
   entryWrapper: {
     paddingTop: 15,
     paddingBottom: 5,
     width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   deleteAccountText: {
     fontSize: 25,
     fontFamily: regFont.fontFamily,
   },
-  touchableWrapper: {
-    backgroundColor: myColors.blue,
-    marginBottom: 25,
-    padding: 12,
-    borderRadius: 25,
-    display: "flex",
-    alignItems: "center",
-  },
 
   overlay: {
     width: "93%",
     maxHeight: "93%",
-    backgroundColor: myColors.sand,
+    backgroundColor: myColors.beige,
     borderRadius: "10%",
   },
   userPhoto: {
@@ -201,7 +195,10 @@ const styles = StyleSheet.create({
     width: 120,
     borderRadius: 100,
     borderWidth: 2,
-    borderColor: myColors.blue,
+    borderColor: myColors.red,
     alignSelf: "center",
+  },
+  spacer: {
+    height: 7,
   },
 });

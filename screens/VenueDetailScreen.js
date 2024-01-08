@@ -1,11 +1,11 @@
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast } from "../helpers";
-import { myColors, regFont } from "../theme";
+import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import MyTextInput from "../components/MyTextInput";
@@ -24,6 +24,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     createdByUID: "",
   });
+  const windowHeight = Dimensions.get("window").height;
 
   const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
 
@@ -62,7 +63,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.pageWrapper}>
+    <View
+      style={[
+        styles.pageWrapper,
+        { marginTop: windowHeight / upperMargin.margy },
+      ]}
+    >
       <View>
         <MyTextInput
           style={styles.itemStyle}
@@ -121,8 +127,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
         displayName={user?.displayName}
       />
       <View>
-        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
-
         <FlatList
           data={venueInfo?.pdfs}
           renderItem={({ item }) => (
@@ -145,11 +149,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
                 width: 1,
                 marginLeft: 10,
                 marginRight: 10,
-                backgroundColor: myColors,
+                backgroundColor: myColors.black,
               }}
             ></View>
           }
         />
+        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
+
         <MyButton
           title="Delete Venue"
           onPress={() =>
