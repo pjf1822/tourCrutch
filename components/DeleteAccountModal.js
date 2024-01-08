@@ -14,12 +14,12 @@ import {
   getAuth,
 } from "firebase/auth";
 import { showToast } from "../helpers";
+import { myColors } from "../theme";
 
 const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [openCreds, setOpenCreds] = useState(false);
-
   const auth = getAuth();
 
   const deleteAccount = async () => {
@@ -36,11 +36,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
     } catch (error) {
       console.log(error.message, "we ended up in here");
       if (error.message.includes("auth/requires-recent-login")) {
-        showToast(
-          "you have to type in your info for this to work",
-          false,
-          "top"
-        );
+        showToast("Please type in your email and password", false, "top");
         setOpenCreds(true);
       } else if (error.message.includes("(auth/invalid-email)")) {
         showToast("Invalid Credentials", false, "top");
@@ -60,7 +56,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         value={email}
         onChangeText={(text) => setEmail(text)}
         placeholder="Enter your email"
-        // placeholderTextColor={openCreds ? colors.green : "gray"}
+        placeholderTextColor={openCreds ? myColors.sand : "gray"}
       />
       <TextInput
         disabled={openCreds}
@@ -69,11 +65,11 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         onChangeText={(text) => setPassword(text)}
         placeholder="Enter your password"
         secureTextEntry={true}
-        // placeholderTextColor={openCreds ? colors.green : "gray"}
+        placeholderTextColor={openCreds ? myColors.sand : "gray"}
       />
       <Text
         style={{
-          //   color: colors.beige,
+          color: myColors.blue,
           width: "100%",
           textAlign: "center",
         }}
@@ -98,7 +94,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         >
           <Text
             style={{
-              //   color: colors.terraCotta,
+              color: myColors.blue,
               width: "100%",
             }}
           >
@@ -115,7 +111,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
         >
           <Text
             style={{
-              //   color: colors.beige,
+              color: myColors.darkBlue,
               width: "100%",
             }}
           >
@@ -133,7 +129,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     height: 40,
     width: "100%",
-    // borderColor: colors.blue,
+    borderColor: myColors.blue,
     borderWidth: 2,
     marginBottom: 12,
     paddingHorizontal: 8,

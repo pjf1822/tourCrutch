@@ -66,13 +66,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
     showToast("Profile pic added!", true, "top");
   } catch (error) {
     showToast(error, false, "top");
-
-    console.error(
-      "Error uploading image:",
-      error.code,
-      error.message,
-      error.serverResponse
-    );
+    throw new Error("Error adding Profile Pic");
   }
 };
 
@@ -143,14 +137,21 @@ export const uploadPDF = async (
         );
         return updateVenuePDFs;
       } else {
+        showToast(
+          "Invalid file format or size exceeds the limit",
+          false,
+          "top"
+        );
+
         throw new Error("Invalid file format or size exceeds the limit");
       }
     } else if (result.canceled === true) {
-      console.log("Document picking cancelled");
+      showToast(error?.message, false, "top");
+      throw new Error("Document Picking Cancelled");
     }
   } catch (error) {
     showToast(error?.message, false, "top");
-    console.error("Error picking a document:", error?.message);
+    throw new Error("Error Picking a Document");
   }
 };
 
