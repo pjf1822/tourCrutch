@@ -24,6 +24,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     createdByUID: "",
   });
+
   const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
 
   useEffect(() => {
@@ -43,7 +44,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
     try {
       const { name, address, link } = venueInfo;
       const updatedInfo = await uploadPDF(
-        navigation,
         updateVenueInfoMutation,
         venueId,
         venueInfo?.createdByUID,
@@ -94,7 +94,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
               link !== venueData?.link
             ) {
               handleUpdateVenueInfo(
-                navigation,
                 updateVenueInfoMutation,
                 venueId,
                 venueInfo?.createdByUID,
@@ -123,9 +122,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
           data={venueInfo?.pdfs}
           renderItem={({ item }) => (
             <RenderPDFItem
-              venueId={venueId}
-              item={item}
               updateVenueInfoMutation={updateVenueInfoMutation}
+              venueId={venueId}
+              createdByUID={venueInfo?.createdByUID}
+              userUID={user?.uid}
+              name={venueData?.name}
+              address={venueData?.address}
+              link={venueData?.link}
+              item={item}
             />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}

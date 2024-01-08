@@ -60,6 +60,7 @@ const SettingsScreen = () => {
     <View>
       <Text style={styles.header}>Account Details </Text>
       <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
+
       <View style={styles.formWrapper}>
         <View style={styles.entryWrapper}>
           <Text style={styles.label}>Email Account</Text>

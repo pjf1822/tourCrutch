@@ -3,14 +3,37 @@ import React from "react";
 import { getVenuePDF } from "../storageFunctionUtils";
 import { myColors } from "../theme";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { handleUpdateVenueInfo } from "../crudUtils/venue";
+import { showToast } from "../helpers";
 
-const RenderPDFItem = ({ venueId, item, updateVenueInfoMutation }) => {
-  const [firstPart, restPart] = item.split("-");
+const RenderPDFItem = ({
+  updateVenueInfoMutation,
+  venueId,
+  createdByUID,
+  userUID,
+  name,
+  address,
+  link,
+  item,
+}) => {
+  const [firstPart, restPart] = item?.split("-");
 
+  const handleLongPress = async () => {
+    const result = await handleUpdateVenueInfo(
+      updateVenueInfoMutation,
+      venueId,
+      createdByUID,
+      userUID,
+      name,
+      address,
+      link,
+      "REMOVE"
+    );
+  };
   return (
     <TouchableOpacity
       onPress={() => getVenuePDF(venueId, item)}
-      onLongPress={() => updateVenueInfoMutation}
+      onLongPress={handleLongPress}
     >
       <Icon name="file-pdf-o" size={20} color={myColors.sand} />
       <Text style={{ color: myColors.sand, flexWrap: "wrap" }}>
