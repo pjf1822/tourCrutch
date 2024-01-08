@@ -42,17 +42,20 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
   const handleUploadPdf = async () => {
     try {
-      const { name, address, link } = venueInfo;
       const updatedInfo = await uploadPDF(
         updateVenueInfoMutation,
         venueId,
         venueInfo?.createdByUID,
         user?.uid,
-        name,
-        address,
-        link,
-        venueInfo.pdfs
+        venueData,
+        {
+          name: venueInfo.name,
+          address: venueInfo.address,
+          link: venueInfo.link,
+          pdfs: venueInfo.pdfs,
+        }
       );
+      setVenueInfo(updatedInfo.venue);
     } catch (error) {
       console.error(error);
     }
@@ -98,10 +101,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
                 venueId,
                 venueInfo?.createdByUID,
                 user?.uid,
-                name,
-                address,
-                link,
-                null
+                venueData,
+                {
+                  name,
+                  address,
+                  link,
+                }
               );
             } else {
               showToast("You didnt change anything bozo", false, "top");
@@ -126,10 +131,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
               venueId={venueId}
               createdByUID={venueInfo?.createdByUID}
               userUID={user?.uid}
-              name={venueData?.name}
-              address={venueData?.address}
-              link={venueData?.link}
+              venueData={venueData}
               item={item}
+              setVenueInfo={setVenueInfo}
             />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}

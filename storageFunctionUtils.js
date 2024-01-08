@@ -1,4 +1,4 @@
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
@@ -108,32 +108,35 @@ export const uploadPDF = async (
   venueId,
   createdByUID,
   userUID,
-  venueName,
-  venueAddress,
-  venueLink,
-  venuePDFs
+  originalVenueData,
+  updatedVenueData
 ) => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
+
     if (result.canceled === false) {
       const { uri, mimeType, size, name } = result.assets[0];
-      if (venuePDFs.includes(name)) {
+      if (updatedVenueData?.pdfs?.includes(name)) {
         throw new Error("File with the same name already exists.");
       }
+
       if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
         await uploadPDFToFirebase(uri, name, venueId);
+
+        const updatedDataWithNewPDF = {
+          ...updatedVenueData,
+          pdfs: [...updatedVenueData.pdfs, name],
+        };
 
         const updateVenuePDFs = await handleUpdateVenueInfo(
           updateVenueInfoMutation,
           venueId,
           createdByUID,
           userUID,
-          venueName,
-          venueAddress,
-          venueLink,
-          name
+          originalVenueData,
+          updatedDataWithNewPDF
         );
         return updateVenuePDFs;
       } else {
@@ -166,7 +169,6 @@ export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
       },
     });
     const downloadURL = await getDownloadURL(storageRef);
-    showToast("Document Uploaded!", true, "top");
     return downloadURL;
   } catch (error) {
     console.log(error, "the failgin error");
