@@ -44,7 +44,6 @@ const DrawerNavigator = ({ user }) => {
       screenOptions={({ navigation }) => ({
         headerTitle: "",
         headerStyle: {
-          backgroundColor: "transparent",
           height: 0,
         },
 

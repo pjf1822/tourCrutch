@@ -25,7 +25,11 @@ const LoginScreen = () => {
     <ImageBackground
       source={require("../assets/DJ.jpg")}
       style={styles.background}
-      blurRadius={1}
+      onProgress={() => console.log("in progress")}
+      onLoad={() => console.log("on load")}
+      onLoadEnd={() => console.log("on load end")}
+      onLoadStart={() => console.log("on load start")}
+      onPartialLoad={console.log("on partial load")}
     >
       <Image
         style={{
