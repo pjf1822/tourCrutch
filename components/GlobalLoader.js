@@ -1,11 +1,11 @@
 import { StyleSheet, ImageBackground } from "react-native";
 import React from "react";
-import { regFont } from "./theme";
+import { regFont } from "../theme";
 
 const GlobalLoader = () => {
   return (
     <ImageBackground
-      source={require("./assets/DJ.jpg")}
+      source={require("../assets/DJ.jpg")}
       style={styles.background}
     />
   );

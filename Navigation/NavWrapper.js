@@ -15,7 +15,13 @@ const AuthNavigator = () => (
     }}
   >
     <AuthStack.Screen name="Signup" component={SignupScreen} />
-    <AuthStack.Screen name="Login" component={LoginScreen} />
+    <AuthStack.Screen
+      options={{
+        lazy: true,
+      }}
+      name="Login"
+      component={LoginScreen}
+    />
   </AuthStack.Navigator>
 );
 

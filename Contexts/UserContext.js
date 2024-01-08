@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import GlobalLoader from "../GlobalLoader";
+import GlobalLoader from "../components/GlobalLoader.js";
 import { FIREBASE_AUTH } from "../firebaseConfig";
 
 const UserContext = createContext();
@@ -29,7 +29,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const updateUserProfile = async () => {
-      // console.log("we called the useEffect when the user changes");
       fetchUserFromFirebase();
     };
 
@@ -38,9 +37,9 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
-  if (loading) {
-    return <GlobalLoader />;
-  }
+  // if (loading) {
+  //   return <GlobalLoader />;
+  // }
 
   return (
     <UserContext.Provider
