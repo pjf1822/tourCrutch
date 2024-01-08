@@ -14,6 +14,17 @@ import { showToast } from "../../helpers";
 import { myColors, regFont } from "../../theme";
 import MyButton from "../MyButton";
 
+const commonDrawerStyles = {
+  drawerLabelStyle: {
+    fontFamily: regFont.fontFamily,
+  },
+
+  drawerActiveTintColor: myColors.beige,
+  drawerActiveBackgroundColor: myColors.red,
+  drawerInactiveTintColor: myColors.black,
+  drawerInactiveBackgroundColor: myColors.beige,
+};
+
 function CustomDrawerContent({ user, ...props }) {
   const signOut = async () => {
     try {
@@ -25,12 +36,22 @@ function CustomDrawerContent({ user, ...props }) {
   };
   return (
     <DrawerContentScrollView
-      style={{ backgroundColor: myColors.shadow }}
+      style={{ backgroundColor: myColors.black }}
       {...props}
     >
-      <Text style={{ fontFamily: regFont.fontFamily }}>{user?.email}</Text>
+      <Text
+        style={{
+          fontFamily: regFont.fontFamily,
+          color: myColors.beige,
+          marginBottom: 10,
+          width: "80%",
+          alignSelf: "center",
+        }}
+      >
+        {user?.email}
+      </Text>
       <DrawerItemList {...props} />
-      <MyButton title="signout" onPress={() => signOut()} />
+      <MyButton title="signout" onPress={() => signOut()} warning={true} />
     </DrawerContentScrollView>
   );
 }
@@ -63,35 +84,33 @@ const DrawerNavigator = ({ user }) => {
       <Drawer.Screen
         name="Home"
         options={{
-          drawerLabelStyle: {
-            fontFamily: regFont.fontFamily,
+          ...commonDrawerStyles,
+          drawerItemStyle: {
+            width: "80%",
+            alignSelf: "center",
           },
-          drawerActiveTintColor: myColors.shadow,
-          drawerActiveBackgroundColor: myColors.darkBlue,
-          drawerInactiveTintColor: myColors.blue,
-          drawerInactiveBackgroundColor: myColors.sand,
         }}
         component={HomeScreen}
       />
       <Drawer.Screen
         name="NewVenue"
         options={{
+          ...commonDrawerStyles,
           drawerLabel: "New Venue",
-          drawerLabelStyle: { fontFamily: regFont.fontFamily },
-          drawerActiveTintColor: myColors.shadow,
-          drawerActiveBackgroundColor: myColors.darkBlue,
-          drawerInactiveTintColor: myColors.blue,
-          drawerInactiveBackgroundColor: myColors.sand,
+          drawerItemStyle: {
+            width: "80%",
+            alignSelf: "center",
+          },
         }}
         component={NewVenueScreen}
       />
       <Drawer.Screen
         options={{
-          drawerLabelStyle: { fontFamily: regFont.fontFamily },
-          drawerActiveTintColor: myColors.shadow,
-          drawerActiveBackgroundColor: myColors.darkBlue,
-          drawerInactiveTintColor: myColors.blue,
-          drawerInactiveBackgroundColor: myColors.sand,
+          ...commonDrawerStyles,
+          drawerItemStyle: {
+            width: "80%",
+            alignSelf: "center",
+          },
         }}
         name="Settings"
         component={SettingsScreen}
@@ -101,6 +120,7 @@ const DrawerNavigator = ({ user }) => {
         component={VenueDetailScreen}
         options={{
           drawerItemStyle: { height: 0 },
+          ...commonDrawerStyles,
         }}
       />
     </Drawer.Navigator>

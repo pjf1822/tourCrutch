@@ -2,10 +2,15 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
-const MyButton = ({ title, onPress }) => {
+const MyButton = ({ title, onPress, warning }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.buttonWrapper}>
-      <Text style={styles.textStyle}>{title}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.buttonWrapper, warning && styles.warningButton]}
+    >
+      <Text style={[styles.textStyle, warning && styles.warningText]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -17,14 +22,21 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     width: "100%",
-    backgroundColor: myColors.darkBlue,
+    backgroundColor: myColors.beige,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: myColors.sand,
+    borderColor: myColors.black,
     padding: 10,
+    width: "80%",
+    alignSelf: "center",
   },
+  warningButton: {
+    backgroundColor: myColors.pink,
+  },
+  warningText: { color: myColors.beige },
   textStyle: {
     fontFamily: regFont.fontFamily,
-    color: myColors.sand,
+    color: myColors.black,
+    fontSize: 17,
   },
 });

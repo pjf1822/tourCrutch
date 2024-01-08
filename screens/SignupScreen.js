@@ -54,6 +54,7 @@ const SignupScreen = () => {
               setPassword(value);
             }}
             placeholder={"password"}
+            secureTextEntry={true}
           />
           <View style={styles.spacer}></View>
 
@@ -64,9 +65,9 @@ const SignupScreen = () => {
             }
           />
         </View>
-        <View style={{ paddingBottom: 40 }}>
+        <View style={{ paddingBottom: windowHeight / 13 }}>
           <MyButton
-            title="go to Login Page"
+            title="Go to Login Page"
             onPress={() => navigation.navigate("Login")}
           />
         </View>

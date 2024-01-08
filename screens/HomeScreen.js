@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
@@ -68,6 +69,7 @@ const HomeScreen = ({ navigation, route }) => {
         <SearchBar
           placeholder="search a venue"
           value={search}
+          placeholderTextColor={myColors.beige}
           onChangeText={(search) => setSearch(search)}
           style={{
             flex: 1,
@@ -80,9 +82,11 @@ const HomeScreen = ({ navigation, route }) => {
             borderTopWidth: "0px",
           }}
           inputContainerStyle={{
-            backgroundColor: myColors.sand,
+            backgroundColor: "transparent",
           }}
-          inputStyle={{ backgroundColor: myColors.darkBlue }}
+          inputStyle={{ color: myColors.beige }}
+          clearIcon={<Icon name="times" size={20} color={myColors.beige} />}
+          searchIcon={<Icon name="search" size={17} color={myColors.beige} />}
         />
         {!userLoading && !isLoading && (
           <FlatList
@@ -94,6 +98,8 @@ const HomeScreen = ({ navigation, route }) => {
             keyExtractor={(item, index) => item?._id || index.toString()}
           />
         )}
+      </View>
+      <View style={{ paddingBottom: windowHeight / 13 }}>
         <MyButton
           title="Create New Venue"
           onPress={() => navigation.navigate("NewVenue")}
@@ -109,5 +115,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     backgroundColor: "black",
+    justifyContent: "space-between",
   },
 });

@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { deleteObject, ref } from "@firebase/storage";
 import { FIREBASE_STORAGE } from "../firebaseConfig";
+import { regFont } from "../theme";
 
 const RenderPDFItem = ({
   updateVenueInfoMutation,
@@ -50,11 +51,25 @@ const RenderPDFItem = ({
       onPress={() => getVenuePDF(venueId, item)}
       onLongPress={handleLongPress}
     >
-      <Icon name="file-pdf-o" size={20} color={myColors.sand} />
-      <Text style={{ color: myColors.sand, flexWrap: "wrap" }}>
+      <Icon name="file-pdf-o" size={24} color={myColors.black} />
+      <Text
+        style={{
+          color: myColors.black,
+          fontFamily: regFont.fontFamily,
+          flexWrap: "wrap",
+        }}
+      >
         {firstPart}
       </Text>
-      <Text style={{ color: myColors.sand, flexWrap: "wrap" }}>{restPart}</Text>
+      <Text
+        style={{
+          color: myColors.black,
+          fontFamily: regFont.fontFamily,
+          flexWrap: "wrap",
+        }}
+      >
+        {restPart}
+      </Text>
     </TouchableOpacity>
   );
 };
