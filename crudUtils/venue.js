@@ -63,6 +63,7 @@ export const handleUpdateVenueInfo = async (
         newPDF: newPDF,
       },
     });
+    return response;
 
     showToast("You Updated the venue!", true, "top");
     // navigation.navigate("Home", { venueUpdated: true });   do we really need this?

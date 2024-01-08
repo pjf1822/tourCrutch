@@ -123,9 +123,15 @@ const VenueDetailScreen = ({ route, navigation }) => {
           data={venueInfo?.pdfs}
           renderItem={({ item }) => (
             <RenderPDFItem
-              venueId={venueId}
-              item={item}
+              navigation={navigation}
               updateVenueInfoMutation={updateVenueInfoMutation}
+              venueId={venueId}
+              createdByUID={venueInfo?.createdByUID}
+              userUID={user?.uid}
+              name={venueData?.name}
+              address={venueData?.address}
+              link={venueData?.link}
+              item={item}
             />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}
