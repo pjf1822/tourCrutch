@@ -1,34 +1,49 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { getVenuePDF } from "../storageFunctionUtils";
 import { myColors } from "../theme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
-import { showToast } from "../helpers";
+import { deleteObject, ref } from "@firebase/storage";
+import { FIREBASE_STORAGE } from "../firebaseConfig";
 
 const RenderPDFItem = ({
   updateVenueInfoMutation,
   venueId,
   createdByUID,
   userUID,
-  name,
-  address,
-  link,
+  venueData,
   item,
+  setVenueInfo,
 }) => {
   const [firstPart, restPart] = item?.split("-");
 
   const handleLongPress = async () => {
+    const updatedPDFs = [...venueData.pdfs];
+    const itemIndex = updatedPDFs.indexOf(item);
+    if (itemIndex !== -1) {
+      const deletedPDF = updatedPDFs.splice(itemIndex, 1)[0];
+      const storageRef = ref(
+        FIREBASE_STORAGE,
+        `venue-info/${venueId}/${deletedPDF}`
+      );
+      try {
+        await deleteObject(storageRef);
+      } catch (error) {
+        console.error("Error deleting file from Firebase Storage:", error);
+        throw new Error("Couldnt delete file");
+      }
+    }
+
     const result = await handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
       createdByUID,
       userUID,
-      name,
-      address,
-      link,
-      "REMOVE"
+      venueData,
+      { ...venueData, pdfs: updatedPDFs }
     );
+    setVenueInfo(result.venue);
   };
   return (
     <TouchableOpacity

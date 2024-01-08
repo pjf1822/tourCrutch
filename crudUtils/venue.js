@@ -34,26 +34,35 @@ export const handleUpdateVenueInfo = async (
   venueId,
   createdByUID,
   userUID,
-  venueName,
-  venueAddress,
-  venueLink,
-  newPDF
+  originalVenueData,
+  updatedVenueData
 ) => {
   try {
     if (!createdByUID || createdByUID !== userUID) {
       throw new Error("User does not have permission to update this venue.");
     }
 
+    const updatedFields = {};
+
+    Object.keys(updatedVenueData).forEach((field) => {
+      if (originalVenueData[field] !== updatedVenueData[field]) {
+        updatedFields[field] = updatedVenueData[field];
+      }
+    });
+
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,
-      updatedData: {
-        name: venueName,
-        address: venueAddress,
-        link: venueLink,
-        newPDF: newPDF,
-      },
+      updatedData: updatedFields,
     });
-    showToast("You Updated the venue!", true, "top");
+    if (originalVenueData.pdfs.length > updatedVenueData.pdfs.length) {
+      showToast("You Deleted a file", true, "top");
+    } else if (originalVenueData.pdfs.length < updatedVenueData.pdfs.length) {
+      showToast("You Added a file", true, "top");
+    } else {
+      showToast("You Updated the venue!", true, "top");
+    }
+
+    return response;
   } catch (error) {
     console.log(error, "what did we break");
     showToast(error?.message, false, "top");
