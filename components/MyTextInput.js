@@ -25,5 +25,6 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     fontFamily: regFont.fontFamily,
     color: myColors.sand,
+    backgroundColor: myColors.blue,
   },
 });

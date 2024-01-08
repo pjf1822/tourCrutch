@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { LogBox, Image } from "react-native";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
-import GlobalLoader from "./GlobalLoader";
 import { StorageProvider } from "./Contexts/StorageContext";
 import { UserProvider } from "./Contexts/UserContext";
 
@@ -24,7 +23,7 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync({
-          Dot: require("./assets/DotGothic16-Regular.ttf"),
+          Dot: require("./assets/DoHyeon-Regular.ttf"),
         });
       } catch (e) {
         console.warn(e);

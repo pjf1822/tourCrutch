@@ -1,10 +1,12 @@
-import { View, TextInput, Button } from "react-native";
+import { View, TextInput, Button, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import React from "react";
 import { useCreateVenue } from "../api";
 import { createVenue } from "../crudUtils/venue";
 import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyTextInput";
+import { myColors } from "../theme";
+import MyButton from "../components/MyButton";
 
 const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();
@@ -14,12 +16,13 @@ const NewVenueScreen = ({ navigation }) => {
     createVenue(values, user, createVenueMutation, navigation, resetForm);
   };
   return (
-    <View>
+    <View style={styles.pageWrapper}>
       <Formik
         initialValues={{
           name: "",
           address: "",
           link: "",
+          pdfs: [],
         }}
         onSubmit={handleSubmit}
       >
@@ -44,7 +47,7 @@ const NewVenueScreen = ({ navigation }) => {
               value={values.link}
             />
 
-            <Button title="Submit" onPress={handleSubmit} />
+            <MyButton title="Submit" onPress={handleSubmit} />
           </View>
         )}
       </Formik>
@@ -53,3 +56,10 @@ const NewVenueScreen = ({ navigation }) => {
 };
 
 export default NewVenueScreen;
+
+const styles = StyleSheet.create({
+  pageWrapper: {
+    flex: 1,
+    backgroundColor: myColors.sand,
+  },
+});

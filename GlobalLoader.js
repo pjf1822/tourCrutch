@@ -1,13 +1,13 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 import React from "react";
 import { regFont } from "./theme";
 
 const GlobalLoader = () => {
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} source={require("./assets/logo.png")} />
-      <Text style={styles.loadingFontStyle}>LOading Babayyyy</Text>
-    </View>
+    <ImageBackground
+      source={require("./assets/DJ.jpg")}
+      style={styles.background}
+    ></ImageBackground>
   );
 };
 
@@ -26,5 +26,11 @@ const styles = StyleSheet.create({
   loadingFontStyle: {
     fontFamily: regFont.fontFamily,
     fontSize: 40,
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
