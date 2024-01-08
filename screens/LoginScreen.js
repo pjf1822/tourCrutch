@@ -1,4 +1,10 @@
-import { View, Text, TextInput } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  Image,
+  Dimensions,
+} from "react-native";
 import React, { useState } from "react";
 import { handleSignIn } from "../authFunctionUtils";
 import { FIREBASE_AUTH } from "../firebaseConfig";
@@ -13,35 +19,79 @@ const LoginScreen = () => {
   const { setUser } = useUser();
   const auth = FIREBASE_AUTH;
   const navigation = useNavigation();
+  const windowHeight = Dimensions.get("window").height;
 
   return (
-    <View style={{ marginTop: 100 }}>
-      <Text>LoginScreen</Text>
-      <MyTextInput
-        value={email}
-        onChangeText={(value) => {
-          setEmail(value);
+    <ImageBackground
+      source={require("../assets/DJ.jpg")}
+      style={styles.background}
+      onProgress={() => console.log("in progress")}
+      onLoad={() => console.log("on load")}
+      onLoadEnd={() => console.log("on load end")}
+      onLoadStart={() => console.log("on load start")}
+      onPartialLoad={console.log("on partial load")}
+    >
+      <Image
+        style={{
+          height: 150,
+          width: 150,
+          alignSelf: "center",
+          marginTop: windowHeight / 10,
         }}
-        placeholder={"email"}
+        source={require("../assets/logito.png")}
       />
-      <MyTextInput
-        value={password}
-        onChangeText={(value) => {
-          setPassword(value);
-        }}
-        placeholder={"password"}
-      />
-      <MyButton
-        title="singin"
-        onPress={() => handleSignIn(auth, email, password, setUser)}
-      />
+      <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
+        <View>
+          <MyTextInput
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
+            }}
+            placeholder={"email"}
+          />
+          <View style={styles.spacer}></View>
 
-      <MyButton
-        title="Go to sign up page"
-        onPress={() => navigation.navigate("Signup")}
-      />
-    </View>
+          <MyTextInput
+            value={password}
+            onChangeText={(value) => {
+              setPassword(value);
+            }}
+            placeholder={"password"}
+          />
+          <View style={styles.spacer}></View>
+
+          <MyButton
+            title="Log In"
+            onPress={() => handleSignIn(auth, email, password, setUser)}
+          />
+        </View>
+
+        <View style={{ paddingBottom: 40 }}>
+          <MyButton
+            title="Go to sign up page"
+            onPress={() => navigation.navigate("Signup")}
+          />
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  pageWrapper: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  spacer: {
+    height: 10,
+  },
+});

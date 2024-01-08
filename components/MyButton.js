@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     width: "100%",
-    backgroundColor: myColors.blue,
+    backgroundColor: myColors.darkBlue,
     borderWidth: 2,
     borderRadius: 10,
     borderColor: myColors.sand,
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontFamily: regFont.fontFamily,
-    color: myColors.shadow,
+    color: myColors.sand,
   },
 });

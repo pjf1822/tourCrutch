@@ -1,7 +1,7 @@
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
-import { regFont } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const HomePageFlatListItem = ({ item, navigation }) => {
   return (
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "space-between",
     padding: 10,
+    backgroundColor: myColors.sand,
   },
   itemStyle: {
     fontFamily: regFont.fontFamily,
