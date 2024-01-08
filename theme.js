@@ -8,3 +8,5 @@ export const myColors = {
   blue: "#2d545e",
   darkBlue: "#12343b",
 };
+
+export const upperMargin = { margy: 9 };

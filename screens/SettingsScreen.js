@@ -1,8 +1,15 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ImageBackground,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail, updateProfile } from "firebase/auth";
-import { regFont } from "../theme";
+import { myColors, regFont, upperMargin } from "../theme";
 import * as ImagePicker from "expo-image-picker";
 import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
@@ -11,6 +18,7 @@ import MyButton from "../components/MyButton";
 import { pickImage } from "../storageFunctionUtils";
 import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
+const windowHeight = Dimensions.get("window").height;
 
 const SettingsScreen = () => {
   const { user, setUser } = useUser();
@@ -63,90 +71,102 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View>
-      <Overlay
-        isVisible={visible}
-        onBackdropPress={toggleOverlay}
-        overlayStyle={styles.overlay}
-      >
-        <DeleteAccountModal
-          user={user}
-          setUser={setUser}
-          toggleOverlay={toggleOverlay}
-        />
-      </Overlay>
-      <Text style={styles.header}>Account Details </Text>
-      <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
+    <ImageBackground
+      source={require("../assets/DJ.jpg")}
+      style={styles.background}
+      blurRadius={1}
+    >
+      <View style={{ marginTop: windowHeight / upperMargin.margy }}>
+        <Overlay
+          isVisible={visible}
+          onBackdropPress={toggleOverlay}
+          overlayStyle={styles.overlay}
+        >
+          <DeleteAccountModal
+            user={user}
+            setUser={setUser}
+            toggleOverlay={toggleOverlay}
+          />
+        </Overlay>
+        <Text style={styles.header}>Account Details </Text>
+        <Image source={{ uri: userProfilePic }} style={styles.userPhoto} />
 
-      <View style={styles.formWrapper}>
-        <View style={styles.entryWrapper}>
-          <Text style={styles.label}>Email Account</Text>
-          <Text style={styles.text}>{user?.email}</Text>
-        </View>
-        <View style={styles.entryWrapper}>
+        <View style={styles.formWrapper}>
           <View style={styles.entryWrapper}>
-            <Text style={styles.label}>Display Name</Text>
-            <MyTextInput
-              placeholder="displayName"
-              onChangeText={(thing) => setDisplayName(thing)}
-              value={displayName}
-            />
-            <Text>{user.displayName && user.displayName}</Text>
-            <MyButton
-              title={"update displayname"}
-              onPress={updateUserDisplayName}
-            />
+            <Text style={styles.label}>Email Account</Text>
+            <Text style={styles.text}>{user?.email}</Text>
+          </View>
+          <View style={styles.entryWrapper}>
+            <View style={styles.entryWrapper}>
+              <Text style={styles.label}>Display Name</Text>
+              <MyTextInput
+                placeholder="displayName"
+                onChangeText={(thing) => setDisplayName(thing)}
+                value={displayName}
+              />
+              <MyButton
+                title={"update displayname"}
+                onPress={updateUserDisplayName}
+              />
+            </View>
+          </View>
+          <View
+            style={{
+              height: "65%",
+              display: "flex",
+              justifyContent: "flex-start",
+              marginTop: 30,
+              width: "100%",
+            }}
+          >
+            <TouchableOpacity
+              style={styles.touchableWrapper}
+              onPress={updatePassword}
+            >
+              <Text style={styles.label}>Update Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.touchableWrapper}
+              onPress={handleUpdateProfilePic}
+            >
+              <Text style={styles.label}>upload profile pic</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.touchableWrapper}
+              onPress={toggleOverlay}
+            >
+              <Text style={styles.label}>Delete Account</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View
-          style={{
-            height: "65%",
-            display: "flex",
-            justifyContent: "flex-start",
-            marginTop: 30,
-          }}
-        >
-          <TouchableOpacity
-            style={styles.touchableWrapper}
-            onPress={updatePassword}
-          >
-            <Text>Update Password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleUpdateProfilePic}>
-            <Text>upload profile pic</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleOverlay}>
-            <Text>Delete Account</Text>
-          </TouchableOpacity>
-        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 export default SettingsScreen;
 
 const styles = StyleSheet.create({
-  optionsPageWrapper: {
-    // backgroundColor: colors.blue,
-    height: "100%",
-    display: "flex",
-    paddingLeft: 20,
+  background: {
+    flex: 1,
+    resizeMode: "cover",
   },
   formWrapper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "flex-start",
+    width: "100%",
   },
   header: {
-    // color: colors.beige,
+    color: myColors.sand,
     fontSize: 40,
     fontFamily: regFont.fontFamily,
     marginBottom: 20,
+    alignSelf: "center",
   },
   label: {
-    // color: colors.beige,
+    color: myColors.sand,
     fontSize: 30,
     fontFamily: regFont.fontFamily,
     marginBottom: 8,
@@ -155,13 +175,14 @@ const styles = StyleSheet.create({
   entryWrapper: {
     paddingTop: 15,
     paddingBottom: 5,
+    width: "100%",
   },
   deleteAccountText: {
     fontSize: 25,
     fontFamily: regFont.fontFamily,
   },
   touchableWrapper: {
-    // backgroundColor: colors.beige,
+    backgroundColor: myColors.blue,
     marginBottom: 25,
     padding: 12,
     borderRadius: 25,
@@ -172,11 +193,15 @@ const styles = StyleSheet.create({
   overlay: {
     width: "93%",
     maxHeight: "93%",
-    // backgroundColor: colors.blue,
+    backgroundColor: myColors.sand,
     borderRadius: "10%",
   },
   userPhoto: {
-    height: 80,
-    width: 80,
+    height: 120,
+    width: 120,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: myColors.blue,
+    alignSelf: "center",
   },
 });

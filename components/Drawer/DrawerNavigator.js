@@ -43,7 +43,10 @@ const DrawerNavigator = ({ user }) => {
       drawerContent={(props) => <CustomDrawerContent {...props} user={user} />}
       screenOptions={({ navigation }) => ({
         headerTitle: "",
-        headerStyle: { backgroundColor: myColors.blue },
+        headerStyle: {
+          backgroundColor: "transparent",
+          height: 0,
+        },
 
         headerLeft: () => (
           <TouchableOpacity
