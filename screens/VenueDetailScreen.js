@@ -18,6 +18,7 @@ import { uploadPDF } from "../storageFunctionUtils";
 import MyTextInput from "../components/MyTextInput";
 import FilesModal from "../components/FilesModal";
 import MyLongPressButton from "../components/MyLongPressButton";
+import ContactSection from "../components/ContactSection";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -142,6 +143,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
             }
           }}
         />
+        <ContactSection />
       </View>
 
       <CommentSection
