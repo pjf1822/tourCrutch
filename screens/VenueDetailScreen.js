@@ -56,6 +56,11 @@ const VenueDetailScreen = ({ route, navigation }) => {
   }, [venueData]);
 
   const handleUploadPdf = async () => {
+    if (venueData?.pdfs?.length >= 8) {
+      showToast("This venue has too many files", false, "top");
+      return;
+    }
+
     try {
       const updatedInfo = await uploadPDF(
         updateVenueInfoMutation,
