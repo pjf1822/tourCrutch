@@ -51,7 +51,7 @@ const RenderPDFItem = ({
       onPress={() => getVenuePDF(venueId, item)}
       onLongPress={handleLongPress}
     >
-      <Icon name="file-pdf-o" size={24} color={myColors.black} />
+      <Icon name="file-pdf-o" size={40} color={myColors.black} />
       <Text
         style={{
           color: myColors.black,
@@ -66,6 +66,7 @@ const RenderPDFItem = ({
           color: myColors.black,
           fontFamily: regFont.fontFamily,
           flexWrap: "wrap",
+          fontSize: 15,
         }}
       >
         {restPart}

@@ -156,7 +156,7 @@ export const uploadPDF = async (
       throw new Error("Document Picking Cancelled");
     }
   } catch (error) {
-    showToast(error?.message, false, "top");
+    showToast(error.message, false, "top");
     throw new Error("Error Picking a Document");
   }
 };
