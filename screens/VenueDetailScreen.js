@@ -1,4 +1,11 @@
-import { View, StyleSheet, FlatList, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  ImageBackground,
+  Button,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import CommentSection from "../components/CommentSection";
 import MyButton from "../components/MyButton";
@@ -9,13 +16,15 @@ import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import MyTextInput from "../components/MyTextInput";
-import RenderPDFItem from "../components/RenderPDFItem";
+import FilesModal from "../components/Drawer/FilesModal";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
   const updateVenueInfoMutation = useUpdateVenueInfo();
+
   const { venueId } = route.params;
   const { user, setLoading: setUserLoading } = useUser();
+  const [isModalVisible, setModalVisible] = useState(false);
   const [venueInfo, setVenueInfo] = useState({
     name: "",
     address: "",
@@ -24,6 +33,11 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     createdByUID: "",
   });
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const windowHeight = Dimensions.get("window").height;
 
   const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
@@ -42,6 +56,11 @@ const VenueDetailScreen = ({ route, navigation }) => {
   }, [venueData]);
 
   const handleUploadPdf = async () => {
+    if (venueData?.pdfs?.length >= 8) {
+      showToast("This venue has too many files", false, "top");
+      return;
+    }
+
     try {
       const updatedInfo = await uploadPDF(
         updateVenueInfoMutation,
@@ -56,6 +75,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
           pdfs: venueInfo.pdfs,
         }
       );
+      console.log(updatedInfo, "the thing");
+      if (updatedInfo === undefined) {
+        return;
+      }
       setVenueInfo(updatedInfo.venue);
     } catch (error) {
       console.error(error);
@@ -63,13 +86,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View
-      style={[
-        styles.pageWrapper,
-        { marginTop: windowHeight / upperMargin.margy },
-      ]}
+    <ImageBackground
+      source={require("../assets/festival.jpg")}
+      style={styles.imagePageWrapper}
+      imageStyle={{ opacity: 0.6 }}
     >
-      <View>
+      <View style={{ marginTop: windowHeight / upperMargin.margy }}>
         <MyTextInput
           style={styles.itemStyle}
           value={venueInfo.name}
@@ -126,35 +148,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
         userId={user?.uid}
         displayName={user?.displayName}
       />
+
       <View>
-        <FlatList
-          data={venueInfo?.pdfs}
-          renderItem={({ item }) => (
-            <RenderPDFItem
-              updateVenueInfoMutation={updateVenueInfoMutation}
-              venueId={venueId}
-              createdByUID={venueInfo?.createdByUID}
-              userUID={user?.uid}
-              venueData={venueData}
-              item={item}
-              setVenueInfo={setVenueInfo}
-            />
-          )}
-          keyExtractor={(item, index) => `${item}-${index}`}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={
-            <View
-              style={{
-                width: 1,
-                marginLeft: 10,
-                marginRight: 10,
-                backgroundColor: myColors.black,
-              }}
-            ></View>
-          }
-        />
-        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
+        <MyButton title="Venue Files" onPress={toggleModal} />
 
         <MyButton
           title="Delete Venue"
@@ -169,14 +165,25 @@ const VenueDetailScreen = ({ route, navigation }) => {
           }
         />
       </View>
-    </View>
+      <FilesModal
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModal}
+        venueInfo={venueInfo}
+        venueData={venueData}
+        updateVenueInfoMutation={updateVenueInfoMutation}
+        venueId={venueId}
+        user={user}
+        setVenueInfo={setVenueInfo}
+        handleUploadPdf={handleUploadPdf}
+      />
+    </ImageBackground>
   );
 };
 
 export default VenueDetailScreen;
 
 const styles = StyleSheet.create({
-  pageWrapper: {
+  imagePageWrapper: {
     backgroundColor: myColors.blue,
     flex: 1,
     display: "flex",

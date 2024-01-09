@@ -22,6 +22,7 @@ export const showToast = (toastMessage, success, position) => {
     textColor: textColor,
     opacity: 1,
     fontSize: 23,
+    zIndex: 999,
   });
 };
 

@@ -4,6 +4,7 @@ import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { createComment } from "../api";
 import { addComment } from "../crudUtils/comment";
+import { showToast } from "../helpers";
 
 const AddComment = ({
   venueId,
@@ -20,6 +21,19 @@ const AddComment = ({
     userDisplayName: displayName,
   });
 
+  const handleAddComment = () => {
+    if (newComment.trim() === "") {
+      showToast("Youre comment cant be blank", false, "top");
+    } else {
+      addComment(
+        addCommentMutation,
+        allComments,
+        setNewComment,
+        setAllComments
+      );
+    }
+  };
+
   return (
     <View>
       <MyTextInput
@@ -27,17 +41,7 @@ const AddComment = ({
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
       />
-      <MyButton
-        title={"Submitm Cooment"}
-        onPress={() =>
-          addComment(
-            addCommentMutation,
-            allComments,
-            setNewComment,
-            setAllComments
-          )
-        }
-      />
+      <MyButton title={"Submitm Cooment"} onPress={handleAddComment} />
     </View>
   );
 };
