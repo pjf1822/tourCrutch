@@ -16,7 +16,8 @@ import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import MyTextInput from "../components/MyTextInput";
-import FilesModal from "../components/Drawer/FilesModal";
+import FilesModal from "../components/FilesModal";
+import MyLongPressButton from "../components/MyLongPressButton";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -152,9 +153,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <View>
         <MyButton title="Venue Files" onPress={toggleModal} />
 
-        <MyButton
+        <MyLongPressButton
           title="Delete Venue"
-          onPress={() =>
+          onPress={() => showToast("Hold down to delete", false, "top")}
+          onLongPress={() =>
             handleDelete(
               venueId,
               venueInfo?.createdByUID,
