@@ -27,7 +27,6 @@ const mockPeeps = [
     number: "+1 5555555555",
     email: "alice.johnson@gmail.com",
   },
-  // Add more entries as needed
 ];
 
 const ContactSection = () => {
@@ -35,19 +34,17 @@ const ContactSection = () => {
 
   return (
     <View style={styles.app}>
-      {/* {mockPeeps?.map((card, i) => (
-        <ContactCard key={i} data={card} />
-      ))} */}
       <FlatList
         data={mockPeeps}
-        numColumns={2}
+        numColumns={1}
+        horizontal={true}
         renderItem={renderItem}
         keyExtractor={(item) => item.name}
-        // ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
         contentContainerStyle={{
-          //   alignItems: "center", // Center items horizontallyj
           justifyContent: "center",
         }}
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
@@ -56,10 +53,5 @@ const ContactSection = () => {
 export default ContactSection;
 
 const styles = StyleSheet.create({
-  app: {
-    // flex: 1,
-
-    backgroundColor: "green",
-    justifyContent: "center",
-  },
+  app: { marginTop: 10 },
 });

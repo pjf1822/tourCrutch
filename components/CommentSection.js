@@ -7,6 +7,7 @@ import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { deleteComment, useFetchVenueComments } from "../api";
 import { deleteCommentHandler } from "../crudUtils/comment";
+import { myColors, regFont } from "../theme";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
@@ -66,8 +67,8 @@ const CommentSection = ({ venueId, userId, displayName }) => {
           >
             <Icon name="close" />
           </TouchableOpacity>
-          <Text>{comment?.comment}</Text>
-          <Text>{comment?.userDisplayName}</Text>
+          <Text style={styles.commentText}>{comment?.comment}</Text>
+          <Text style={styles.commentText}>{comment?.userDisplayName}</Text>
           {userPhotos[comment?.userUid] === "noPic" ? (
             <Image source={Smiley} style={styles.userPhoto} />
           ) : (
@@ -102,11 +103,19 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "space-between",
+    alignItems: "center",
     borderWidth: 2,
-    borderColor: "green",
-    paddingVertical: 10,
-    paddingHorizontal: 0,
+    borderColor: myColors.black,
+    borderRadius: 10,
+    padding: 3,
+  },
+  commentText: {
+    fontFamily: regFont.fontFamily,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    maxWidth: "65%",
   },
   userPhoto: { height: 40, width: 40, borderRadius: 25 },
 });
