@@ -2,7 +2,7 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
-const MyButton = ({ title, onPress, warning }) => {
+const MyButton = ({ title, onPress, warning, width }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     display: "flex",
     alignItems: "center",
-    width: "100%",
     backgroundColor: myColors.beige,
     borderWidth: 2,
     borderRadius: 10,

@@ -7,8 +7,8 @@ import Modal from "react-native-modal";
 import { myColors } from "../theme";
 
 const FilesModal = ({
-  isModalVisible,
-  toggleModal,
+  isPDFModalVisible,
+  togglePDFModal,
   venueInfo,
   updateVenueInfoMutation,
   venueId,
@@ -19,9 +19,9 @@ const FilesModal = ({
 }) => {
   return (
     <Modal
-      isVisible={isModalVisible}
+      isVisible={isPDFModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
-      onBackdropPress={toggleModal}
+      onBackdropPress={togglePDFModal}
       backdropOpacity={0}
     >
       <View

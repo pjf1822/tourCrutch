@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, Image } from "react-native";
+import { Text, TouchableOpacity, Image, View } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -51,7 +51,7 @@ function CustomDrawerContent({ user, ...props }) {
         {user?.email}
       </Text>
       <DrawerItemList {...props} />
-      <MyButton title="signout" onPress={() => signOut()} warning={true} />
+      <MyButton title="signout" onPress={() => signOut()} />
     </DrawerContentScrollView>
   );
 }
