@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";

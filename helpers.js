@@ -121,3 +121,10 @@ export const transformVenueData = (venueData) => {
 
   return transformedData;
 };
+
+export const combineAddress = (values) => {
+  const address = `${values.streetNameNumber},${
+    values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
+  }, ${values.city}, ${values.state}, ${values.zip}`;
+  return address.trim();
+};

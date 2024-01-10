@@ -3,7 +3,7 @@ import React from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
-import { showToast, transformVenueData } from "../helpers";
+import { combineAddress, showToast, transformVenueData } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyLongPressButton";
@@ -22,14 +22,14 @@ const UpdateDataFormModal = ({
   windowHeight,
 }) => {
   const handleUpdate = async (values) => {
-    const newAddress = `${values.streetNameNumber},${
-      values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
-    }, ${values.city}, ${values.state}, ${values.zip}`;
-
+    // Recombine Address
+    const newAddress = combineAddress(values);
     venueInfo.address = newAddress;
+
     const { name, address, link } = venueInfo;
 
     if (
+      // Did the fields actually change
       name !== venueData?.name ||
       address !== venueData?.address ||
       link !== venueData?.link

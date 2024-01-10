@@ -1,11 +1,9 @@
-import { View, Text, TextInput } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { stateOptions } from "../helpers";
 import MyButton from "../components/MyButton";
 import { myColors, regFont, upperMargin } from "../theme";
-import { createVenue } from "../crudUtils/venue";
 import MyTextInput from "../components/MyTextInput";
-import { useCreateVenue } from "../api";
 import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
 
@@ -51,7 +49,6 @@ const VenueForm = ({
             />
             <Picker
               selectedValue={values.state}
-              //   style={styles.picker}
               onValueChange={(itemValue) => handleChange("state")(itemValue)}
               numberOfLines={1}
               itemStyle={{

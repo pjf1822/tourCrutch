@@ -1,4 +1,4 @@
-import { isValidUrl, showToast } from "../helpers";
+import { combineAddress, isValidUrl, showToast } from "../helpers";
 
 export const createVenue = async (
   values,
@@ -19,28 +19,19 @@ export const createVenue = async (
       showToast("Please fill out all fields", false, "top");
       return;
     }
-
     if (!isValidUrl(values?.link)) {
       showToast("Please enter a valid URL for the Venue Link", false, "top");
       return;
     }
-
-    const address = `${values.streetNameNumber},${
-      values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
-    }, ${values.city}, ${values.state}, ${values.zip}`;
-
+    const address = combineAddress(values);
     values.address = address;
-
     const result = await createVenueMutation.mutateAsync({
       ...values,
       userUID: user.uid,
     });
-
     showToast("Created new venue!", true, "top");
     resetForm();
     navigation.navigate("Home", { venueCreated: true });
-
-    return result;
   } catch (error) {
     showToast(error?.message, false, "top");
   }
@@ -55,12 +46,6 @@ export const handleUpdateVenueInfo = async (
   updatedVenueData
 ) => {
   try {
-    console.log(
-      originalVenueData,
-      "original data",
-      updatedVenueData,
-      "the new data"
-    );
     if (!createdByUID || createdByUID !== userUID) {
       throw new Error("User does not have permission to update this venue.");
     }
@@ -72,12 +57,12 @@ export const handleUpdateVenueInfo = async (
         updatedFields[field] = updatedVenueData[field];
       }
     });
-    console.log(updatedFields, "the updated fields");
 
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,
       updatedData: updatedFields,
     });
+
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (

@@ -15,6 +15,7 @@ const NewVenueScreen = ({ navigation }) => {
   const handleSubmit = (values, { resetForm }) => {
     createVenue(values, user, createVenueMutation, navigation, resetForm);
   };
+
   const initialValues = {
     name: "",
     streetNameNumber: "",
