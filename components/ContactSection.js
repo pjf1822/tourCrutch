@@ -1,10 +1,41 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import ContactCard from "./ContactCard";
+import { handleUpdateVenueInfo } from "../crudUtils/venue";
 
-const ContactSection = ({ venueInfo }) => {
-  const renderItem = ({ item }) => <ContactCard data={item} />;
+const ContactSection = ({
+  venueInfo,
+  updateVenueInfoMutation,
+  venueId,
+  user,
+  venueData,
+  setVenueInfo,
+}) => {
+  const renderItem = ({ item }) => (
+    <ContactCard
+      data={item}
+      handleDeleteContactCard={handleDeleteContactCard}
+    />
+  );
 
+  const handleDeleteContactCard = (contactCardId) => {
+    const updatedContactCards = venueInfo.contactCards.filter(
+      (card) => card._id !== contactCardId
+    );
+
+    handleUpdateVenueInfo(
+      updateVenueInfoMutation,
+      venueId,
+      venueInfo?.createdByUID,
+      user?.uid,
+      venueData,
+      { contactCards: updatedContactCards }
+    );
+    setVenueInfo((prevVenueInfo) => ({
+      ...prevVenueInfo,
+      contactCards: updatedContactCards,
+    }));
+  };
   return (
     <View style={styles.app}>
       <FlatList

@@ -110,7 +110,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
         }}
       >
         <DisplayedDataForm venueInfo={venueInfo} />
-        <ContactSection venueInfo={venueInfo} />
+        <ContactSection
+          venueInfo={venueInfo}
+          updateVenueInfoMutation={updateVenueInfoMutation}
+          venueId={venueId}
+          user={user}
+          venueData={venueData}
+          setVenueInfo={setVenueInfo}
+        />
         <TouchableOpacity onPress={toggleContactModal}>
           <Icon
             name="plus"

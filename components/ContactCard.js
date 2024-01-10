@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
-const ContactCard = ({ data }) => {
+const ContactCard = ({ data, handleDeleteContactCard }) => {
   const handlePhonePress = () => {
     const phoneNumber = data.number.replace(/\D/g, ""); // Remove non-numeric characters
     const phoneURL = `tel:${phoneNumber}`;
@@ -10,7 +10,10 @@ const ContactCard = ({ data }) => {
   };
 
   return (
-    <View style={styles.cardWrapper}>
+    <TouchableOpacity
+      style={styles.cardWrapper}
+      onLongPress={() => handleDeleteContactCard(data._id)}
+    >
       <View style={styles.half}>
         <Text style={styles.cardText}>{data.name}</Text>
         <Text style={styles.cardText}>{data.position}</Text>
@@ -20,7 +23,7 @@ const ContactCard = ({ data }) => {
         <Text style={styles.cardText}>{data.email}</Text>
         <Text style={styles.cardText}>{data.phoneNumber}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
