@@ -31,13 +31,19 @@ export const createVenue = async (
 
     values.address = address;
 
+    const pdfNames = values.pdfs.map((pdf) => pdf.name);
+    values.pdfs = pdfNames;
+
     const result = await createVenueMutation.mutateAsync({
       ...values,
       userUID: user.uid,
     });
+
     showToast("Created new venue!", true, "top");
     resetForm();
     navigation.navigate("Home", { venueCreated: true });
+
+    return result;
   } catch (error) {
     showToast(error?.message, false, "top");
   }

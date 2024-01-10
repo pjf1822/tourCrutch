@@ -8,14 +8,15 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useCreateVenue } from "../api";
 import { createVenue } from "../crudUtils/venue";
 import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyTextInput";
 import { myColors, regFont, upperMargin } from "../theme";
 import MyButton from "../components/MyButton";
-import { stateOptions } from "../helpers";
+import { showToast, stateOptions } from "../helpers";
+import * as DocumentPicker from "expo-document-picker";
 
 const NewVenueScreen = ({ navigation }) => {
   const createVenueMutation = useCreateVenue();
@@ -25,6 +26,7 @@ const NewVenueScreen = ({ navigation }) => {
   const handleSubmit = (values, { resetForm }) => {
     createVenue(values, user, createVenueMutation, navigation, resetForm);
   };
+
   return (
     <ImageBackground
       source={require("../assets/crowd.jpg")}
@@ -89,7 +91,7 @@ const NewVenueScreen = ({ navigation }) => {
                   width: "80%",
                   backgroundColor: myColors.beige,
                   alignSelf: "center",
-                  height: 100,
+                  height: 60,
                   borderRadius: 10,
                 }}
               >
