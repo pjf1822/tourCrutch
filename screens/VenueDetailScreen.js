@@ -1,17 +1,9 @@
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  ImageBackground,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
-import { handleDelete } from "../crudUtils/venue";
 import { showToast } from "../helpers";
-import { myColors, regFont, upperMargin } from "../theme";
+import { myColors, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import FilesModal from "../components/FilesModal";
@@ -86,7 +78,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           pdfs: venueInfo.pdfs,
         }
       );
-      console.log(updatedInfo, "the thing");
       if (updatedInfo === undefined) {
         return;
       }
@@ -103,7 +94,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
       imageStyle={{ opacity: 0.6 }}
     >
       <View style={{ marginTop: windowHeight / upperMargin.margy }}>
-        <DisplayedDataForm venueData={venueData} />
+        <DisplayedDataForm venueInfo={venueInfo} />
         <ContactSection />
       </View>
 
@@ -146,14 +137,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
         isVenueDataModalVisible={isVenueDataModalVisible}
         toggleVenueDataModal={toggleVenueDataModal}
         venueInfo={venueInfo}
-        setVenueInfo={setVenueInfo}
         updateVenueInfoMutation={updateVenueInfoMutation}
         venueId={venueId}
         user={user}
         venueData={venueData}
-        handleDelete={handleDelete}
         navigation={navigation}
         deleteVenueMutation={deleteVenueMutation}
+        windowHeight={windowHeight}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

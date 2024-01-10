@@ -65,7 +65,7 @@ const HomeScreen = ({ navigation, route }) => {
       style={styles.homePageWrapper}
       imageStyle={{ opacity: 0.6 }}
     >
-      <View style={{ marginTop: windowHeight / upperMargin.margy }}>
+      <View style={{ marginTop: windowHeight / upperMargin.margy, flex: 1 }}>
         <SearchBar
           placeholder="search a venue"
           value={search}
@@ -90,6 +90,9 @@ const HomeScreen = ({ navigation, route }) => {
         />
         {!userLoading && !isLoading && (
           <FlatList
+            contentContainerStyle={{
+              flex: 1,
+            }}
             data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
             renderItem={({ item, index }) => (
               <HomePageFlatListItem item={item} navigation={navigation} />
@@ -98,12 +101,16 @@ const HomeScreen = ({ navigation, route }) => {
             keyExtractor={(item, index) => item?._id || index.toString()}
           />
         )}
-      </View>
-      <View style={{ paddingBottom: windowHeight / 13 }}>
-        <MyButton
-          title="Create New Venue"
-          onPress={() => navigation.navigate("NewVenue")}
-        />
+        <View
+          style={{
+            paddingBottom: windowHeight / 13,
+          }}
+        >
+          <MyButton
+            title="Create New Venue"
+            onPress={() => navigation.navigate("NewVenue")}
+          />
+        </View>
       </View>
     </ImageBackground>
   );

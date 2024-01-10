@@ -2,25 +2,74 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
-import { handleUpdateVenueInfo } from "../crudUtils/venue";
-import { showToast } from "../helpers";
+import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
+import { combineAddress, showToast, transformVenueData } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyLongPressButton";
+import VenueForm from "./VenueForm";
 
 const UpdateDataFormModal = ({
   isVenueDataModalVisible,
   toggleVenueDataModal,
   venueInfo,
-  setVenueInfo,
   updateVenueInfoMutation,
   venueId,
   user,
   venueData,
-  handleDelete,
   navigation,
   deleteVenueMutation,
+  windowHeight,
 }) => {
+  const handleUpdate = async (values) => {
+    // Recombine Address
+    const newAddress = combineAddress(values);
+    venueInfo.address = newAddress;
+
+    const { name, address, link } = venueInfo;
+
+    if (
+      // Did the fields actually change
+      name !== venueData?.name ||
+      address !== venueData?.address ||
+      link !== venueData?.link
+    ) {
+      handleUpdateVenueInfo(
+        updateVenueInfoMutation,
+        venueId,
+        venueInfo?.createdByUID,
+        user?.uid,
+        venueData,
+        {
+          name,
+          address,
+          link,
+        }
+      );
+
+      toggleVenueDataModal();
+    } else {
+      showToast("You didnt change anything bozo", false, "top");
+    }
+  };
+
+  const handleDeleteVenue = async () => {
+    try {
+      await handleDelete(
+        venueId,
+        venueInfo?.createdByUID,
+        user?.uid,
+        navigation,
+        deleteVenueMutation
+      );
+
+      toggleVenueDataModal();
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+  const transformedData = transformVenueData(venueData);
+
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
@@ -34,70 +83,22 @@ const UpdateDataFormModal = ({
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
+          borderTopWidth: 10,
+          borderTopColor: myColors.black,
         }}
       >
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.name}
-          onChangeText={(newName) =>
-            setVenueInfo((prev) => ({ ...prev, name: newName }))
-          }
-        />
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.address}
-          onChangeText={(newAddress) =>
-            setVenueInfo((prev) => ({ ...prev, address: newAddress }))
-          }
-        />
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.link}
-          onChangeText={(newLink) =>
-            setVenueInfo((prev) => ({ ...prev, link: newLink }))
-          }
+        <VenueForm
+          windowHeight={windowHeight}
+          handleSubmit={handleUpdate}
+          buttonTitle="Update"
+          initialValues={transformedData}
+          formStyles={{}}
         />
 
-        <MyButton
-          title="Update venue info"
-          onPress={() => {
-            const { name, address, link, pdfs } = venueInfo;
-
-            if (
-              name !== venueData?.name ||
-              address !== venueData?.address ||
-              link !== venueData?.link
-            ) {
-              handleUpdateVenueInfo(
-                updateVenueInfoMutation,
-                venueId,
-                venueInfo?.createdByUID,
-                user?.uid,
-                venueData,
-                {
-                  name,
-                  address,
-                  link,
-                }
-              );
-            } else {
-              showToast("You didnt change anything bozo", false, "top");
-            }
-          }}
-        />
-        <View style={{ height: 60 }}></View>
         <MyLongPressButton
           title="Delete Venue"
           onPress={() => showToast("Hold down to delete", false, "top")}
-          onLongPress={() =>
-            handleDelete(
-              venueId,
-              venueInfo?.createdByUID,
-              user?.uid,
-              navigation,
-              deleteVenueMutation
-            )
-          }
+          onLongPress={handleDeleteVenue}
         />
       </View>
     </Modal>

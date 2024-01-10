@@ -1,4 +1,4 @@
-import { isValidUrl, showToast } from "../helpers";
+import { combineAddress, isValidUrl, showToast } from "../helpers";
 
 export const createVenue = async (
   values,
@@ -8,15 +8,23 @@ export const createVenue = async (
   resetForm
 ) => {
   try {
-    if (!values?.name || !values?.address || !values?.link) {
+    if (
+      !values?.name ||
+      !values?.streetNameNumber ||
+      !values.city ||
+      !values.state ||
+      !values.zip ||
+      !values?.link
+    ) {
       showToast("Please fill out all fields", false, "top");
       return;
     }
-
-    if (!isValidUrl(values.link)) {
+    if (!isValidUrl(values?.link)) {
       showToast("Please enter a valid URL for the Venue Link", false, "top");
       return;
     }
+    const address = combineAddress(values);
+    values.address = address;
     const result = await createVenueMutation.mutateAsync({
       ...values,
       userUID: user.uid,
@@ -54,6 +62,7 @@ export const handleUpdateVenueInfo = async (
       id: venueId,
       updatedData: updatedFields,
     });
+
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (
