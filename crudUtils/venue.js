@@ -8,15 +8,29 @@ export const createVenue = async (
   resetForm
 ) => {
   try {
-    if (!values?.name || !values?.address || !values?.link) {
+    if (
+      !values?.name ||
+      !values?.streetNameNumber ||
+      !values.city ||
+      !values.state ||
+      !values.zip ||
+      !values?.link
+    ) {
       showToast("Please fill out all fields", false, "top");
       return;
     }
 
-    if (!isValidUrl(values.link)) {
+    if (!isValidUrl(values?.link)) {
       showToast("Please enter a valid URL for the Venue Link", false, "top");
       return;
     }
+
+    const address = `${values.streetNameNumber}${
+      values.apartmentNumber ? `, ${values.apartmentNumber}` : ""
+    }, ${values.city}, ${values.state} ${values.zip}`;
+
+    values.address = address;
+
     const result = await createVenueMutation.mutateAsync({
       ...values,
       userUID: user.uid,
