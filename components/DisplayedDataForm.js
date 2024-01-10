@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   displayedDataWrapper: {
     backgroundColor: myColors.beige,
     padding: 2,
+    borderRadius: 10,
   },
   displayedDataText: { fontFamily: regFont.fontFamily, padding: 2 },
 });

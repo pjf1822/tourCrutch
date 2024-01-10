@@ -8,16 +8,17 @@ const ContactCard = ({ data }) => {
     const phoneURL = `tel:${phoneNumber}`;
     Linking.openURL(phoneURL);
   };
+
   return (
     <View style={styles.cardWrapper}>
       <View style={styles.half}>
         <Text style={styles.cardText}>{data.name}</Text>
-        <Text style={styles.cardText}>{data.title}</Text>
+        <Text style={styles.cardText}>{data.position}</Text>
       </View>
 
       <View style={[styles.half, { alignItems: "flex-end" }]}>
         <Text style={styles.cardText}>{data.email}</Text>
-        <Text style={styles.cardText}>{data.number}</Text>
+        <Text style={styles.cardText}>{data.phoneNumber}</Text>
       </View>
     </View>
   );
