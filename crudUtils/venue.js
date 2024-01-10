@@ -25,14 +25,11 @@ export const createVenue = async (
       return;
     }
 
-    const address = `${values.streetNameNumber}${
-      values.apartmentNumber ? `, ${values.apartmentNumber}` : ""
-    }, ${values.city}, ${values.state} ${values.zip}`;
+    const address = `${values.streetNameNumber},${
+      values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
+    }, ${values.city}, ${values.state}, ${values.zip}`;
 
     values.address = address;
-
-    const pdfNames = values.pdfs.map((pdf) => pdf.name);
-    values.pdfs = pdfNames;
 
     const result = await createVenueMutation.mutateAsync({
       ...values,

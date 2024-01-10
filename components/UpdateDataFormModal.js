@@ -3,10 +3,11 @@ import React from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
-import { showToast } from "../helpers";
+import { showToast, transformVenueData } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyLongPressButton";
+import VenueForm from "./VenueForm";
 
 const UpdateDataFormModal = ({
   isVenueDataModalVisible,
@@ -20,7 +21,42 @@ const UpdateDataFormModal = ({
   handleDelete,
   navigation,
   deleteVenueMutation,
+  windowHeight,
 }) => {
+  const handleUpdate = async (values) => {
+    const newAddress = `${values.streetNameNumber},${
+      values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
+    }, ${values.city}, ${values.state}, ${values.zip}`;
+
+    venueData.address = newAddress;
+    const { name, address, link, pdfs } = venueInfo;
+
+    if (
+      name !== venueData?.name ||
+      address !== venueData?.address ||
+      link !== venueData?.link
+    ) {
+      handleUpdateVenueInfo(
+        updateVenueInfoMutation,
+        venueId,
+        venueInfo?.createdByUID,
+        user?.uid,
+        venueData,
+        {
+          name,
+          address,
+          link,
+        }
+      );
+
+      toggleVenueDataModal();
+    } else {
+      showToast("You didnt change anything bozo", false, "top");
+    }
+  };
+
+  const transformedData = transformVenueData(venueData);
+
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
@@ -34,58 +70,18 @@ const UpdateDataFormModal = ({
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
+          borderTopWidth: 10,
+          borderTopColor: myColors.black,
         }}
       >
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.name}
-          onChangeText={(newName) =>
-            setVenueInfo((prev) => ({ ...prev, name: newName }))
-          }
-        />
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.address}
-          onChangeText={(newAddress) =>
-            setVenueInfo((prev) => ({ ...prev, address: newAddress }))
-          }
-        />
-        <MyTextInput
-          style={styles.itemStyle}
-          value={venueInfo.link}
-          onChangeText={(newLink) =>
-            setVenueInfo((prev) => ({ ...prev, link: newLink }))
-          }
+        <VenueForm
+          windowHeight={windowHeight}
+          handleSubmit={handleUpdate}
+          buttonTitle="Update"
+          initialValues={transformedData}
+          formStyles={{}}
         />
 
-        <MyButton
-          title="Update venue info"
-          onPress={() => {
-            const { name, address, link, pdfs } = venueInfo;
-
-            if (
-              name !== venueData?.name ||
-              address !== venueData?.address ||
-              link !== venueData?.link
-            ) {
-              handleUpdateVenueInfo(
-                updateVenueInfoMutation,
-                venueId,
-                venueInfo?.createdByUID,
-                user?.uid,
-                venueData,
-                {
-                  name,
-                  address,
-                  link,
-                }
-              );
-            } else {
-              showToast("You didnt change anything bozo", false, "top");
-            }
-          }}
-        />
-        <View style={{ height: 60 }}></View>
         <MyLongPressButton
           title="Delete Venue"
           onPress={() => showToast("Hold down to delete", false, "top")}

@@ -2,10 +2,36 @@ import { StyleSheet, ImageBackground, Dimensions } from "react-native";
 import React from "react";
 import { useUser } from "../Contexts/UserContext";
 import VenueForm from "../components/VenueForm";
+import { createVenue } from "../crudUtils/venue";
+import { useCreateVenue } from "../api";
+import { upperMargin } from "../theme";
 
 const NewVenueScreen = ({ navigation }) => {
   const { user } = useUser();
   const windowHeight = Dimensions.get("window").height;
+
+  const createVenueMutation = useCreateVenue();
+
+  const handleSubmit = (values, { resetForm }) => {
+    createVenue(values, user, createVenueMutation, navigation, resetForm);
+  };
+  const initialValues = {
+    name: "",
+    streetNameNumber: "",
+    apartmentNumber: "",
+    city: "",
+    state: "",
+    zip: "",
+    link: "",
+    pdfs: [],
+  };
+
+  const createVenueStyles = {
+    marginTop: windowHeight / upperMargin.margy,
+    flex: 1,
+    display: "flex",
+    justifyContent: "space-between",
+  };
 
   return (
     <ImageBackground
@@ -14,9 +40,11 @@ const NewVenueScreen = ({ navigation }) => {
       imageStyle={{ opacity: 0.6 }}
     >
       <VenueForm
-        user={user}
         windowHeight={windowHeight}
-        navigation={navigation}
+        handleSubmit={handleSubmit}
+        initialValues={initialValues}
+        buttonTitle="Submit"
+        formStyles={createVenueStyles}
       />
     </ImageBackground>
   );

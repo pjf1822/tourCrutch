@@ -86,7 +86,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           pdfs: venueInfo.pdfs,
         }
       );
-      console.log(updatedInfo, "the thing");
       if (updatedInfo === undefined) {
         return;
       }
@@ -154,6 +153,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         handleDelete={handleDelete}
         navigation={navigation}
         deleteVenueMutation={deleteVenueMutation}
+        windowHeight={windowHeight}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

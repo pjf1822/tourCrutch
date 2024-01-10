@@ -9,33 +9,19 @@ import { useCreateVenue } from "../api";
 import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
 
-const VenueForm = ({ user, windowHeight, navigation }) => {
-  const handleSubmit = (values, { resetForm }) => {
-    createVenue(values, user, createVenueMutation, navigation, resetForm);
-  };
-  const createVenueMutation = useCreateVenue();
-
+const VenueForm = ({
+  windowHeight,
+  handleSubmit,
+  initialValues,
+  buttonTitle,
+  formStyles,
+}) => {
   return (
-    <Formik
-      initialValues={{
-        name: "",
-        streetNameNumber: "",
-        apartmentNumber: "",
-        city: "",
-        state: "",
-        zip: "",
-        link: "",
-        pdfs: [],
-      }}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ handleChange, handleBlur, handleSubmit, values, navigation }) => (
         <View
           style={{
-            marginTop: windowHeight / upperMargin.margy,
-            flex: 1,
-            display: "flex",
-            justifyContent: "space-between",
+            ...formStyles,
           }}
         >
           <View>
@@ -99,9 +85,8 @@ const VenueForm = ({ user, windowHeight, navigation }) => {
               value={values.link}
             />
           </View>
-
           <View style={{ paddingBottom: windowHeight / 13 }}>
-            <MyButton title="Submit" onPress={handleSubmit} />
+            <MyButton title={buttonTitle} onPress={handleSubmit} />
           </View>
         </View>
       )}

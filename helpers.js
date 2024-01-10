@@ -95,3 +95,29 @@ export const stateOptions = [
   { label: "Wisconsin", value: "WI" },
   { label: "Wyoming", value: "WY" },
 ];
+
+export const transformVenueData = (venueData) => {
+  if (!venueData || !venueData.address) {
+    return null;
+  }
+  const { address } = venueData;
+
+  // Splitting the address into different parts
+  const [streetNameNumber, apartmentNumber, city, state, zip] = address
+    .split(",")
+    .map((item) => item.trim());
+
+  // Creating the transformed object
+  const transformedData = {
+    name: venueData.name || "",
+    streetNameNumber: streetNameNumber || "",
+    apartmentNumber: apartmentNumber || "",
+    city: city || "",
+    state: state || "",
+    zip: zip || "",
+    link: venueData.link || "",
+    pdfs: venueData.pdfs || [],
+  };
+
+  return transformedData;
+};
