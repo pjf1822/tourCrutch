@@ -1,9 +1,15 @@
-import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  Text,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
-import { myColors, upperMargin } from "../theme";
+import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import FilesModal from "../components/FilesModal";
@@ -118,12 +124,39 @@ const VenueDetailScreen = ({ route, navigation }) => {
           venueData={venueData}
           setVenueInfo={setVenueInfo}
         />
-        <TouchableOpacity onPress={toggleContactModal}>
-          <Icon
-            name="plus"
-            style={{ color: "white", fontSize: 24, marginTop: 4 }}
-          />
-        </TouchableOpacity>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <TouchableOpacity onPress={toggleContactModal}>
+            <Icon
+              name="plus"
+              style={{ color: "white", fontSize: 24, marginTop: 4 }}
+            />
+          </TouchableOpacity>
+          {venueInfo.contactCards.length === 0 && (
+            <TouchableOpacity
+              onPress={toggleContactModal}
+              style={{
+                backgroundColor: myColors.beige,
+                borderRadius: 10,
+                marginLeft: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: regFont.fontFamily,
+                  padding: 10,
+                  fontSize: 16,
+                }}
+              >
+                Add Contact Cards
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <View
@@ -131,6 +164,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
+          marginBottom: 10,
         }}
       >
         <MyBottomRowButton

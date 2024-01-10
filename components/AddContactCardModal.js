@@ -76,22 +76,26 @@ const AddContactCardModal = ({
         <MyTextInput
           value={card.name}
           onChangeText={(newName) => handleFieldChange("name", newName)}
+          placeholder="Name"
         />
         <MyTextInput
           value={card.position}
           onChangeText={(newPosition) =>
             handleFieldChange("position", newPosition)
           }
+          placeholder="Position"
         />
         <MyTextInput
           value={card.email}
           onChangeText={(newEmail) => handleFieldChange("email", newEmail)}
+          placeholder="Email"
         />
         <MyTextInput
           value={card.phoneNumber}
           onChangeText={(newPhoneNumber) =>
             handleFieldChange("phoneNumber", newPhoneNumber)
           }
+          placeholder="Phone Number"
         />
         <MyButton title="Add Contact" onPress={handleAddContactCard} />
       </View>

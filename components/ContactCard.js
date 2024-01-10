@@ -38,10 +38,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 5,
+    minWidth: 120,
   },
 
   half: {
     display: "flex",
+    justifyContent: "flex-end",
   },
   cardText: {
     fontFamily: regFont.fontFamily,
