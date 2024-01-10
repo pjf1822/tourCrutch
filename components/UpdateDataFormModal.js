@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
-import { handleUpdateVenueInfo } from "../crudUtils/venue";
+import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { showToast, transformVenueData } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import Modal from "react-native-modal";
@@ -13,12 +13,10 @@ const UpdateDataFormModal = ({
   isVenueDataModalVisible,
   toggleVenueDataModal,
   venueInfo,
-  setVenueInfo,
   updateVenueInfoMutation,
   venueId,
   user,
   venueData,
-  handleDelete,
   navigation,
   deleteVenueMutation,
   windowHeight,
@@ -28,8 +26,8 @@ const UpdateDataFormModal = ({
       values.apartmentNumber ? ` ${values.apartmentNumber}` : ""
     }, ${values.city}, ${values.state}, ${values.zip}`;
 
-    venueData.address = newAddress;
-    const { name, address, link, pdfs } = venueInfo;
+    venueInfo.address = newAddress;
+    const { name, address, link } = venueInfo;
 
     if (
       name !== venueData?.name ||
@@ -55,6 +53,21 @@ const UpdateDataFormModal = ({
     }
   };
 
+  const handleDeleteVenue = async () => {
+    try {
+      await handleDelete(
+        venueId,
+        venueInfo?.createdByUID,
+        user?.uid,
+        navigation,
+        deleteVenueMutation
+      );
+
+      toggleVenueDataModal();
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
   const transformedData = transformVenueData(venueData);
 
   return (
@@ -85,15 +98,7 @@ const UpdateDataFormModal = ({
         <MyLongPressButton
           title="Delete Venue"
           onPress={() => showToast("Hold down to delete", false, "top")}
-          onLongPress={() =>
-            handleDelete(
-              venueId,
-              venueInfo?.createdByUID,
-              user?.uid,
-              navigation,
-              deleteVenueMutation
-            )
-          }
+          onLongPress={handleDeleteVenue}
         />
       </View>
     </Modal>

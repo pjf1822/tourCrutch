@@ -7,6 +7,10 @@ const HomePageFlatListItem = ({ item, navigation }) => {
   const navigateToVenueDetail = () => {
     navigation.navigate("VenueDetail", { venueId: item._id });
   };
+
+  const formatAddress = (address) => {
+    return address.replace(/,+/g, ",").trim();
+  };
   return (
     <TouchableOpacity
       style={styles.flatListItemWrapper}
@@ -19,7 +23,9 @@ const HomePageFlatListItem = ({ item, navigation }) => {
       onPress={navigateToVenueDetail}
     >
       <Text style={styles.itemStyle}>{item?.name}</Text>
-      <Text style={styles.itemStyle}>{item?.address}</Text>
+      <Text style={styles.displayedDataText}>
+        {formatAddress(item?.address)}
+      </Text>
       <Icon name="arrow-right" color={myColors.black} />
     </TouchableOpacity>
   );

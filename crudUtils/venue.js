@@ -55,6 +55,12 @@ export const handleUpdateVenueInfo = async (
   updatedVenueData
 ) => {
   try {
+    console.log(
+      originalVenueData,
+      "original data",
+      updatedVenueData,
+      "the new data"
+    );
     if (!createdByUID || createdByUID !== userUID) {
       throw new Error("User does not have permission to update this venue.");
     }
@@ -66,6 +72,7 @@ export const handleUpdateVenueInfo = async (
         updatedFields[field] = updatedVenueData[field];
       }
     });
+    console.log(updatedFields, "the updated fields");
 
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,
