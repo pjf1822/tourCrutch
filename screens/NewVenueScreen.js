@@ -25,6 +25,7 @@ const NewVenueScreen = ({ navigation }) => {
     zip: "",
     link: "",
     pdfs: [],
+    contactCards: [],
   };
 
   const createVenueStyles = {

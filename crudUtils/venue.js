@@ -46,9 +46,9 @@ export const handleUpdateVenueInfo = async (
   updatedVenueData
 ) => {
   try {
-    if (!createdByUID || createdByUID !== userUID) {
-      throw new Error("User does not have permission to update this venue.");
-    }
+    // if (!createdByUID || createdByUID !== userUID) {
+    //   throw new Error("User does not have permission to update this venue.");
+    // }
 
     const updatedFields = {};
 
