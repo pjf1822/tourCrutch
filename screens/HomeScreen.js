@@ -76,6 +76,7 @@ const HomeScreen = ({ navigation, route }) => {
             fontFamily: regFont.fontFamily,
             backgroundColor: "transparent",
           }}
+          onClear={() => setSearch("")}
           containerStyle={{
             backgroundColor: "transparent",
             borderBottomWidth: "0px",

@@ -5,6 +5,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Text,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
@@ -42,7 +43,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
     createdByUID: "",
   });
 
-  console.log(venueInfo, "the venueInfo");
   const togglePDFModal = () => {
     setIsPDFModalVisible(!isPDFModalVisible);
   };
@@ -159,7 +159,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           )}
         </View>
       </View>
-
       <View
         style={{
           display: "flex",

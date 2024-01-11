@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, Platform, Keyboard } from "react-native";
+import React, { useEffect, useState } from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyButton";
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
@@ -22,6 +22,32 @@ const UpdateDataFormModal = ({
   windowHeight,
   setVenueInfo,
 }) => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height - 90);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  const modalPosition =
+    Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
+
   const handleUpdate = async (values) => {
     // Recombine Address
     const newAddress = combineAddress(values);
@@ -76,7 +102,7 @@ const UpdateDataFormModal = ({
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
-      style={{ justifyContent: "flex-end", margin: 0 }}
+      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
       onBackdropPress={toggleVenueDataModal}
       backdropOpacity={0}
     >

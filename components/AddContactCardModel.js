@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Keyboard, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
 import MyTextInput from "./MyTextInput";
 import MyButton from "./MyBottomRowButton";
 import Modal from "react-native-modal";
@@ -47,10 +47,34 @@ const AddContactCardModal = ({
     toggleContactModal();
   };
 
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  const modalPosition = Platform.OS === "ios" ? { bottom: keyboardHeight } : {};
+
   return (
     <Modal
       isVisible={isContactModalVisible}
-      style={{ justifyContent: "flex-end", margin: 0 }}
+      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
       onBackdropPress={toggleContactModal}
       backdropOpacity={0}
     >
