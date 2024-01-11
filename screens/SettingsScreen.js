@@ -18,9 +18,18 @@ import MyButton from "../components/MyButton";
 import { pickImage } from "../storageFunctionUtils";
 import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
+import { useNavigation } from "@react-navigation/native";
+import {
+  EmailAuthProvider,
+  signInWithEmailAndPassword,
+  reauthenticateWithCredential,
+  getAuth,
+  deleteUser,
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "../firebaseConfig";
 const windowHeight = Dimensions.get("window").height;
 
-const SettingsScreen = ({ navigation }) => {
+const SettingsScreen = () => {
   const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
@@ -29,6 +38,8 @@ const SettingsScreen = ({ navigation }) => {
     setVisible(!visible);
   };
 
+  const auth = getAuth();
+  const navigation = useNavigation();
   useEffect(() => {
     if (user && user?.displayName) {
       setDisplayName(user?.displayName);
@@ -70,6 +81,31 @@ const SettingsScreen = ({ navigation }) => {
     }
   };
 
+  const deleteAccount = async () => {
+    toggleOverlay();
+    try {
+      const currentUser = auth.currentUser;
+      showToast("Delete user!", true, "top");
+      await deleteUser(currentUser);
+
+      if (email !== "" && password !== "") {
+        console.log("we are never");
+        const credentials = EmailAuthProvider.credential(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
+        await reauthenticateWithCredential(currentUser, credentials);
+      }
+
+      setUser(null);
+    } catch (error) {
+      if (error.message.includes("auth/requires-recent-login")) {
+        showToast("Please type in your email and password", false, "top");
+        setOpenCreds(true);
+      } else if (error.message.includes("(auth/invalid-email)")) {
+        showToast("Invalid Credentials", false, "top");
+      }
+    }
+  };
+
   return (
     <ImageBackground
       source={require("../assets/DJ.jpg")}
@@ -86,7 +122,7 @@ const SettingsScreen = ({ navigation }) => {
             user={user}
             setUser={setUser}
             toggleOverlay={toggleOverlay}
-            navigation={navigation}
+            deleteAccount={deleteAccount}
           />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>

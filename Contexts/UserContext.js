@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import GlobalLoader from "../components/GlobalLoader.js";
 import { FIREBASE_AUTH } from "../firebaseConfig";
+import { Text } from "react-native";
 
 const UserContext = createContext();
 
@@ -35,9 +36,9 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
-  // if (loading) {
-  //   return <GlobalLoader />;
-  // }
+  if (loading) {
+    return <Text>loading</Text>;
+  }
 
   return (
     <UserContext.Provider
