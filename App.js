@@ -9,6 +9,11 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import { StorageProvider } from "./Contexts/StorageContext";
 import { UserProvider } from "./Contexts/UserContext";
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "https://7991ee4b5dc4b51bce7140bfb8337a08@o4506486302441472.ingest.sentry.io/4506486304604160",
+});
 
 LogBox.ignoreLogs([
   "No native splash screen",

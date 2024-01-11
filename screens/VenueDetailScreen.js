@@ -61,7 +61,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (venueData) {
-      console.log(venueData, "teh venue data");
       setVenueInfo({
         name: venueData?.name,
         address: venueData?.address,
@@ -94,9 +93,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           pdfs: venueInfo.pdfs,
         }
       );
-      // if (updatedInfo === undefined) {
-      //   return;
-      // }
+      if (updatedInfo === undefined) {
+        return;
+      }
       setVenueInfo(updatedInfo.venue);
     } catch (error) {
       console.error(error);

@@ -115,6 +115,7 @@ export const uploadPDF = async (
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
+    console.log(result, "teh result");
     if (result.canceled === true) {
       return;
     }
@@ -165,6 +166,7 @@ export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
   try {
     const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
     const response = await fetch(imageUri);
+    console.log(response, "teh response");
     const blob = await response.blob();
     await uploadBytes(storageRef, blob, {
       customMetadata: {
