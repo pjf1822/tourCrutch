@@ -61,14 +61,15 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (venueData) {
+      console.log(venueData, "teh venue data");
       setVenueInfo({
-        name: venueData.name,
-        address: venueData.address,
-        link: venueData.link,
-        pdfs: venueData.pdfs || [],
-        comments: venueData.comments,
-        createdByUID: venueData.createdByUID,
-        contactCards: venueData.contactCards,
+        name: venueData?.name,
+        address: venueData?.address,
+        link: venueData?.link,
+        pdfs: venueData?.pdfs,
+        comments: venueData?.comments,
+        createdByUID: venueData?.createdByUID,
+        contactCards: venueData?.contactCards,
       });
     }
   }, [venueData]);
