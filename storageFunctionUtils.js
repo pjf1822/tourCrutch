@@ -166,11 +166,13 @@ export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
     const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
     const response = await fetch(imageUri);
     const blob = await response.blob();
-    const ready = await uploadBytes(storageRef, blob, {
+    const uploadTask = uploadBytes(storageRef, blob, {
       customMetadata: {
         fileName: name,
       },
     });
+
+    await uploadTask;
     const downloadURL = await getDownloadURL(storageRef);
     return downloadURL;
   } catch (error) {

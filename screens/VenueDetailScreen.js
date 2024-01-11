@@ -93,9 +93,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           pdfs: venueInfo.pdfs,
         }
       );
-      if (updatedInfo === undefined) {
-        return;
-      }
+      // if (updatedInfo === undefined) {
+      //   return;
+      // }
       setVenueInfo(updatedInfo.venue);
     } catch (error) {
       console.error(error);
