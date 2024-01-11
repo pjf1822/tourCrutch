@@ -53,7 +53,9 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
       `user-profiles/${user?.uid}/profile-pic.jpg`
     );
 
+    console.log(storageRef, "the storage ref");
     const response = await fetch(imageUri);
+    console.log(response, "the response");
     const blob = await response.blob();
     const ready = await uploadBytes(storageRef, blob);
     const downloadURL = await getDownloadURL(storageRef);
