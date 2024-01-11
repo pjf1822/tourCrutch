@@ -1,41 +1,46 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import React from "react";
 import ContactCard from "./ContactCard";
+import { handleUpdateVenueInfo } from "../crudUtils/venue";
 
-const mockPeeps = [
-  {
-    name: "Billy Bobby",
-    title: "Production Manager",
-    number: "+1 18298349823",
-    email: "bigboy@gmail.fuck",
-  },
-  {
-    name: "Sandra Smith",
-    title: "Marketing Coordinator",
-    number: "+1 9876543210",
-    email: "sandra.smith@email.com",
-  },
-  {
-    name: "John Doe",
-    title: "Software Engineer",
-    number: "+1 1234567890",
-    email: "john.doe@example.com",
-  },
-  {
-    name: "Alice Johnson",
-    title: "Graphic Designer",
-    number: "+1 5555555555",
-    email: "alice.johnson@gmail.com",
-  },
-];
+const ContactSection = ({
+  venueInfo,
+  updateVenueInfoMutation,
+  venueId,
+  user,
+  venueData,
+  setVenueInfo,
+}) => {
+  const renderItem = ({ item }) => (
+    <ContactCard
+      data={item}
+      handleDeleteContactCard={handleDeleteContactCard}
+    />
+  );
 
-const ContactSection = () => {
-  const renderItem = ({ item }) => <ContactCard data={item} />;
+  const handleDeleteContactCard = (contactCardId) => {
+    const updatedContactCards = venueInfo.contactCards.filter(
+      (card) => card._id !== contactCardId
+    );
+
+    handleUpdateVenueInfo(
+      updateVenueInfoMutation,
+      venueId,
+      venueInfo?.createdByUID,
+      user?.uid,
+      venueData,
+      { contactCards: updatedContactCards }
+    );
+    setVenueInfo((prevVenueInfo) => ({
+      ...prevVenueInfo,
+      contactCards: updatedContactCards,
+    }));
+  };
 
   return (
     <View style={styles.app}>
       <FlatList
-        data={mockPeeps}
+        data={venueInfo.contactCards}
         numColumns={1}
         horizontal={true}
         renderItem={renderItem}

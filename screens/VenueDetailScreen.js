@@ -1,9 +1,16 @@
-import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
-import { myColors, upperMargin } from "../theme";
+import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import { uploadPDF } from "../storageFunctionUtils";
 import FilesModal from "../components/FilesModal";
@@ -11,6 +18,8 @@ import ContactSection from "../components/ContactSection";
 import DisplayedDataForm from "../components/DisplayedDataForm";
 import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
+import Icon from "react-native-vector-icons/FontAwesome";
+import AddContactCardModal from "../components/AddContactCardModel";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -21,6 +30,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isPDFModalVisible, setIsPDFModalVisible] = useState(false);
   const [isVenueDataModalVisible, setIsVenueDataModalVisible] = useState(false);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
+  const [isContactModalVisible, setIsContactModalVisible] = useState(false);
 
   const [venueInfo, setVenueInfo] = useState({
     name: "",
@@ -28,6 +38,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     link: "",
     pdfs: [],
     comments: [],
+    contactCards: [],
     createdByUID: "",
   });
 
@@ -39,6 +50,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
   };
   const toggleCommentsModal = () => {
     setIsCommentsModalVisible(!isCommentsModalVisible);
+  };
+  const toggleContactModal = () => {
+    setIsContactModalVisible(!isContactModalVisible);
   };
 
   const windowHeight = Dimensions.get("window").height;
@@ -54,6 +68,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         pdfs: venueData.pdfs || [],
         comments: venueData.comments,
         createdByUID: venueData.createdByUID,
+        contactCards: venueData?.contactCards,
       });
     }
   }, [venueData]);
@@ -93,9 +108,55 @@ const VenueDetailScreen = ({ route, navigation }) => {
       style={styles.imagePageWrapper}
       imageStyle={{ opacity: 0.6 }}
     >
-      <View style={{ marginTop: windowHeight / upperMargin.margy }}>
+      <View
+        style={{
+          marginTop: windowHeight / upperMargin.margy,
+          marginLeft: 7,
+          marginRight: 7,
+        }}
+      >
         <DisplayedDataForm venueInfo={venueInfo} />
-        <ContactSection />
+        <ContactSection
+          venueInfo={venueInfo}
+          updateVenueInfoMutation={updateVenueInfoMutation}
+          venueId={venueId}
+          user={user}
+          venueData={venueData}
+          setVenueInfo={setVenueInfo}
+        />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <TouchableOpacity onPress={toggleContactModal}>
+            <Icon
+              name="plus"
+              style={{ color: "white", fontSize: 24, marginTop: 4 }}
+            />
+          </TouchableOpacity>
+          {venueInfo.contactCards.length === 0 && (
+            <TouchableOpacity
+              onPress={toggleContactModal}
+              style={{
+                backgroundColor: myColors.beige,
+                borderRadius: 10,
+                marginLeft: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: regFont.fontFamily,
+                  padding: 10,
+                  fontSize: 16,
+                }}
+              >
+                Add Contact Cards
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <View
@@ -150,6 +211,16 @@ const VenueDetailScreen = ({ route, navigation }) => {
         toggleCommentsModal={toggleCommentsModal}
         venueId={venueId}
         user={user}
+      />
+      <AddContactCardModal
+        isContactModalVisible={isContactModalVisible}
+        toggleContactModal={toggleContactModal}
+        venueInfo={venueInfo}
+        updateVenueInfoMutation={updateVenueInfoMutation}
+        venueId={venueId}
+        user={user}
+        venueData={venueData}
+        setVenueInfo={setVenueInfo}
       />
     </ImageBackground>
   );
