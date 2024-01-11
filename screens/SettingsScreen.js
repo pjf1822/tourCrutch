@@ -91,9 +91,10 @@ const SettingsScreen = () => {
         <Text style={styles.header}>Account Details </Text>
         <Image
           source={
-            userProfilePic
-              ? { uri: userProfilePic }
-              : require("../assets/logito.png")
+            // userProfilePic
+            //   ? { uri: userProfilePic }
+            //   : require("../assets/logito.png")
+            require("../assets/logito.png")
           }
           style={styles.userPhoto}
         />
@@ -111,8 +112,9 @@ const SettingsScreen = () => {
                 onChangeText={(thing) => setDisplayName(thing)}
                 value={displayName}
               />
+              <View style={{ height: 8 }}></View>
               <MyButton
-                title={"update displayname"}
+                title={"Update Display Name"}
                 onPress={updateUserDisplayName}
               />
             </View>
@@ -122,17 +124,17 @@ const SettingsScreen = () => {
               height: "65%",
               display: "flex",
               justifyContent: "flex-start",
-              marginTop: 30,
+              // marginTop: 10,
               width: "100%",
             }}
           >
             <MyButton title="Update Password" onPress={updatePassword} />
             <View style={styles.spacer}></View>
-            <MyButton
+            {/* <MyButton
               title="Upload Profile Pic"
               onPress={handleUpdateProfilePic}
-            />
-            <View style={styles.spacer}></View>
+            /> */}
+            {/* <View style={styles.spacer}></View> */}
             <MyButton title="Delete Account" onPress={toggleOverlay} />
           </View>
         </View>
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: myColors.black,
     padding: 10,
-    borderRadius: 30,
+    borderRadius: 50,
   },
   label: {
     color: myColors.sand,

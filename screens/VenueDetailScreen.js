@@ -42,6 +42,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     createdByUID: "",
   });
 
+  console.log(venueInfo, "the venueInfo");
   const togglePDFModal = () => {
     setIsPDFModalVisible(!isPDFModalVisible);
   };
@@ -136,7 +137,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
               style={{ color: "white", fontSize: 24, marginTop: 4 }}
             />
           </TouchableOpacity>
-          {venueInfo.contactCards.length === 0 && (
+          {venueInfo?.contactCards?.length === 0 && (
             <TouchableOpacity
               onPress={toggleContactModal}
               style={{
@@ -164,6 +165,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
+          paddingBottom: windowHeight / 13,
         }}
       >
         <MyBottomRowButton
@@ -205,6 +207,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         navigation={navigation}
         deleteVenueMutation={deleteVenueMutation}
         windowHeight={windowHeight}
+        setVenueInfo={setVenueInfo}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

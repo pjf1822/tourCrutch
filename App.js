@@ -36,7 +36,7 @@ export default function App() {
   }, []);
 
   if (!appIsReady) {
-    return <Image source={require("./assets/olav.png")} />;
+    return <Image source={require("./assets/DJ.jpg")} />;
   }
   return (
     <QueryClientProvider client={queryClient}>

@@ -20,13 +20,14 @@ const UpdateDataFormModal = ({
   navigation,
   deleteVenueMutation,
   windowHeight,
+  setVenueInfo,
 }) => {
   const handleUpdate = async (values) => {
     // Recombine Address
     const newAddress = combineAddress(values);
-    venueInfo.address = newAddress;
+    values.address = newAddress;
 
-    const { name, address, link } = venueInfo;
+    const { name, address, link } = values;
 
     if (
       // Did the fields actually change
@@ -34,7 +35,7 @@ const UpdateDataFormModal = ({
       address !== venueData?.address ||
       link !== venueData?.link
     ) {
-      handleUpdateVenueInfo(
+      const response = await handleUpdateVenueInfo(
         updateVenueInfoMutation,
         venueId,
         venueInfo?.createdByUID,
@@ -46,6 +47,8 @@ const UpdateDataFormModal = ({
           link,
         }
       );
+
+      setVenueInfo(response.venue);
 
       toggleVenueDataModal();
     } else {

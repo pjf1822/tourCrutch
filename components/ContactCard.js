@@ -4,7 +4,7 @@ import { myColors, regFont } from "../theme";
 
 const ContactCard = ({ data, handleDeleteContactCard }) => {
   const handlePhonePress = () => {
-    const phoneNumber = data.number.replace(/\D/g, ""); // Remove non-numeric characters
+    const phoneNumber = data?.number?.replace(/\D/g, ""); // Remove non-numeric characters
     const phoneURL = `tel:${phoneNumber}`;
     Linking.openURL(phoneURL);
   };

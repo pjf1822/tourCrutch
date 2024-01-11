@@ -16,7 +16,7 @@ const DisplayedDataForm = ({ venueInfo }) => {
   };
 
   const formatAddress = (address) => {
-    return address.replace(/,+/g, ",").trim();
+    return address?.replace(/,+/g, ",").trim();
   };
   return (
     <View style={styles.displayedDataWrapper}>
@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
   displayedDataWrapper: {
     backgroundColor: myColors.beige,
     padding: 2,
+    borderRadius: 10,
   },
-  displayedDataText: { fontFamily: regFont.fontFamily, padding: 2 },
+  displayedDataText: {
+    fontFamily: regFont.fontFamily,
+    padding: 2,
+    fontSize: 17,
+    paddingLeft: 10,
+  },
 });

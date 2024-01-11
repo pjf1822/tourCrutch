@@ -29,10 +29,10 @@ const NewVenueScreen = ({ navigation }) => {
   };
 
   const createVenueStyles = {
-    marginTop: windowHeight / upperMargin.margy,
+    // marginTop: windowHeight / upperMargin.margy,
     flex: 1,
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
   };
 
   return (
