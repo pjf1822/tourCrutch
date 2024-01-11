@@ -32,6 +32,7 @@ const NewVenueScreen = ({ navigation }) => {
     state: "",
     zip: "",
     link: "",
+    description: "",
     pdfs: [],
     contactCards: [],
   };

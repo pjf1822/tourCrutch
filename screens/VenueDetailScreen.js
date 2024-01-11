@@ -21,6 +21,7 @@ import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AddContactCardModal from "../components/AddContactCardModel";
+import DescriptionSection from "../components/DescriptionSection";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -41,6 +42,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     contactCards: [],
     createdByUID: "",
+    description: "",
   });
 
   const togglePDFModal = () => {
@@ -70,6 +72,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         comments: venueData.comments,
         createdByUID: venueData.createdByUID,
         contactCards: venueData?.contactCards,
+        description: venueData.description,
       });
     }
   }, [venueData]);
@@ -158,7 +161,16 @@ const VenueDetailScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           )}
         </View>
+        <DescriptionSection
+          venueInfo={venueInfo}
+          setVenueInfo={setVenueInfo}
+          updateVenueInfoMutation={updateVenueInfoMutation}
+          venueId={venueId}
+          user={user}
+          venueData={venueData}
+        />
       </View>
+
       <View
         style={{
           display: "flex",

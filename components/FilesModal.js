@@ -27,7 +27,7 @@ const FilesModal = ({
       <View
         style={{
           backgroundColor: myColors.beige,
-          height: "27%",
+          // height: "27%",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,

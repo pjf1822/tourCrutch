@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet, Platform, Keyboard } from "react-native";
+import { View, StyleSheet, Platform, Keyboard } from "react-native";
 import React, { useEffect, useState } from "react";
-import MyTextInput from "./MyTextInput";
-import MyButton from "./MyButton";
+
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { combineAddress, showToast, transformVenueData } from "../helpers";
-import { myColors, regFont, upperMargin } from "../theme";
+import { myColors, regFont } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyLongPressButton";
 import VenueForm from "./VenueForm";
