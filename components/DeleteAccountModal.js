@@ -16,7 +16,7 @@ import {
 import { showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
 
-const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
+const DeleteAccountModal = ({ user, setUser, toggleOverlay, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [openCreds, setOpenCreds] = useState(false);
@@ -33,6 +33,7 @@ const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
       await deleteUser(currentUser);
       setUser(null);
       toggleOverlay();
+      navigation.navigate("Signup");
     } catch (error) {
       if (error.message.includes("auth/requires-recent-login")) {
         showToast("Please type in your email and password", false, "top");

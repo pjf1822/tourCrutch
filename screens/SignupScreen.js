@@ -49,7 +49,7 @@ const SignupScreen = () => {
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder={"email"}
+            placeholder={"Email"}
           />
 
           <View style={styles.spacer}></View>
@@ -58,7 +58,7 @@ const SignupScreen = () => {
             onChangeText={(value) => {
               setPassword(value);
             }}
-            placeholder={"password"}
+            placeholder={"Password"}
             secureTextEntry={true}
           />
           <View style={styles.spacer}></View>

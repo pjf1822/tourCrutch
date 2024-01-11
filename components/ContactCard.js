@@ -18,7 +18,7 @@ const ContactCard = ({ data, handleDeleteContactCard }) => {
         <Text style={styles.cardText}>{data.position}</Text>
       </View>
 
-      <View style={[styles.half, { alignItems: "flex-end" }]}>
+      <View style={[styles.half, { alignItems: "flex-end", marginLeft: 10 }]}>
         <Text style={styles.cardText}>{data.email}</Text>
         <Text style={styles.cardText}>{data.phoneNumber}</Text>
       </View>

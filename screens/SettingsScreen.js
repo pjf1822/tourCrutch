@@ -20,7 +20,7 @@ import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
 const windowHeight = Dimensions.get("window").height;
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }) => {
   const { user, setUser } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState(user?.photoURL);
@@ -86,6 +86,7 @@ const SettingsScreen = () => {
             user={user}
             setUser={setUser}
             toggleOverlay={toggleOverlay}
+            navigation={navigation}
           />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>

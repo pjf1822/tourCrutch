@@ -11,8 +11,6 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUserFromFirebase = () => {
-    // console.log("we are fetching the user");
-
     setLoading(true);
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
       setUser(authUser);

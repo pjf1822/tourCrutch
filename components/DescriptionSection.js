@@ -4,6 +4,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
@@ -34,46 +36,52 @@ const DescriptionSection = ({
       venueInfo
     );
   };
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: myColors.black,
-          padding: 8,
-          borderRadius: 8,
-          marginBottom: 8,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          padding: 5,
-          alignSelf: "flex-start",
-        }}
-      >
-        <Text
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <View style={styles.container}>
+        <View
           style={{
-            fontFamily: regFont.fontFamily,
-            color: myColors.white,
+            backgroundColor: myColors.black,
+            padding: 8,
+            borderRadius: 8,
+            marginBottom: 8,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: 5,
+            alignSelf: "flex-start",
           }}
         >
-          Description
-        </Text>
-      </View>
+          <Text
+            style={{
+              fontFamily: regFont.fontFamily,
+              color: myColors.white,
+            }}
+          >
+            Description
+          </Text>
+        </View>
 
-      <TextInput
-        style={styles.input}
-        multiline
-        numberOfLines={4}
-        value={venueInfo.description}
-        onChangeText={handleDescriptionChange}
-        placeholder="Enter your text here"
-      />
-      <TouchableOpacity
-        style={styles.localButtonStyle}
-        onPress={handleDescriptionUpdate}
-      >
-        <Text style={styles.textStyle}>Update Description</Text>
-      </TouchableOpacity>
-    </View>
+        <TextInput
+          style={styles.input}
+          multiline
+          numberOfLines={3}
+          value={venueInfo.description}
+          onChangeText={handleDescriptionChange}
+          placeholder="Enter your text here"
+        />
+        <TouchableOpacity
+          style={styles.localButtonStyle}
+          onPress={handleDescriptionUpdate}
+        >
+          <Text style={styles.textStyle}>Update Description</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

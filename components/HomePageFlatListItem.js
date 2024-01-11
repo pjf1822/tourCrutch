@@ -24,7 +24,7 @@ const HomePageFlatListItem = ({ item, navigation }) => {
     >
       <Text style={styles.itemStyle}>{item?.name}</Text>
       <Text style={styles.displayedDataText}>
-        {formatAddress(item?.address)}
+        {formatAddress(item?.address.substring(0, 30))}
       </Text>
       <Icon name="arrow-right" color={myColors.black} />
     </TouchableOpacity>

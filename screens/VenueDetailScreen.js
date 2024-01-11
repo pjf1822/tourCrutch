@@ -137,7 +137,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           <TouchableOpacity onPress={toggleContactModal}>
             <Icon
               name="plus"
-              style={{ color: "white", fontSize: 24, marginTop: 4 }}
+              style={{ color: "white", fontSize: 24, marginTop: 6 }}
             />
           </TouchableOpacity>
           {venueInfo?.contactCards?.length === 0 && (
