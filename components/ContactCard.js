@@ -4,7 +4,7 @@ import { myColors, regFont } from "../theme";
 
 const ContactCard = ({ data, handleDeleteContactCard }) => {
   const handlePhonePress = () => {
-    const phoneNumber = data.number.replace(/\D/g, ""); // Remove non-numeric characters
+    const phoneNumber = data?.number?.replace(/\D/g, ""); // Remove non-numeric characters
     const phoneURL = `tel:${phoneNumber}`;
     Linking.openURL(phoneURL);
   };
@@ -18,7 +18,7 @@ const ContactCard = ({ data, handleDeleteContactCard }) => {
         <Text style={styles.cardText}>{data.position}</Text>
       </View>
 
-      <View style={[styles.half, { alignItems: "flex-end" }]}>
+      <View style={[styles.half, { alignItems: "flex-end", marginLeft: 10 }]}>
         <Text style={styles.cardText}>{data.email}</Text>
         <Text style={styles.cardText}>{data.phoneNumber}</Text>
       </View>

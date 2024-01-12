@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import GlobalLoader from "../components/GlobalLoader.js";
 import { FIREBASE_AUTH } from "../firebaseConfig";
+import { Text } from "react-native";
 
 const UserContext = createContext();
 
@@ -11,8 +12,6 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUserFromFirebase = () => {
-    // console.log("we are fetching the user");
-
     setLoading(true);
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
       setUser(authUser);
@@ -37,9 +36,9 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
-  // if (loading) {
-  //   return <GlobalLoader />;
-  // }
+  if (loading) {
+    return <Text>loading</Text>;
+  }
 
   return (
     <UserContext.Provider

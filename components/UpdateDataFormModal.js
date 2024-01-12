@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
-import MyTextInput from "./MyTextInput";
-import MyButton from "./MyButton";
+import { View, StyleSheet, Platform, Keyboard } from "react-native";
+import React, { useEffect, useState } from "react";
+
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
 import { combineAddress, showToast, transformVenueData } from "../helpers";
-import { myColors, regFont, upperMargin } from "../theme";
+import { myColors, regFont } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyLongPressButton";
 import VenueForm from "./VenueForm";
@@ -20,13 +19,40 @@ const UpdateDataFormModal = ({
   navigation,
   deleteVenueMutation,
   windowHeight,
+  setVenueInfo,
 }) => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height - 90);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  const modalPosition =
+    Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
+
   const handleUpdate = async (values) => {
     // Recombine Address
     const newAddress = combineAddress(values);
-    venueInfo.address = newAddress;
+    values.address = newAddress;
 
-    const { name, address, link } = venueInfo;
+    const { name, address, link } = values;
 
     if (
       // Did the fields actually change
@@ -34,7 +60,7 @@ const UpdateDataFormModal = ({
       address !== venueData?.address ||
       link !== venueData?.link
     ) {
-      handleUpdateVenueInfo(
+      const response = await handleUpdateVenueInfo(
         updateVenueInfoMutation,
         venueId,
         venueInfo?.createdByUID,
@@ -46,6 +72,8 @@ const UpdateDataFormModal = ({
           link,
         }
       );
+
+      setVenueInfo(response.venue);
 
       toggleVenueDataModal();
     } else {
@@ -73,7 +101,7 @@ const UpdateDataFormModal = ({
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
-      style={{ justifyContent: "flex-end", margin: 0 }}
+      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
       onBackdropPress={toggleVenueDataModal}
       backdropOpacity={0}
     >

@@ -4,7 +4,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 
 import { NavWrapper } from "./Navigation/NavWrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { LogBox, Image } from "react-native";
+import { LogBox, Image, KeyboardAvoidingView } from "react-native";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import { StorageProvider } from "./Contexts/StorageContext";
@@ -36,7 +36,7 @@ export default function App() {
   }, []);
 
   if (!appIsReady) {
-    return <Image source={require("./assets/olav.png")} />;
+    return <Image source={require("./assets/DJ.jpg")} />;
   }
   return (
     <QueryClientProvider client={queryClient}>

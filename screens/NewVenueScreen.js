@@ -1,5 +1,13 @@
-import { StyleSheet, ImageBackground, Dimensions } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  Keyboard,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../Contexts/UserContext";
 import VenueForm from "../components/VenueForm";
 import { createVenue } from "../crudUtils/venue";
@@ -24,30 +32,56 @@ const NewVenueScreen = ({ navigation }) => {
     state: "",
     zip: "",
     link: "",
+    description: "",
     pdfs: [],
     contactCards: [],
   };
 
   const createVenueStyles = {
-    marginTop: windowHeight / upperMargin.margy,
+    // marginTop: windowHeight / upperMargin.margy,
     flex: 1,
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
   };
 
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(20);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  const modalPosition = Platform.OS === "ios" ? { bottom: keyboardHeight } : {};
   return (
     <ImageBackground
       source={require("../assets/crowd.jpg")}
       style={[styles.pageWrapper]}
       imageStyle={{ opacity: 0.6 }}
     >
-      <VenueForm
-        windowHeight={windowHeight}
-        handleSubmit={handleSubmit}
-        initialValues={initialValues}
-        buttonTitle="Submit"
-        formStyles={createVenueStyles}
-      />
+      <View style={[modalPosition, { flex: 1 }]}>
+        <VenueForm
+          windowHeight={windowHeight}
+          handleSubmit={handleSubmit}
+          initialValues={initialValues}
+          buttonTitle="Submit"
+          formStyles={createVenueStyles}
+        />
+      </View>
     </ImageBackground>
   );
 };

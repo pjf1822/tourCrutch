@@ -12,15 +12,20 @@ import { handleSignUp } from "../authFunctionUtils";
 import { useUser } from "../Contexts/UserContext";
 import MyButton from "../components/MyButton";
 import MyTextInput from "../components/MyTextInput";
+import { showToast } from "../helpers";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("df");
+  const [password2, setPassword2] = useState("");
+  const [displayName, setDisplayName] = useState("");
+
   const auth = FIREBASE_AUTH;
   const { setUser } = useUser();
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
+
+  const isSignupDisabled = !email || !displayName || !password || !password2;
 
   return (
     <ImageBackground
@@ -44,7 +49,7 @@ const SignupScreen = () => {
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder={"email"}
+            placeholder={"Email"}
           />
 
           <View style={styles.spacer}></View>
@@ -53,16 +58,48 @@ const SignupScreen = () => {
             onChangeText={(value) => {
               setPassword(value);
             }}
-            placeholder={"password"}
+            placeholder={"Password"}
             secureTextEntry={true}
+          />
+          <View style={styles.spacer}></View>
+
+          <MyTextInput
+            // style={password2 !== "" ? styles.input : styles.inputEmpty}
+            placeholder="Type Your Password Again"
+            onChangeText={(text) => setPassword2(text)}
+            secureTextEntry={true}
+            // placeholderTextColor={colors.terraCotta}
+          />
+          <View style={styles.spacer}></View>
+
+          <MyTextInput
+            // style={displayName !== "" ? styles.input : styles.inputEmpty}
+            placeholder="Display Name"
+            // placeholderTextColor={colors.terraCotta}
+            onChangeText={(text) => setDisplayName(text)}
           />
           <View style={styles.spacer}></View>
 
           <MyButton
             title="Sign Up"
-            onPress={() =>
-              handleSignUp(auth, email, password, displayName, setUser)
-            }
+            onPress={async () => {
+              try {
+                if (isSignupDisabled) {
+                  showToast("You need to fill all the fields", false, "top");
+                  return;
+                }
+                if (password !== password2) {
+                  showToast("the passwords dont match", false, "top");
+                  return;
+                }
+
+                await handleSignUp(auth, email, password, displayName, setUser);
+              } catch (error) {
+                // Handle errors here
+                console.error("Sign Up Error:", error);
+                // You can also show an error message to the user if needed
+              }
+            }}
           />
         </View>
         <View style={{ paddingBottom: windowHeight / 13 }}>

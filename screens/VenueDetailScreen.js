@@ -5,6 +5,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Text,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
@@ -20,6 +21,7 @@ import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AddContactCardModal from "../components/AddContactCardModel";
+import DescriptionSection from "../components/DescriptionSection";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -40,6 +42,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     contactCards: [],
     createdByUID: "",
+    description: "",
   });
 
   const togglePDFModal = () => {
@@ -69,6 +72,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         comments: venueData.comments,
         createdByUID: venueData.createdByUID,
         contactCards: venueData?.contactCards,
+        description: venueData.description,
       });
     }
   }, [venueData]);
@@ -133,10 +137,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
           <TouchableOpacity onPress={toggleContactModal}>
             <Icon
               name="plus"
-              style={{ color: "white", fontSize: 24, marginTop: 4 }}
+              style={{ color: "white", fontSize: 24, marginTop: 6 }}
             />
           </TouchableOpacity>
-          {venueInfo.contactCards.length === 0 && (
+          {venueInfo?.contactCards?.length === 0 && (
             <TouchableOpacity
               onPress={toggleContactModal}
               style={{
@@ -157,6 +161,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           )}
         </View>
+        <DescriptionSection
+          venueInfo={venueInfo}
+          setVenueInfo={setVenueInfo}
+          updateVenueInfoMutation={updateVenueInfoMutation}
+          venueId={venueId}
+          user={user}
+          venueData={venueData}
+        />
       </View>
 
       <View
@@ -164,6 +176,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
+          paddingBottom: windowHeight / 13,
         }}
       >
         <MyBottomRowButton
@@ -205,6 +218,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         navigation={navigation}
         deleteVenueMutation={deleteVenueMutation}
         windowHeight={windowHeight}
+        setVenueInfo={setVenueInfo}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

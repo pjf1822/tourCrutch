@@ -76,6 +76,7 @@ const HomeScreen = ({ navigation, route }) => {
             fontFamily: regFont.fontFamily,
             backgroundColor: "transparent",
           }}
+          // onClear={() => setSearch("")}
           containerStyle={{
             backgroundColor: "transparent",
             borderBottomWidth: "0px",
@@ -85,7 +86,14 @@ const HomeScreen = ({ navigation, route }) => {
             backgroundColor: "transparent",
           }}
           inputStyle={{ color: myColors.beige }}
-          clearIcon={<Icon name="times" size={20} color={myColors.beige} />}
+          clearIcon={
+            <Icon
+              name="times"
+              size={20}
+              color={myColors.beige}
+              onPress={() => setSearch("")}
+            />
+          }
           searchIcon={<Icon name="search" size={17} color={myColors.beige} />}
         />
         {!userLoading && !isLoading && (

@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import Modal from "react-native-modal";
 import CommentSection from "./CommentSection";
-import { myColors } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const CommentsModal = ({
   isCommentsModalVisible,
@@ -25,11 +25,20 @@ const CommentsModal = ({
           padding: 20,
         }}
       >
-        <CommentSection
+        {/* <CommentSection
           venueId={venueId}
           userId={user?.uid}
           displayName={user?.displayName}
-        />
+        /> */}
+        <Text
+          style={{
+            fontFamily: regFont.fontFamily,
+            fontSize: 18,
+            textAlign: "center",
+          }}
+        >
+          Coming Soon
+        </Text>
       </View>
     </Modal>
   );

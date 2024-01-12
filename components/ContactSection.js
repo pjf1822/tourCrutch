@@ -19,8 +19,8 @@ const ContactSection = ({
   );
 
   const handleDeleteContactCard = (contactCardId) => {
-    const updatedContactCards = venueInfo.contactCards.filter(
-      (card) => card._id !== contactCardId
+    const updatedContactCards = venueInfo?.contactCards.filter(
+      (card) => card?._id !== contactCardId
     );
 
     handleUpdateVenueInfo(
@@ -40,7 +40,7 @@ const ContactSection = ({
   return (
     <View style={styles.app}>
       <FlatList
-        data={venueInfo.contactCards}
+        data={venueInfo?.contactCards}
         numColumns={1}
         horizontal={true}
         renderItem={renderItem}

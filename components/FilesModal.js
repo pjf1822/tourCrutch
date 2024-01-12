@@ -4,7 +4,7 @@ import MyButton from "./MyButton";
 import RenderPDFItem from "../components/RenderPDFItem";
 
 import Modal from "react-native-modal";
-import { myColors } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const FilesModal = ({
   isPDFModalVisible,
@@ -27,7 +27,7 @@ const FilesModal = ({
       <View
         style={{
           backgroundColor: myColors.beige,
-          height: "27%",
+          // height: "27%",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
@@ -59,7 +59,16 @@ const FilesModal = ({
             ></View>
           }
         />
-        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
+        <Text
+          style={{
+            fontFamily: regFont.fontFamily,
+            fontSize: 18,
+            textAlign: "center",
+          }}
+        >
+          Coming Soon
+        </Text>
+        {/* <MyButton title="Upload Pdf" onPress={handleUploadPdf} /> */}
       </View>
     </Modal>
   );

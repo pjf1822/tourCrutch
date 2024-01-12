@@ -62,7 +62,6 @@ export const handleUpdateVenueInfo = async (
       id: venueId,
       updatedData: updatedFields,
     });
-
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (

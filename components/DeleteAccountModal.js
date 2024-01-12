@@ -9,41 +9,26 @@ import React, { useState } from "react";
 import {
   EmailAuthProvider,
   signInWithEmailAndPassword,
-  deleteUser,
   reauthenticateWithCredential,
   getAuth,
+  deleteUser,
 } from "firebase/auth";
 import { showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
+import { useNavigation } from "@react-navigation/native";
+import { FIREBASE_APP, FIREBASE_AUTH } from "../firebaseConfig";
 
-const DeleteAccountModal = ({ user, setUser, toggleOverlay }) => {
+const DeleteAccountModal = ({
+  user,
+  setUser,
+  toggleOverlay,
+  deleteAccount,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [openCreds, setOpenCreds] = useState(false);
   const auth = getAuth();
-
-  const deleteAccount = async () => {
-    try {
-      const currentUser = auth.currentUser;
-      if (email !== "" && password !== "") {
-        const credentials = EmailAuthProvider.credential(email, password);
-        await signInWithEmailAndPassword(auth, email, password);
-        await reauthenticateWithCredential(currentUser, credentials);
-      }
-      await deleteUser(currentUser);
-      setUser(null);
-      toggleOverlay();
-    } catch (error) {
-      if (error.message.includes("auth/requires-recent-login")) {
-        showToast("Please type in your email and password", false, "top");
-        setOpenCreds(true);
-      } else if (error.message.includes("(auth/invalid-email)")) {
-        showToast("Invalid Credentials", false, "top");
-      }
-      {
-      }
-    }
-  };
+  const navigation = useNavigation();
 
   return (
     <View>

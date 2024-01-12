@@ -18,6 +18,15 @@ import MyButton from "../components/MyButton";
 import { pickImage } from "../storageFunctionUtils";
 import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
+import { useNavigation } from "@react-navigation/native";
+import {
+  EmailAuthProvider,
+  signInWithEmailAndPassword,
+  reauthenticateWithCredential,
+  getAuth,
+  deleteUser,
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "../firebaseConfig";
 const windowHeight = Dimensions.get("window").height;
 
 const SettingsScreen = () => {
@@ -29,6 +38,8 @@ const SettingsScreen = () => {
     setVisible(!visible);
   };
 
+  const auth = getAuth();
+  const navigation = useNavigation();
   useEffect(() => {
     if (user && user?.displayName) {
       setDisplayName(user?.displayName);
@@ -70,6 +81,31 @@ const SettingsScreen = () => {
     }
   };
 
+  const deleteAccount = async () => {
+    toggleOverlay();
+    try {
+      const currentUser = auth.currentUser;
+      showToast("Delete user!", true, "top");
+      await deleteUser(currentUser);
+
+      if (email !== "" && password !== "") {
+        console.log("we are never");
+        const credentials = EmailAuthProvider.credential(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
+        await reauthenticateWithCredential(currentUser, credentials);
+      }
+
+      setUser(null);
+    } catch (error) {
+      if (error.message.includes("auth/requires-recent-login")) {
+        showToast("Please type in your email and password", false, "top");
+        setOpenCreds(true);
+      } else if (error.message.includes("(auth/invalid-email)")) {
+        showToast("Invalid Credentials", false, "top");
+      }
+    }
+  };
+
   return (
     <ImageBackground
       source={require("../assets/DJ.jpg")}
@@ -86,14 +122,16 @@ const SettingsScreen = () => {
             user={user}
             setUser={setUser}
             toggleOverlay={toggleOverlay}
+            deleteAccount={deleteAccount}
           />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>
         <Image
           source={
-            userProfilePic
-              ? { uri: userProfilePic }
-              : require("../assets/logito.png")
+            // userProfilePic
+            //   ? { uri: userProfilePic }
+            //   : require("../assets/logito.png")
+            require("../assets/logito.png")
           }
           style={styles.userPhoto}
         />
@@ -111,8 +149,9 @@ const SettingsScreen = () => {
                 onChangeText={(thing) => setDisplayName(thing)}
                 value={displayName}
               />
+              <View style={{ height: 8 }}></View>
               <MyButton
-                title={"update displayname"}
+                title={"Update Display Name"}
                 onPress={updateUserDisplayName}
               />
             </View>
@@ -122,17 +161,17 @@ const SettingsScreen = () => {
               height: "65%",
               display: "flex",
               justifyContent: "flex-start",
-              marginTop: 30,
+              // marginTop: 10,
               width: "100%",
             }}
           >
             <MyButton title="Update Password" onPress={updatePassword} />
             <View style={styles.spacer}></View>
-            <MyButton
+            {/* <MyButton
               title="Upload Profile Pic"
               onPress={handleUpdateProfilePic}
-            />
-            <View style={styles.spacer}></View>
+            /> */}
+            {/* <View style={styles.spacer}></View> */}
             <MyButton title="Delete Account" onPress={toggleOverlay} />
           </View>
         </View>
@@ -163,7 +202,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: myColors.black,
     padding: 10,
-    borderRadius: 30,
+    borderRadius: 50,
   },
   label: {
     color: myColors.sand,
