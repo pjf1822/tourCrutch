@@ -1,10 +1,10 @@
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_STORAGE } from "./firebaseConfig";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
-import * as DocumentPicker from "expo-document-picker";
 import { showToast } from "./helpers";
 import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
@@ -20,7 +20,7 @@ export const pickImage = async (ImagePicker, user, setUser) => {
     });
 
     if (!result?.canceled) {
-      const fileSize = result.assets[0].fileSize;
+      const fileSize = result?.assets[0]?.fileSize;
 
       if (fileSize <= MAX_FILE_SIZE_BYTES) {
         await uploadUserProfilePic(result.assets[0].uri, user, setUser);
@@ -29,6 +29,7 @@ export const pickImage = async (ImagePicker, user, setUser) => {
         console.error("Selected file exceeds the maximum allowed size.");
       }
     }
+    console.log("image pick canceled by user");
   } catch (error) {
     console.error("Error picking an image:", error);
   }
@@ -52,12 +53,11 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
       FIREBASE_STORAGE,
       `user-profiles/${user?.uid}/profile-pic.jpg`
     );
-
-    console.log(storageRef, "the storage ref");
     const response = await fetch(imageUri);
-    console.log(response, "the response");
+
     const blob = await response.blob();
-    const ready = await uploadBytes(storageRef, blob);
+
+    const ready = await uploadBytesResumable(storageRef, blob);
     const downloadURL = await getDownloadURL(storageRef);
 
     await updateProfile(user, {

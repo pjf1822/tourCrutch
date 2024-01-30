@@ -167,11 +167,11 @@ const SettingsScreen = () => {
           >
             <MyButton title="Update Password" onPress={updatePassword} />
             <View style={styles.spacer}></View>
-            {/* <MyButton
+            <MyButton
               title="Upload Profile Pic"
               onPress={handleUpdateProfilePic}
-            /> */}
-            {/* <View style={styles.spacer}></View> */}
+            />
+            <View style={styles.spacer}></View>
             <MyButton title="Delete Account" onPress={toggleOverlay} />
           </View>
         </View>
