@@ -1,80 +1,98 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  EmailAuthProvider,
   createUserWithEmailAndPassword,
+  deleteUser,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
+  signOut,
   updateProfile,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "./firebaseConfig";
-import { showToast } from "./helpers.js";
-export const handleSignUp = async (
-  auth,
-  email,
-  password,
-  displayName,
-  setUser
-) => {
-  try {
-    const response = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const userWithDisplayName = { ...response.user, displayName };
+import { auth } from "./firebaseConfig";
 
-    await updateProfile(response.user, {
-      displayName: displayName,
-    });
-    setUser(userWithDisplayName);
+export const handleSignUp = (email, password, displayName) => {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      if (displayName) {
+        updateProfile(user, { displayName })
+          .then(() => {
+            // Profile updated successfully
+          })
+          .catch((profileError) => {
+            console.error("Error updating profile:", profileError);
+          });
+      }
 
-    const userCredentials = JSON.stringify({
-      accessToken: response?.user?.accessToken,
+      handleSignIn(email, password);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("Error creating user:", errorCode, errorMessage);
     });
-    showToast("Youve signed up!", true, "top");
-    await AsyncStorage.setItem("userCredentials", userCredentials);
-  } catch (error) {
-    if (error.message === "Firebase: Error (auth/invalid-email).") {
-      showToast("Invalid Email!", false, "top");
-    } else if (
-      error.message ===
-      "Firebase: Password should be at least 6 characters (auth/weak-password)."
-    ) {
-      showToast("Password should be at least 6 characters long", false, "top");
-    } else if (
-      error.message === "Firebase: Error (auth/network-request-failed)."
-    ) {
-      showToast("The server is still spinning sorrryy", false, "top");
-    } else if (
-      error.message === "Firebase: Error (auth/email-already-in-use)."
-    ) {
-      showToast("An account under that name already exists", false, "top");
-    } else {
-      showToast(error.message, false, "top");
-    }
+};
+export const handleSignIn = async (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+};
+
+export const handleSignOut = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("User signed out successfully");
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error.code, error.message);
+    });
+};
+
+export const handleDeleteUser = (email, password) => {
+  const user = auth.currentUser;
+
+  if (user) {
+    const credentials = EmailAuthProvider.credential(email, password);
+
+    console.log(credentials, "show me the creds");
+
+    reauthenticateWithCredential(user, credentials)
+      .then(() => {
+        console.log("then were ready to do the thing");
+        return deleteUser(user);
+      })
+      .then(() => {
+        console.log("User deleted successfully");
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error.code, error.message);
+      });
+  } else {
+    console.error("No user is currently signed in");
   }
 };
 
-export const handleSignIn = async (auth, email, password, setUser) => {
-  try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
-    if (response?.user?.email) {
-      showToast("Signin successful!", true, "top");
-    }
+export const updateDisplayName = (displayName, toggleProfileUpdated) => {
+  const user = auth.currentUser;
 
-    const userCredentials = JSON.stringify({
-      accessToken: response?.user?.accessToken,
-    });
-    await AsyncStorage.setItem("userCredentials", userCredentials);
-    setUser(response.user);
-  } catch (error) {
-    showToast("Sign-in failed. Check your credentials.", false, "top");
-  }
-};
-
-export const signOut = async () => {
-  try {
-    await AsyncStorage.removeItem("userCredentials");
-    await FIREBASE_AUTH.signOut();
-  } catch (error) {
-    console.error("Error signing out:", error);
+  if (user) {
+    updateProfile(user, { displayName })
+      .then(() => {
+        toggleProfileUpdated();
+        console.log("Display name updated successfully");
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating display name:",
+          error.code,
+          error.message
+        );
+      });
+  } else {
+    console.error("No user is currently signed in");
   }
 };

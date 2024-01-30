@@ -1,49 +1,33 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import GlobalLoader from "../components/GlobalLoader.js";
-import { FIREBASE_AUTH } from "../firebaseConfig";
-import { Text } from "react-native";
+import { auth } from "../firebaseConfig";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authCompleted, setAuthCompleted] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
-  const fetchUserFromFirebase = () => {
-    setLoading(true);
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
-      setUser(authUser);
-      setAuthCompleted(true);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+  const toggleProfileUpdated = () => {
+    setProfileUpdated((prev) => !prev);
   };
 
   useEffect(() => {
-    fetchUserFromFirebase();
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      setUser(authUser);
+      setAuthCompleted(true);
+    });
 
-  useEffect(() => {
-    const updateUserProfile = async () => {
-      fetchUserFromFirebase();
-    };
+    return () => unsubscribe();
+  }, [profileUpdated]);
 
-    if (user) {
-      updateUserProfile();
-    }
-  }, [user]);
-
-  if (loading) {
-    return <Text>loading</Text>;
+  if (!authCompleted) {
+    return null;
   }
 
   return (
-    <UserContext.Provider
-      value={{ user, setUser, fetchUserFromFirebase, loading, setLoading }}
-    >
+    <UserContext.Provider value={{ user, setUser, toggleProfileUpdated }}>
       {children}
     </UserContext.Provider>
   );
