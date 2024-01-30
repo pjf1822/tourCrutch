@@ -59,7 +59,7 @@ const FilesModal = ({
             ></View>
           }
         />
-        <Text
+        {/* <Text
           style={{
             fontFamily: regFont.fontFamily,
             fontSize: 18,
@@ -67,8 +67,8 @@ const FilesModal = ({
           }}
         >
           Coming Soon
-        </Text>
-        {/* <MyButton title="Upload Pdf" onPress={handleUploadPdf} /> */}
+        </Text> */}
+        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
       </View>
     </Modal>
   );

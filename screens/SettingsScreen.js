@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { myColors, regFont, upperMargin } from "../theme";
-import * as ImagePicker from "expo-image-picker";
 import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyTextInput";
@@ -75,7 +74,7 @@ const SettingsScreen = () => {
 
   const handleUpdateProfilePic = async () => {
     try {
-      await pickImage(ImagePicker, user, setUser);
+      await pickImage(user, setUser);
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }
