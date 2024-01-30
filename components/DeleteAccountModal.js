@@ -6,48 +6,30 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  EmailAuthProvider,
-  signInWithEmailAndPassword,
-  reauthenticateWithCredential,
-  getAuth,
-  deleteUser,
-} from "firebase/auth";
-import { showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
-import { useNavigation } from "@react-navigation/native";
-import { FIREBASE_APP, FIREBASE_AUTH } from "../firebaseConfig";
+import { handleDeleteUser } from "../authFunctionUtils";
+import { showToast } from "../helpers";
 
-const DeleteAccountModal = ({
-  user,
-  setUser,
-  toggleOverlay,
-  deleteAccount,
-}) => {
+const DeleteAccountModal = ({ toggleOverlay }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [openCreds, setOpenCreds] = useState(false);
-  const auth = getAuth();
-  const navigation = useNavigation();
 
   return (
     <View>
       <TextInput
-        disabled={openCreds}
         style={styles.inputStyle}
         value={email}
         onChangeText={(text) => setEmail(text)}
         placeholder="Enter your email"
-        placeholderTextColor={openCreds ? myColors.beige : "gray"}
+        placeholderTextColor={myColors.black}
       />
       <TextInput
-        disabled={openCreds}
         style={styles.inputStyle}
         value={password}
         onChangeText={(text) => setPassword(text)}
         placeholder="Enter your password"
         secureTextEntry={true}
-        placeholderTextColor={openCreds ? myColors.beige : "gray"}
+        placeholderTextColor={myColors.black}
       />
       <Text
         style={{
@@ -74,11 +56,17 @@ const DeleteAccountModal = ({
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={deleteAccount}
+          onPress={() => {
+            if (email && password) {
+              handleDeleteUser(email, password, toggleOverlay);
+            } else {
+              showToast("Fill in your user info", false, "top");
+            }
+          }}
         >
           <Text
             style={{
-              color: myColors.blue,
+              color: !email || !password ? "grey" : myColors.blue,
               width: "100%",
               fontFamily: regFont.fontFamily,
               fontSize: 17,

@@ -11,7 +11,7 @@ import {
 } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FIREBASE_STORAGE } from "./firebaseConfig";
+import { storage } from "./firebaseConfig";
 import { showToast } from "./helpers";
 import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
@@ -62,7 +62,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
 
   try {
     const storageRef = ref(
-      FIREBASE_STORAGE,
+      storage,
       `user-profiles/${user?.uid}/profile-pic.jpg`
     );
     const response = await fetch(imageUri);
@@ -102,10 +102,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
 
 export const getUserProfilePic = async (userUid) => {
   try {
-    const storageRef = ref(
-      FIREBASE_STORAGE,
-      `user-profiles/${userUid}/profile-pic.jpg`
-    );
+    const storageRef = ref(storage, `user-profiles/${userUid}/profile-pic.jpg`);
 
     const downloadURL = await getDownloadURL(storageRef);
     return downloadURL;
@@ -117,8 +114,8 @@ export const getUserProfilePic = async (userUid) => {
 
 export const getVenuePDF = async (venueId, pdf) => {
   try {
-    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${pdf}`);
-    const fileRef = ref(FIREBASE_STORAGE, storageRef);
+    const storageRef = ref(storage, `venue-info/${venueId}/${pdf}`);
+    const fileRef = ref(storage, storageRef);
     const downloadURL = await getDownloadURL(fileRef);
     const localUri = `${FileSystem.cacheDirectory}${pdf}`;
 
@@ -187,7 +184,7 @@ export const uploadPDF = async (
 
 export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
   try {
-    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
+    const storageRef = ref(storage, `venue-info/${venueId}/${name}`);
     const response = await fetch(imageUri);
     const blob = await response.blob();
     const uploadTask = uploadBytesResumable(storageRef, blob, {

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useRoute } from "@react-navigation/native";
 import DrawerNavigator from "../components/Drawer/DrawerNavigator";
 import { useUser } from "../Contexts/UserContext";
+import SettingsScreen from "../screens/SettingsScreen";
 
 // AUTH STACK
 const AuthStack = createNativeStackNavigator();
@@ -50,13 +51,21 @@ export const NavWrapper = () => {
             name="App"
             component={AppNavigator}
             initialParams={{
-              user: { email: user?.email },
+              user: user ? { email: user?.email } : null,
             }}
           />
+          {/* <Stack.Screen name="Settings" component={SettingsScreen} /> */}
         </>
       ) : (
         <>
-          <Stack.Screen name="Auth" component={AuthNavigator} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen
+            options={{
+              lazy: true,
+            }}
+            name="Login"
+            component={LoginScreen}
+          />
         </>
       )}
     </Stack.Navigator>

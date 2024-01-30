@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { handleSignIn } from "../authFunctionUtils";
-import { FIREBASE_AUTH } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../Contexts/UserContext";
 import MyButton from "../components/MyButton";
@@ -17,7 +17,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useUser();
-  const auth = FIREBASE_AUTH;
+
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
 
@@ -58,7 +58,7 @@ const LoginScreen = () => {
 
           <MyButton
             title="Log In"
-            onPress={() => handleSignIn(auth, email, password, setUser)}
+            onPress={() => handleSignIn(email, password)}
           />
         </View>
 

@@ -8,6 +8,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
+import { showToast } from "./helpers";
 
 export const handleSignUp = (email, password, displayName) => {
   createUserWithEmailAndPassword(auth, email, password)
@@ -26,12 +27,24 @@ export const handleSignUp = (email, password, displayName) => {
       handleSignIn(email, password);
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error("Error creating user:", errorCode, errorMessage);
+      console.log(error.message, "what is this");
+
+      if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+        showToast("This email already has an account", false, "top");
+      }
+      if (error.message === "Firebase: Error (auth/invalid-email).") {
+        showToast("Invalid email", false, "top");
+      }
+      if (
+        error.message ===
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+      ) {
+        showToast("Password should be at least six characters", false, "top");
+      }
     });
 };
-export const handleSignIn = async (email, password) => {
+
+export const handleSignIn = (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -52,7 +65,7 @@ export const handleSignOut = () => {
     });
 };
 
-export const handleDeleteUser = (email, password) => {
+export const handleDeleteUser = (email, password, toggleOverlay) => {
   const user = auth.currentUser;
 
   if (user) {
@@ -63,6 +76,7 @@ export const handleDeleteUser = (email, password) => {
     reauthenticateWithCredential(user, credentials)
       .then(() => {
         console.log("then were ready to do the thing");
+        toggleOverlay();
         return deleteUser(user);
       })
       .then(() => {
@@ -70,6 +84,9 @@ export const handleDeleteUser = (email, password) => {
       })
       .catch((error) => {
         console.error("Error deleting user:", error.code, error.message);
+        if (error.message === "Firebase: Error (auth/invalid-email).") {
+          showToast("Invalid email or password", false, "top");
+        }
       });
   } else {
     console.error("No user is currently signed in");
@@ -83,8 +100,9 @@ export const updateDisplayName = (displayName, toggleProfileUpdated) => {
     updateProfile(user, { displayName })
       .then(() => {
         toggleProfileUpdated();
-        console.log("Display name updated successfully");
+        showToast("Display name updated!", true, "top");
       })
+
       .catch((error) => {
         console.error(
           "Error updating display name:",
