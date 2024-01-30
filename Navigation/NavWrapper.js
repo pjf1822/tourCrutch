@@ -54,19 +54,9 @@ export const NavWrapper = () => {
               user: user ? { email: user?.email } : null,
             }}
           />
-          {/* <Stack.Screen name="Settings" component={SettingsScreen} /> */}
         </>
       ) : (
-        <>
-          <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen
-            options={{
-              lazy: true,
-            }}
-            name="Login"
-            component={LoginScreen}
-          />
-        </>
+        <Stack.Screen name="Auth" component={AuthNavigator} />
       )}
     </Stack.Navigator>
   );
