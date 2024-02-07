@@ -21,8 +21,8 @@ const firebaseConfig = {
   appId: FIREBASE_APP_ID,
 };
 
-export const FIREBASE_APP = initializeApp(firebaseConfig);
-export const FIREBASE_AUTH = initializeAuth(FIREBASE_APP, {
+export const app = initializeApp(firebaseConfig);
+export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
-export const FIREBASE_STORAGE = getStorage(FIREBASE_APP);
+export const storage = getStorage(app);

@@ -1,14 +1,21 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FIREBASE_STORAGE } from "./firebaseConfig";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
+
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { updateProfile } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "./firebaseConfig";
 import { showToast } from "./helpers";
 import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
-export const pickImage = async (ImagePicker, user, setUser) => {
+export const pickImage = async (user, setUser, toggleProfileUpdated) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   try {
@@ -18,54 +25,80 @@ export const pickImage = async (ImagePicker, user, setUser) => {
       aspect: [4, 3],
       quality: 1,
     });
+    const { uri, type, fileSize } = result.assets[0];
 
-    if (!result?.canceled) {
-      const fileSize = result.assets[0].fileSize;
-
-      if (fileSize <= MAX_FILE_SIZE_BYTES) {
-        await uploadUserProfilePic(result.assets[0].uri, user, setUser);
-      } else {
-        showToast("File size too big", false, "top");
-        console.error("Selected file exceeds the maximum allowed size.");
-      }
+    if (result.canceled === true) {
+      showToast("Error uploading image", false, "top");
+      throw new Error("Upload canncelled.");
     }
+    if (!type === "image") {
+      showToast("not an image", false, "top");
+      throw new Error("Not an image");
+    }
+    if (fileSize > 10 * 1024 * 1024) {
+      showToast("image too large", false, "top");
+      throw new Error("Image too large");
+    }
+
+    const imageURL = await uploadUserProfilePic(uri, user);
+    console.log(imageURL, "we have escaped that ");
+    await updateProfile(user, { photoURL: imageURL });
+    toggleProfileUpdated();
   } catch (error) {
     console.error("Error picking an image:", error);
   }
 };
 
-export const uploadUserProfilePic = async (imageUri, user, setUser) => {
-  const uploadCountString = await AsyncStorage.getItem("uploadCount");
-  let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
+export const uploadUserProfilePic = async (imageUri, user) => {
+  // const uploadCountString = await AsyncStorage.getItem("uploadCount");
+  // let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
 
-  if (uploadCount >= 40) {
-    showToast("Upload limit exceeded.", false, "top");
-    return;
-  }
+  // if (uploadCount >= 40) {
+  //   showToast("Upload limit exceeded.", false, "top");
+  //   return;
+  // }
 
-  if (!user || !user.getIdToken) {
-    showToast("User information is missing or incomplete.", false, "top");
-    return;
-  }
+  // if (!user || !user.getIdToken) {
+  //   showToast("User information is missing or incomplete.", false, "top");
+  //   return;
+  // }
+
   try {
     const storageRef = ref(
-      FIREBASE_STORAGE,
+      storage,
       `user-profiles/${user?.uid}/profile-pic.jpg`
     );
-
-    console.log(storageRef, "the storage ref");
     const response = await fetch(imageUri);
-    console.log(response, "the response");
+
     const blob = await response.blob();
-    const ready = await uploadBytes(storageRef, blob);
-    const downloadURL = await getDownloadURL(storageRef);
 
-    await updateProfile(user, {
-      photoURL: downloadURL,
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(progress);
+        },
+        (error) => {
+          console.log("are we in here");
+          reject(error);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask?.snapshot?.ref);
+            resolve(downloadURL);
+          } catch (error) {
+            console.log("or here");
+
+            showToast(error, false, "top");
+            reject(error);
+          }
+        }
+      );
     });
-
-    await AsyncStorage.setItem("uploadCount", (uploadCount + 1).toString());
-    showToast("Profile pic added!", true, "top");
   } catch (error) {
     showToast(error, false, "top");
     throw new Error("Error adding Profile Pic");
@@ -74,10 +107,7 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
 
 export const getUserProfilePic = async (userUid) => {
   try {
-    const storageRef = ref(
-      FIREBASE_STORAGE,
-      `user-profiles/${userUid}/profile-pic.jpg`
-    );
+    const storageRef = ref(storage, `user-profiles/${userUid}/profile-pic.jpg`);
 
     const downloadURL = await getDownloadURL(storageRef);
     return downloadURL;
@@ -89,8 +119,8 @@ export const getUserProfilePic = async (userUid) => {
 
 export const getVenuePDF = async (venueId, pdf) => {
   try {
-    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${pdf}`);
-    const fileRef = ref(FIREBASE_STORAGE, storageRef);
+    const storageRef = ref(storage, `venue-info/${venueId}/${pdf}`);
+    const fileRef = ref(storage, storageRef);
     const downloadURL = await getDownloadURL(fileRef);
     const localUri = `${FileSystem.cacheDirectory}${pdf}`;
 
@@ -117,46 +147,40 @@ export const uploadPDF = async (
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
+    const { uri, mimeType, size, name } = result.assets[0];
+
+    // error catching section
     if (result.canceled === true) {
-      return;
+      showToast("Error uploading PDF", false, "top");
+      throw new Error("Upload canncelled.");
     }
-
-    if (result.canceled === false) {
-      const { uri, mimeType, size, name } = result.assets[0];
-      if (updatedVenueData?.pdfs?.includes(name)) {
-        throw new Error("File with the same name already exists.");
-      }
-
-      if (mimeType === "application/pdf" && size <= 10 * 1024 * 1024) {
-        await uploadPDFToFirebase(uri, name, venueId);
-
-        const updatedDataWithNewPDF = {
-          ...updatedVenueData,
-          pdfs: [...updatedVenueData.pdfs, name],
-        };
-
-        const updateVenuePDFs = await handleUpdateVenueInfo(
-          updateVenueInfoMutation,
-          venueId,
-          createdByUID,
-          userUID,
-          originalVenueData,
-          updatedDataWithNewPDF
-        );
-        return updateVenuePDFs;
-      } else {
-        showToast(
-          "Invalid file format or size exceeds the limit",
-          false,
-          "top"
-        );
-
-        throw new Error("Invalid file format or size exceeds the limit");
-      }
-    } else if (result.canceled === true) {
+    if (updatedVenueData?.pdfs?.includes(name)) {
+      showToast("That file already exists", false, "top");
+      throw new Error("File with the same name already exists.");
+    }
+    if (!mimeType === "application/pdf" || size > 10 * 1024 * 1024) {
       showToast(error?.message, false, "top");
       throw new Error("Document Picking Cancelled");
     }
+    // if successful
+
+    await uploadPDFToFirebase(uri, name, venueId);
+
+    const updatedDataWithNewPDF = {
+      ...updatedVenueData,
+      pdfs: [...updatedVenueData.pdfs, name],
+    };
+
+    const updateVenuePDFs = await handleUpdateVenueInfo(
+      updateVenueInfoMutation,
+      venueId,
+      createdByUID,
+      userUID,
+      originalVenueData,
+      updatedDataWithNewPDF
+    );
+
+    return updateVenuePDFs;
   } catch (error) {
     showToast(error.message, false, "top");
     throw new Error("Error Picking a Document");
@@ -165,18 +189,33 @@ export const uploadPDF = async (
 
 export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
   try {
-    const storageRef = ref(FIREBASE_STORAGE, `venue-info/${venueId}/${name}`);
+    const storageRef = ref(storage, `venue-info/${venueId}/${name}`);
     const response = await fetch(imageUri);
     const blob = await response.blob();
-    const ready = await uploadBytes(storageRef, blob, {
+    const uploadTask = uploadBytesResumable(storageRef, blob, {
       customMetadata: {
         fileName: name,
       },
     });
-    const downloadURL = await getDownloadURL(storageRef);
-    return downloadURL;
+    const uploadPromise = new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          resolve(uploadTask.snapshot);
+        }
+      );
+    });
+
+    await uploadPromise;
   } catch (error) {
-    console.log(error, "the failgin error");
     showToast("Document Upload Failed!", false, "top");
+    throw new Error("Upload doc failed");
   }
 };

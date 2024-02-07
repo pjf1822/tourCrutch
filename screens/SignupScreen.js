@@ -6,10 +6,8 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState } from "react";
-import { FIREBASE_AUTH } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
-import { useUser } from "../Contexts/UserContext";
 import MyButton from "../components/MyButton";
 import MyTextInput from "../components/MyTextInput";
 import { showToast } from "../helpers";
@@ -20,13 +18,27 @@ const SignupScreen = () => {
   const [password2, setPassword2] = useState("");
   const [displayName, setDisplayName] = useState("");
 
-  const auth = FIREBASE_AUTH;
-  const { setUser } = useUser();
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
 
   const isSignupDisabled = !email || !displayName || !password || !password2;
 
+  const handleSignUpPress = () => {
+    try {
+      if (isSignupDisabled) {
+        showToast("You need to fill all the fields", false, "top");
+        return;
+      }
+      if (password !== password2) {
+        showToast("The passwords don't match", false, "top");
+        return;
+      }
+
+      handleSignUp(email, password, displayName);
+    } catch (error) {
+      console.error("Sign Up Error:", error);
+    }
+  };
   return (
     <ImageBackground
       source={require("../assets/gear.jpg")}
@@ -64,43 +76,19 @@ const SignupScreen = () => {
           <View style={styles.spacer}></View>
 
           <MyTextInput
-            // style={password2 !== "" ? styles.input : styles.inputEmpty}
             placeholder="Type Your Password Again"
             onChangeText={(text) => setPassword2(text)}
             secureTextEntry={true}
-            // placeholderTextColor={colors.terraCotta}
           />
           <View style={styles.spacer}></View>
 
           <MyTextInput
-            // style={displayName !== "" ? styles.input : styles.inputEmpty}
             placeholder="Display Name"
-            // placeholderTextColor={colors.terraCotta}
             onChangeText={(text) => setDisplayName(text)}
           />
           <View style={styles.spacer}></View>
 
-          <MyButton
-            title="Sign Up"
-            onPress={async () => {
-              try {
-                if (isSignupDisabled) {
-                  showToast("You need to fill all the fields", false, "top");
-                  return;
-                }
-                if (password !== password2) {
-                  showToast("the passwords dont match", false, "top");
-                  return;
-                }
-
-                await handleSignUp(auth, email, password, displayName, setUser);
-              } catch (error) {
-                // Handle errors here
-                console.error("Sign Up Error:", error);
-                // You can also show an error message to the user if needed
-              }
-            }}
-          />
+          <MyButton title="Sign Up" onPress={handleSignUpPress} />
         </View>
         <View style={{ paddingBottom: windowHeight / 13 }}>
           <MyButton

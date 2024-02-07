@@ -5,7 +5,7 @@ import { myColors } from "../theme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { deleteObject, ref } from "@firebase/storage";
-import { FIREBASE_STORAGE } from "../firebaseConfig";
+import { storage } from "../firebaseConfig";
 import { regFont } from "../theme";
 
 const RenderPDFItem = ({
@@ -24,10 +24,7 @@ const RenderPDFItem = ({
     const itemIndex = updatedPDFs.indexOf(item);
     if (itemIndex !== -1) {
       const deletedPDF = updatedPDFs.splice(itemIndex, 1)[0];
-      const storageRef = ref(
-        FIREBASE_STORAGE,
-        `venue-info/${venueId}/${deletedPDF}`
-      );
+      const storageRef = ref(storage, `venue-info/${venueId}/${deletedPDF}`);
       try {
         await deleteObject(storageRef);
       } catch (error) {
