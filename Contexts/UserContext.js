@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
   const [profileUpdated, setProfileUpdated] = useState(false);
 
   const toggleProfileUpdated = () => {
+    console.log("we have been toggled");
     setProfileUpdated((prev) => !prev);
   };
 

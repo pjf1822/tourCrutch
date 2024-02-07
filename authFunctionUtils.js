@@ -16,9 +16,7 @@ export const handleSignUp = (email, password, displayName) => {
       const user = userCredential.user;
       if (displayName) {
         updateProfile(user, { displayName })
-          .then(() => {
-            // Profile updated successfully
-          })
+          .then(() => {})
           .catch((profileError) => {
             console.error("Error updating profile:", profileError);
           });
@@ -49,10 +47,7 @@ export const handleSignIn = (email, password) => {
     .then((userCredential) => {
       const user = userCredential.user;
     })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+    .catch((error) => {});
 };
 
 export const handleSignOut = () => {
@@ -71,19 +66,13 @@ export const handleDeleteUser = (email, password, toggleOverlay) => {
   if (user) {
     const credentials = EmailAuthProvider.credential(email, password);
 
-    console.log(credentials, "show me the creds");
-
     reauthenticateWithCredential(user, credentials)
       .then(() => {
-        console.log("then were ready to do the thing");
         toggleOverlay();
         return deleteUser(user);
       })
-      .then(() => {
-        console.log("User deleted successfully");
-      })
+      .then(() => {})
       .catch((error) => {
-        console.error("Error deleting user:", error.code, error.message);
         if (error.message === "Firebase: Error (auth/invalid-email).") {
           showToast("Invalid email or password", false, "top");
         }

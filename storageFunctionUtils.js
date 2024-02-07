@@ -15,7 +15,7 @@ import { storage } from "./firebaseConfig";
 import { showToast } from "./helpers";
 import { handleUpdateVenueInfo } from "./crudUtils/venue";
 
-export const pickImage = async (user, setUser) => {
+export const pickImage = async (user, setUser, toggleProfileUpdated) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   try {
@@ -32,21 +32,24 @@ export const pickImage = async (user, setUser) => {
       throw new Error("Upload canncelled.");
     }
     if (!type === "image") {
-      showToast(error?.message, false, "top");
+      showToast("not an image", false, "top");
       throw new Error("Not an image");
     }
     if (fileSize > 10 * 1024 * 1024) {
-      showToast(error?.message, false, "top");
+      showToast("image too large", false, "top");
       throw new Error("Image too large");
     }
 
-    await uploadUserProfilePic(uri, user, setUser);
+    const imageURL = await uploadUserProfilePic(uri, user);
+    console.log(imageURL, "we have escaped that ");
+    await updateProfile(user, { photoURL: imageURL });
+    toggleProfileUpdated();
   } catch (error) {
     console.error("Error picking an image:", error);
   }
 };
 
-export const uploadUserProfilePic = async (imageUri, user, setUser) => {
+export const uploadUserProfilePic = async (imageUri, user) => {
   // const uploadCountString = await AsyncStorage.getItem("uploadCount");
   // let uploadCount = uploadCountString ? parseInt(uploadCountString) : 0;
 
@@ -70,7 +73,8 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
     const blob = await response.blob();
 
     const uploadTask = uploadBytesResumable(storageRef, blob);
-    await new Promise((resolve, reject) => {
+
+    return new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -79,15 +83,16 @@ export const uploadUserProfilePic = async (imageUri, user, setUser) => {
           console.log(progress);
         },
         (error) => {
+          console.log("are we in here");
           reject(error);
         },
         async () => {
           try {
-            const downloadURL = await getDownloadURL(storageRef);
-            await updateProfile(user, { photoURL: downloadURL });
-            showToast("Profile pic added!", true, "top");
-            resolve();
+            const downloadURL = await getDownloadURL(uploadTask?.snapshot?.ref);
+            resolve(downloadURL);
           } catch (error) {
+            console.log("or here");
+
             showToast(error, false, "top");
             reject(error);
           }

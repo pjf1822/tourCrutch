@@ -22,15 +22,19 @@ const windowHeight = Dimensions.get("window").height;
 const SettingsScreen = () => {
   const { user, setUser, toggleProfileUpdated } = useUser();
   const [displayName, setDisplayName] = useState("");
+  const [userProfilePic, setUserProfilePic] = useState("");
+
   const [visible, setVisible] = useState(false);
 
+  console.log(user);
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
   useEffect(() => {
-    if (user && user?.displayName) {
+    if (user) {
       setDisplayName(user?.displayName);
+      setUserProfilePic(user?.photoURL);
     }
   }, [user]);
 
@@ -45,7 +49,7 @@ const SettingsScreen = () => {
 
   const handleUpdateProfilePic = async () => {
     try {
-      await pickImage(user, setUser);
+      await pickImage(user, setUser, toggleProfileUpdated);
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }
@@ -66,15 +70,7 @@ const SettingsScreen = () => {
           <DeleteAccountModal toggleOverlay={toggleOverlay} />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>
-        <Image
-          source={
-            // userProfilePic
-            //   ? { uri: userProfilePic }
-            //   : require("../assets/logito.png")
-            require("../assets/logito.png")
-          }
-          style={styles.userPhoto}
-        />
+        <Image source={{ uri: user?.photoURL }} style={styles.userPhoto} />
 
         <View style={styles.formWrapper}>
           <View style={styles.entryWrapper}>
