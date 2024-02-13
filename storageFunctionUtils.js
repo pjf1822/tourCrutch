@@ -149,6 +149,10 @@ export const uploadPDF = async (
       type: "application/pdf",
     });
 
+    if (result.canceled === true) {
+      return;
+    }
+
     const { uri, mimeType, size, name } = result.assets[0];
 
     // error catching section

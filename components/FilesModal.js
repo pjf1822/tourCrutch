@@ -4,7 +4,7 @@ import MyButton from "./MyButton";
 import RenderPDFItem from "../components/RenderPDFItem";
 
 import Modal from "react-native-modal";
-import { myColors, regFont } from "../theme";
+import { myColors } from "../theme";
 
 const FilesModal = ({
   isPDFModalVisible,

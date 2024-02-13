@@ -1,17 +1,23 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
 const ContactCard = ({ data, handleDeleteContactCard }) => {
   const handlePhonePress = () => {
-    const phoneNumber = data?.number?.replace(/\D/g, ""); // Remove non-numeric characters
-    const phoneURL = `tel:${phoneNumber}`;
+    const phoneNumber = data?.phoneNumber?.replace(/\D/g, ""); // Remove non-numeric characters
+    const phoneURL = `tel://${phoneNumber}`;
     Linking.openURL(phoneURL);
   };
   return (
-    <TouchableOpacity
+    <View
       style={styles.cardWrapper}
-      onLongPress={() => handleDeleteContactCard(data._id)}
+      // onLongPress={() => handleDeleteContactCard(data._id)}
     >
       <View style={styles.half}>
         <Text style={styles.cardText}>{data.name}</Text>
@@ -20,9 +26,11 @@ const ContactCard = ({ data, handleDeleteContactCard }) => {
 
       <View style={[styles.half, { alignItems: "flex-end", marginLeft: 10 }]}>
         <Text style={styles.cardText}>{data.email}</Text>
-        <Text style={styles.cardText}>{data.phoneNumber}</Text>
+        <TouchableOpacity onPress={handlePhonePress}>
+          <Text style={styles.cardText}>{data.phoneNumber}</Text>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -42,6 +50,7 @@ const styles = StyleSheet.create({
 
   half: {
     display: "flex",
+    justifyContent: "space-between",
   },
   cardText: {
     fontFamily: regFont.fontFamily,
