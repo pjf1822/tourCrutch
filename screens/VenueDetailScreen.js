@@ -32,6 +32,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isVenueDataModalVisible, setIsVenueDataModalVisible] = useState(false);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
+  const [PDFUploadProgress, setPDFUploadProgress] = useState(0);
 
   const [venueInfo, setVenueInfo] = useState({
     name: "",
@@ -94,6 +95,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           address: venueInfo.address,
           link: venueInfo.link,
           pdfs: venueInfo.pdfs,
+        },
+        (progress) => {
+          setPDFUploadProgress(progress);
         }
       );
       if (updatedInfo === undefined) {
@@ -205,6 +209,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         user={user}
         setVenueInfo={setVenueInfo}
         handleUploadPdf={handleUploadPdf}
+        PDFUploadProgress={PDFUploadProgress}
       />
       <UpdateDataFormModal
         isVenueDataModalVisible={isVenueDataModalVisible}

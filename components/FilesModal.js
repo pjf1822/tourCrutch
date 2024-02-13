@@ -16,6 +16,7 @@ const FilesModal = ({
   setVenueInfo,
   venueData,
   handleUploadPdf,
+  PDFUploadProgress,
 }) => {
   return (
     <Modal
@@ -27,7 +28,6 @@ const FilesModal = ({
       <View
         style={{
           backgroundColor: myColors.beige,
-          // height: "27%",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
@@ -59,15 +59,28 @@ const FilesModal = ({
             ></View>
           }
         />
-        {/* <Text
-          style={{
-            fontFamily: regFont.fontFamily,
-            fontSize: 18,
-            textAlign: "center",
-          }}
-        >
-          Coming Soon
-        </Text> */}
+        {PDFUploadProgress !== 100 && (
+          <View
+            style={{
+              backgroundColor: myColors.beige,
+              width: 200,
+              height: 8,
+              borderRadius: 1,
+              alignSelf: "center",
+              marginBottom: 5,
+            }}
+          >
+            <View
+              style={{
+                height: "100%",
+                width: `${PDFUploadProgress}%`,
+                backgroundColor: "green",
+                borderRadius: 70,
+              }}
+            ></View>
+          </View>
+        )}
+
         <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
       </View>
     </Modal>

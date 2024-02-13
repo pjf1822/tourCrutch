@@ -57,7 +57,7 @@ const RenderPDFItem = ({
           fontFamily: regFont.fontFamily,
           flexWrap: "wrap",
           paddingTop: 9,
-          paddingBottom: 10,
+          paddingBottom: 5,
         }}
       >
         {item}

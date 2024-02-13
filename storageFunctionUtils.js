@@ -141,7 +141,8 @@ export const uploadPDF = async (
   createdByUID,
   userUID,
   originalVenueData,
-  updatedVenueData
+  updatedVenueData,
+  progressCallback
 ) => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
@@ -165,7 +166,7 @@ export const uploadPDF = async (
     }
     // if successful
 
-    await uploadPDFToFirebase(uri, name, venueId);
+    await uploadPDFToFirebase(uri, name, venueId, progressCallback);
 
     const updatedDataWithNewPDF = {
       ...updatedVenueData,
@@ -188,7 +189,12 @@ export const uploadPDF = async (
   }
 };
 
-export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
+export const uploadPDFToFirebase = async (
+  imageUri,
+  name,
+  venueId,
+  progressCallback
+) => {
   try {
     const storageRef = ref(storage, `venue-info/${venueId}/${name}`);
     const response = await fetch(imageUri);
@@ -204,6 +210,7 @@ export const uploadPDFToFirebase = async (imageUri, name, venueId) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          progressCallback(progress);
         },
         (error) => {
           reject(error);
