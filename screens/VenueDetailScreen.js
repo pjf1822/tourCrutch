@@ -5,7 +5,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   Text,
-  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";

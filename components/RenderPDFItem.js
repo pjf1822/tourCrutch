@@ -17,8 +17,6 @@ const RenderPDFItem = ({
   item,
   setVenueInfo,
 }) => {
-  const [firstPart, restPart] = item?.split("-");
-
   const handleLongPress = async () => {
     const updatedPDFs = [...venueData.pdfs];
     const itemIndex = updatedPDFs.indexOf(item);
@@ -47,6 +45,10 @@ const RenderPDFItem = ({
     <TouchableOpacity
       onPress={() => getVenuePDF(venueId, item)}
       onLongPress={handleLongPress}
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
     >
       <Icon name="file-pdf-o" size={40} color={myColors.black} />
       <Text
@@ -54,19 +56,11 @@ const RenderPDFItem = ({
           color: myColors.black,
           fontFamily: regFont.fontFamily,
           flexWrap: "wrap",
+          paddingTop: 9,
+          paddingBottom: 10,
         }}
       >
-        {firstPart}
-      </Text>
-      <Text
-        style={{
-          color: myColors.black,
-          fontFamily: regFont.fontFamily,
-          flexWrap: "wrap",
-          fontSize: 15,
-        }}
-      >
-        {restPart}
+        {item}
       </Text>
     </TouchableOpacity>
   );

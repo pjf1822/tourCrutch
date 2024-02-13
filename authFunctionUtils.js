@@ -43,11 +43,17 @@ export const handleSignUp = (email, password, displayName) => {
 };
 
 export const handleSignIn = (email, password) => {
+  if (!email || !password) {
+    showToast("Please fill in all fields", false, "top");
+    return;
+  }
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-    })
-    .catch((error) => {});
+    .then((userCredential) => {})
+    .catch((error) => {
+      console.log(error.message);
+      if (error.message === "Firebase: Error (auth/invalid-email).")
+        showToast("Invalid email or password", false, "top");
+    });
 };
 
 export const handleSignOut = () => {

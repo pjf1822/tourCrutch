@@ -147,6 +147,7 @@ export const uploadPDF = async (
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
+
     const { uri, mimeType, size, name } = result.assets[0];
 
     // error catching section

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
 import { myColors, regFont } from "../theme";
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
     marginBottom: 6,
+    // backgroundColor:
+    //   Platform.OS === "ios" && Platform.isPad ? "blue" : "yellow",
   },
   itemStyle: {
     fontFamily: regFont.fontFamily,
