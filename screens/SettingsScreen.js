@@ -26,7 +26,6 @@ const SettingsScreen = () => {
 
   const [visible, setVisible] = useState(false);
 
-  console.log(user);
   const toggleOverlay = () => {
     setVisible(!visible);
   };

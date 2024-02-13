@@ -38,7 +38,7 @@ export const filterVenues = (venues, search) => {
 };
 
 export const isValidUrl = (url) => {
-  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
   return urlRegex.test(url);
 };
 

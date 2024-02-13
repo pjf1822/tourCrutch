@@ -6,6 +6,7 @@ import {
   Platform,
   View,
   Keyboard,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../Contexts/UserContext";
@@ -69,11 +70,20 @@ const NewVenueScreen = ({ navigation }) => {
   const modalPosition = Platform.OS === "ios" ? { bottom: keyboardHeight } : {};
   return (
     <ImageBackground
-      source={require("../assets/crowd.jpg")}
+      source={require("../assets/gear.jpg")}
       style={[styles.pageWrapper]}
       imageStyle={{ opacity: 0.6 }}
     >
       <View style={[modalPosition, { flex: 1 }]}>
+        <Image
+          style={{
+            height: 150,
+            width: 150,
+            alignSelf: "center",
+            marginTop: windowHeight / 10,
+          }}
+          source={require("../assets/logito.png")}
+        />
         <VenueForm
           windowHeight={windowHeight}
           handleSubmit={handleSubmit}
