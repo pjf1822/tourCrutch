@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
 import MyButton from "../components/MyButton";
@@ -47,7 +47,7 @@ const SignupScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    if ((result.canceled = true)) {
+    if (result.canceled == true) {
       return;
     }
     setProfilePic(result.assets[0]);
@@ -64,11 +64,7 @@ const SignupScreen = () => {
         return;
       }
 
-      if (profilePic.uri === null) {
-        handleSignUp(email, password, displayName);
-      } else {
-        handleSignUp(email, password, displayName, profilePic);
-      }
+      handleSignUp(email, password, displayName, profilePic);
     } catch (error) {
       console.error("Sign Up Error:", error);
     }
