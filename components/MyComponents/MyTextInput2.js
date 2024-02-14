@@ -1,8 +1,13 @@
 import { TextInput, StyleSheet, Platform } from "react-native";
 import React from "react";
-import { myColors, regFont } from "../theme";
+import { myColors, regFont } from "../../theme";
 
-const MyTextInput = ({ placeholder, onChangeText, value, secureTextEntry }) => {
+const MyTextInput2 = ({
+  placeholder,
+  onChangeText,
+  value,
+  secureTextEntry,
+}) => {
   return (
     <TextInput
       style={styles.formTextInput}
@@ -15,15 +20,14 @@ const MyTextInput = ({ placeholder, onChangeText, value, secureTextEntry }) => {
   );
 };
 
-export default MyTextInput;
+export default MyTextInput2;
 const styles = StyleSheet.create({
   formTextInput: {
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 6,
     borderColor: myColors.white,
     padding: 10,
-    marginTop: 2,
-    marginBottom: 2,
+    marginBottom: 15,
     fontFamily: regFont.fontFamily,
     color: myColors.beige,
     backgroundColor: myColors.black,

@@ -6,7 +6,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
-import { myColors, regFont } from "../theme";
+import { myColors, regFont } from "../../theme";
 
 const MyLongPressButton = ({ title, onPress, onLongPress }) => {
   const [animation] = useState(new Animated.Value(0));

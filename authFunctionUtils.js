@@ -82,7 +82,9 @@ export const handleSignIn = (email, password) => {
     return;
   }
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {})
+    .then((userCredential) => {
+      showToast("USer signed in!", true, "top");
+    })
     .catch((error) => {
       console.log(error.message);
       if (error.message === "Firebase: Error (auth/invalid-email).") {

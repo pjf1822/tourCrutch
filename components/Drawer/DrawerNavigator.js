@@ -11,7 +11,7 @@ import NewVenueScreen from "../../screens/NewVenueScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import { showToast } from "../../helpers";
 import { myColors, regFont } from "../../theme";
-import MyButton from "../MyButton";
+import MyButton from "../MyComponents/MyButton";
 import { handleSignOut } from "../../authFunctionUtils";
 
 const commonDrawerStyles = {
