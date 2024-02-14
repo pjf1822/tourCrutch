@@ -1,6 +1,6 @@
 import { View, Text, Button, FlatList } from "react-native";
 import React from "react";
-import MyButton from "./MyButton";
+import MyButton from "./MyComponents/MyButton";
 import RenderPDFItem from "../components/RenderPDFItem";
 
 import Modal from "react-native-modal";

@@ -8,8 +8,8 @@ import {
 import React, { useState } from "react";
 import { handleSignIn } from "../authFunctionUtils";
 import { useNavigation } from "@react-navigation/native";
-import MyButton from "../components/MyButton";
-import MyTextInput from "../components/MyTextInput";
+import MyButton from "../components/MyComponents/MyButton";
+import MyTextInput from "../components/MyComponents/MyTextInput";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");

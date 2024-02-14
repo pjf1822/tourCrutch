@@ -11,8 +11,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
-import MyButton from "../components/MyButton";
-import MyTextInput from "../components/MyTextInput";
+import MyButton from "../components/MyComponents/MyButton";
+import MyTextInput from "../components/MyComponents/MyTextInput";
 import { showToast } from "../helpers";
 import * as ImagePicker from "expo-image-picker";
 import { myColors, regFont } from "../theme";

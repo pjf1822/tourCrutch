@@ -11,7 +11,7 @@ import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
 import { useFetchVenues } from "../api";
-import MyButton from "../components/MyButton";
+import MyButton from "../components/MyComponents/MyButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";

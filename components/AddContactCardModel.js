@@ -1,7 +1,7 @@
 import { View, Text, Keyboard, Platform } from "react-native";
 import React, { useState, useEffect } from "react";
-import MyTextInput from "./MyTextInput";
-import MyButton from "./MyBottomRowButton";
+import MyTextInput from "./MyComponents/MyTextInput";
+import MyButton from "./MyComponents/MyBottomRowButton";
 import Modal from "react-native-modal";
 import { myColors, regFont } from "../theme";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";

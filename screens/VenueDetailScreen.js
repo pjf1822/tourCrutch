@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MyBottomRowButton from "../components/MyBottomRowButton";
+import MyBottomRowButton from "../components/MyComponents/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
