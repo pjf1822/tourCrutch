@@ -1,6 +1,7 @@
 import Fuse from "fuse.js";
 import Toast from "react-native-root-toast";
 import { myColors } from "./theme";
+import { Platform } from "react-native";
 
 export const showToast = (toastMessage, success, position) => {
   let backgroundColor;
@@ -21,8 +22,9 @@ export const showToast = (toastMessage, success, position) => {
     backgroundColor: backgroundColor,
     textColor: textColor,
     opacity: 1,
-    fontSize: 23,
+    // fontSize: 23,
     zIndex: 999,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 30 : 23,
   });
 };
 
