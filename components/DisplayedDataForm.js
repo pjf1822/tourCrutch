@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Linking,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   displayedDataText: {
     fontFamily: regFont.fontFamily,
     padding: 2,
-    fontSize: 17,
     paddingLeft: 10,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
   },
 });

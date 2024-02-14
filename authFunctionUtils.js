@@ -94,8 +94,12 @@ export const handleSignIn = (email, password) => {
     .then((userCredential) => {})
     .catch((error) => {
       console.log(error.message);
-      if (error.message === "Firebase: Error (auth/invalid-email).")
+      if (error.message === "Firebase: Error (auth/invalid-email).") {
         showToast("Invalid email or password", false, "top");
+      }
+      if (error.message === "Firebase: Error (auth/invalid-credential).") {
+        showToast("Wrong password", false, "top");
+      }
     });
 };
 

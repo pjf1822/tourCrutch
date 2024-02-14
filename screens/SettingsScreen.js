@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   ImageBackground,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
@@ -176,5 +177,9 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: 7,
+  },
+
+  text: {
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
 });

@@ -1,4 +1,4 @@
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, Platform } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: myColors.black,
     width: "80%",
     alignSelf: "center",
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
 });

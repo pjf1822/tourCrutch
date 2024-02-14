@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { getVenuePDF } from "../storageFunctionUtils";
 import { myColors } from "../theme";
@@ -50,7 +50,11 @@ const RenderPDFItem = ({
         alignItems: "center",
       }}
     >
-      <Icon name="file-pdf-o" size={40} color={myColors.black} />
+      <Icon
+        name="file-pdf-o"
+        size={Platform.OS === "ios" && Platform.isPad ? 50 : 30}
+        color={myColors.black}
+      />
       <Text
         style={{
           color: myColors.black,
@@ -58,6 +62,7 @@ const RenderPDFItem = ({
           flexWrap: "wrap",
           paddingTop: 9,
           paddingBottom: 5,
+          fontSize: Platform.OS === "ios" && Platform.isPad ? 29 : 17,
         }}
       >
         {item}

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
 
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   textStyle: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
 });
