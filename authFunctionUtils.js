@@ -9,20 +9,46 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { showToast } from "./helpers";
+import { uploadUserProfilePic } from "./storageFunctionUtils";
 
-export const handleSignUp = (email, password, displayName) => {
+export const handleSignUp = (email, password, displayName, profilePic) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      if (displayName) {
+      if (profilePic) {
+        // Upload profile picture to Firebase Storage
+        uploadUserProfilePic(profilePic.uri, user)
+          .then((imageURL) => {
+            if (displayName) {
+              updateProfile(user, { displayName, photoURL: imageURL })
+                .then(() => {
+                  // Profile updated successfully
+                  handleSignIn(email, password);
+                })
+                .catch((profileError) => {
+                  console.error("Error updating profile:", profileError);
+                });
+            } else {
+              handleSignIn(email, password);
+            }
+          })
+          .catch((uploadError) => {
+            console.error("Error uploading profile picture:", uploadError);
+          });
+      } else if (displayName) {
+        // Update user profile without a profile picture
         updateProfile(user, { displayName })
-          .then(() => {})
+          .then(() => {
+            // Profile updated successfully
+            handleSignIn(email, password);
+          })
           .catch((profileError) => {
             console.error("Error updating profile:", profileError);
           });
+      } else {
+        // No profile picture or display name provided
+        handleSignIn(email, password);
       }
-
-      handleSignIn(email, password);
     })
     .catch((error) => {
       console.log(error.message, "what is this");
