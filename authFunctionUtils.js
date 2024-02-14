@@ -29,7 +29,10 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
                   console.error("Error updating profile:", profileError);
                 });
             } else {
-              handleSignIn(email, password);
+              updateProfile(user, { photoURL: imageURL }).then(() => {
+                // Profile updated successfully
+                handleSignIn(email, password);
+              });
             }
           })
           .catch((uploadError) => {

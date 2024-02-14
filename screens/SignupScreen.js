@@ -52,6 +52,7 @@ const SignupScreen = () => {
     }
     setProfilePic(result.assets[0]);
   };
+
   const handleSignUpPress = () => {
     try {
       if (isSignupDisabled) {
