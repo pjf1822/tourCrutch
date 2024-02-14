@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import React from "react";
 import { stateOptions } from "../helpers";
 import MyButton from "../components/MyButton";
@@ -52,7 +52,7 @@ const VenueForm = ({
             numberOfLines={1}
             itemStyle={{
               fontFamily: regFont.fontFamily,
-              fontSize: 18,
+              fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 18,
               width: "80%",
               backgroundColor: myColors.beige,
               alignSelf: "center",

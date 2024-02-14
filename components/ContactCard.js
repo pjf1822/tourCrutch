@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Linking,
+  Platform,
 } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
@@ -54,6 +55,6 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontFamily: regFont.fontFamily,
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
   },
 });

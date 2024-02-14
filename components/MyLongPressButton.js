@@ -1,4 +1,10 @@
-import { Text, StyleSheet, TouchableOpacity, Animated } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import { myColors, regFont } from "../theme";
 
@@ -64,10 +70,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   touchable: {
-    backgroundColor: "transparent", // Set the background color to transparent for the TouchableOpacity
+    backgroundColor: "transparent",
+    // Set the background color to transparent for the TouchableOpacity
   },
   textStyle: {
     fontFamily: regFont.fontFamily,
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
   },
 });

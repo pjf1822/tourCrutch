@@ -5,6 +5,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Text,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MyBottomRowButton from "../components/MyBottomRowButton";
@@ -156,7 +157,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
                 style={{
                   fontFamily: regFont.fontFamily,
                   padding: 10,
-                  fontSize: 16,
+                  fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 16,
                 }}
               >
                 Add Contact Cards

@@ -11,7 +11,6 @@ const ContactSection = ({
   venueData,
   setVenueInfo,
 }) => {
-  console.log(venueInfo, "the venue info");
   const renderItem = ({ item }) => (
     <ContactCard
       data={item}

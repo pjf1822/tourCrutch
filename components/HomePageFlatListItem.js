@@ -11,6 +11,7 @@ const HomePageFlatListItem = ({ item, navigation }) => {
   const formatAddress = (address) => {
     return address.replace(/,+/g, ",").trim();
   };
+
   return (
     <TouchableOpacity
       style={styles.flatListItemWrapper}
@@ -40,17 +41,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
     backgroundColor: myColors.beige,
     alignSelf: "center",
     borderRadius: 10,
     marginBottom: 6,
-    // backgroundColor:
-    //   Platform.OS === "ios" && Platform.isPad ? "blue" : "yellow",
+    padding: Platform.OS === "ios" && Platform.isPad ? 15 : 10,
   },
   itemStyle: {
     fontFamily: regFont.fontFamily,
     flex: 1,
     color: myColors.black,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 15,
+  },
+  displayedDataText: {
+    fontFamily: regFont.fontFamily,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 15,
+    paddingRight: Platform.OS === "ios" && Platform.isPad ? 20 : 0,
   },
 });
