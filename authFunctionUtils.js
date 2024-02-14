@@ -16,55 +16,46 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
     .then((userCredential) => {
       const user = userCredential.user;
 
-      if (profilePic || displayName) {
-        const profileData = {
-          displayName: displayName,
-        };
+      const profileData = {
+        displayName: displayName,
+      };
 
-        if (profilePic.uri) {
-          uploadUserProfilePic(profilePic.uri, user)
-            .then((imageURL) => {
-              profileData.photoURL = imageURL;
-              updateProfile(user, profileData)
-                .then(() => {
-                  handleSignIn(email, password);
-                  showToast("Account created!", true, "top");
-                })
-                .catch((profileError) => {
-                  console.error("Error updating profile:", profileError);
-                  showToast(
-                    "An error occurred during profile update",
-                    false,
-                    "top"
-                  );
-                });
-            })
-            .catch((uploadError) => {
-              console.error("Error uploading profile picture:", uploadError);
-              showToast(
-                "An error occurred during profile picture upload",
-                false,
-                "top"
-              );
-            });
-        } else {
-          updateProfile(user, profileData)
-            .then(() => {
-              handleSignIn(email, password);
-              showToast("Account created!", true, "top");
-            })
-            .catch((profileError) => {
-              console.error("Error updating profile:", profileError);
-              showToast(
-                "An error occurred during profile update",
-                false,
-                "top"
-              );
-            });
-        }
+      if (profilePic.uri) {
+        uploadUserProfilePic(profilePic.uri, user)
+          .then((imageURL) => {
+            profileData.photoURL = imageURL;
+            updateProfile(user, profileData)
+              .then(() => {
+                handleSignIn(email, password);
+                showToast("Account created!", true, "top");
+              })
+              .catch((profileError) => {
+                console.error("Error updating profile:", profileError);
+                showToast(
+                  "An error occurred during profile update",
+                  false,
+                  "top"
+                );
+              });
+          })
+          .catch((uploadError) => {
+            console.error("Error uploading profile picture:", uploadError);
+            showToast(
+              "An error occurred during profile picture upload",
+              false,
+              "top"
+            );
+          });
       } else {
-        handleSignIn(email, password);
-        showToast("Account created!", true, "top");
+        updateProfile(user, profileData)
+          .then(() => {
+            handleSignIn(email, password);
+            showToast("Account created!", true, "top");
+          })
+          .catch((profileError) => {
+            console.error("Error updating profile:", profileError);
+            showToast("An error occurred during profile update", false, "top");
+          });
       }
     })
     .catch((error) => {
