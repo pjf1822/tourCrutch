@@ -22,7 +22,6 @@ export const showToast = (toastMessage, success, position) => {
     backgroundColor: backgroundColor,
     textColor: textColor,
     opacity: 1,
-    // fontSize: 23,
     zIndex: 999,
     fontSize: Platform.OS === "ios" && Platform.isPad ? 30 : 23,
   });
