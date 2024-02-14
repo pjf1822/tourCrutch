@@ -5,10 +5,10 @@ import {
   ImageBackground,
   TouchableOpacity,
   Text,
-  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MyBottomRowButton from "../components/MyBottomRowButton";
+import MyBottomRowButton from "../components/MyComponents/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
@@ -33,6 +33,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isVenueDataModalVisible, setIsVenueDataModalVisible] = useState(false);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
+  const [PDFUploadProgress, setPDFUploadProgress] = useState(0);
 
   const [venueInfo, setVenueInfo] = useState({
     name: "",
@@ -95,6 +96,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           address: venueInfo.address,
           link: venueInfo.link,
           pdfs: venueInfo.pdfs,
+        },
+        (progress) => {
+          setPDFUploadProgress(progress);
         }
       );
       if (updatedInfo === undefined) {
@@ -153,7 +157,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
                 style={{
                   fontFamily: regFont.fontFamily,
                   padding: 10,
-                  fontSize: 16,
+                  fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 16,
                 }}
               >
                 Add Contact Cards
@@ -206,6 +210,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         user={user}
         setVenueInfo={setVenueInfo}
         handleUploadPdf={handleUploadPdf}
+        PDFUploadProgress={PDFUploadProgress}
       />
       <UpdateDataFormModal
         isVenueDataModalVisible={isVenueDataModalVisible}

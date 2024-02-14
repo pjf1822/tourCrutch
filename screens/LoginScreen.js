@@ -7,16 +7,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { handleSignIn } from "../authFunctionUtils";
-import { auth } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import { useUser } from "../Contexts/UserContext";
-import MyButton from "../components/MyButton";
-import MyTextInput from "../components/MyTextInput";
+import MyButton from "../components/MyComponents/MyButton";
+import MyTextInput from "../components/MyComponents/MyTextInput";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser } = useUser();
 
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
@@ -42,7 +39,7 @@ const LoginScreen = () => {
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder={"email"}
+            placeholder={"Email"}
           />
           <View style={styles.spacer}></View>
 

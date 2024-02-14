@@ -45,7 +45,7 @@ const ContactSection = ({
         horizontal={true}
         renderItem={renderItem}
         keyExtractor={(item) => item.name}
-        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+        ItemSeparatorComponent={() => <View style={{ width: 30 }} />}
         contentContainerStyle={{
           justifyContent: "center",
         }}

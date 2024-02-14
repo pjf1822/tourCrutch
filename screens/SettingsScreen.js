@@ -5,14 +5,15 @@ import {
   Image,
   Dimensions,
   ImageBackground,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { myColors, regFont, upperMargin } from "../theme";
 import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
-import MyTextInput from "../components/MyTextInput";
-import MyButton from "../components/MyButton";
+import MyTextInput from "../components/MyComponents/MyTextInput";
+import MyButton from "../components/MyComponents/MyButton";
 import { pickImage } from "../storageFunctionUtils";
 import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
@@ -26,7 +27,6 @@ const SettingsScreen = () => {
 
   const [visible, setVisible] = useState(false);
 
-  console.log(user);
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -177,5 +177,9 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: 7,
+  },
+
+  text: {
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
 });

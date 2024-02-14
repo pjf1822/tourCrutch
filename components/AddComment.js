@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import React, { useState } from "react";
-import MyTextInput from "./MyTextInput";
-import MyButton from "./MyButton";
+import MyTextInput from "./MyComponents/MyTextInput";
+import MyButton from "./MyComponents/MyButton";
 import { createComment } from "../api";
 import { addComment } from "../crudUtils/comment";
 import { showToast } from "../helpers";

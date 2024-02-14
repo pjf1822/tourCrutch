@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../theme";
@@ -60,6 +61,7 @@ const DescriptionSection = ({
             style={{
               fontFamily: regFont.fontFamily,
               color: myColors.white,
+              fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
             }}
           >
             Description
@@ -98,6 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     minHeight: 100,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
   },
 
   localButtonStyle: {
@@ -114,6 +117,6 @@ const styles = StyleSheet.create({
   textStyle: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
   },
 });

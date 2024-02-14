@@ -4,13 +4,14 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
+  Platform,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
 import FlatListSeparator from "../components/FlatListSeparator";
 import { SearchBar } from "react-native-elements";
 import { useFetchVenues } from "../api";
-import MyButton from "../components/MyButton";
+import MyButton from "../components/MyComponents/MyButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { filterVenues } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
@@ -75,12 +76,14 @@ const HomeScreen = ({ navigation, route }) => {
             flex: 1,
             fontFamily: regFont.fontFamily,
             backgroundColor: "transparent",
+            fontSize: Platform.OS === "ios" && Platform.isPad ? 28 : 18,
           }}
           // onClear={() => setSearch("")}
           containerStyle={{
             backgroundColor: "transparent",
             borderBottomWidth: "0px",
             borderTopWidth: "0px",
+            paddingBottom: Platform.OS === "ios" && Platform.isPad ? 10 : 0,
           }}
           inputContainerStyle={{
             backgroundColor: "transparent",

@@ -9,20 +9,54 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { showToast } from "./helpers";
+import { uploadUserProfilePic } from "./storageFunctionUtils";
 
-export const handleSignUp = (email, password, displayName) => {
+export const handleSignUp = (email, password, displayName, profilePic) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      if (displayName) {
-        updateProfile(user, { displayName })
-          .then(() => {})
+
+      const profileData = {
+        displayName: displayName,
+      };
+
+      if (profilePic.uri) {
+        uploadUserProfilePic(profilePic.uri, user)
+          .then((imageURL) => {
+            profileData.photoURL = imageURL;
+            updateProfile(user, profileData)
+              .then(() => {
+                handleSignIn(email, password);
+                showToast("Account created!", true, "top");
+              })
+              .catch((profileError) => {
+                console.error("Error updating profile:", profileError);
+                showToast(
+                  "An error occurred during profile update",
+                  false,
+                  "top"
+                );
+              });
+          })
+          .catch((uploadError) => {
+            console.error("Error uploading profile picture:", uploadError);
+            showToast(
+              "An error occurred during profile picture upload",
+              false,
+              "top"
+            );
+          });
+      } else {
+        updateProfile(user, profileData)
+          .then(() => {
+            handleSignIn(email, password);
+            showToast("Account created!", true, "top");
+          })
           .catch((profileError) => {
             console.error("Error updating profile:", profileError);
+            showToast("An error occurred during profile update", false, "top");
           });
       }
-
-      handleSignIn(email, password);
     })
     .catch((error) => {
       console.log(error.message, "what is this");
@@ -43,11 +77,23 @@ export const handleSignUp = (email, password, displayName) => {
 };
 
 export const handleSignIn = (email, password) => {
+  if (!email || !password) {
+    showToast("Please fill in all fields", false, "top");
+    return;
+  }
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      const user = userCredential.user;
+      showToast("USer signed in!", true, "top");
     })
-    .catch((error) => {});
+    .catch((error) => {
+      console.log(error.message);
+      if (error.message === "Firebase: Error (auth/invalid-email).") {
+        showToast("Invalid email or password", false, "top");
+      }
+      if (error.message === "Firebase: Error (auth/invalid-credential).") {
+        showToast("Wrong password", false, "top");
+      }
+    });
 };
 
 export const handleSignOut = () => {

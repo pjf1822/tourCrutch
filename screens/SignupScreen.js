@@ -4,24 +4,54 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  Button,
+  TouchableOpacity,
+  Text,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { handleSignUp } from "../authFunctionUtils";
-import MyButton from "../components/MyButton";
-import MyTextInput from "../components/MyTextInput";
+import MyButton from "../components/MyComponents/MyButton";
+import MyTextInput from "../components/MyComponents/MyTextInput";
 import { showToast } from "../helpers";
+import * as ImagePicker from "expo-image-picker";
+import { myColors, regFont } from "../theme";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [profilePic, setProfilePic] = useState({
+    assetId: null,
+    base64: null,
+    duration: null,
+    exif: null,
+    fileName: null,
+    fileSize: null,
+    height: null,
+    type: null,
+    uri: null,
+    width: null,
+  });
 
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
 
   const isSignupDisabled = !email || !displayName || !password || !password2;
+
+  const handleAddProfilePic = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (result.canceled == true) {
+      return;
+    }
+    setProfilePic(result.assets[0]);
+  };
 
   const handleSignUpPress = () => {
     try {
@@ -34,7 +64,7 @@ const SignupScreen = () => {
         return;
       }
 
-      handleSignUp(email, password, displayName);
+      handleSignUp(email, password, displayName, profilePic);
     } catch (error) {
       console.error("Sign Up Error:", error);
     }
@@ -45,15 +75,23 @@ const SignupScreen = () => {
       style={styles.background}
       blurRadius={1}
     >
-      <Image
-        style={{
-          height: 150,
-          width: 150,
-          alignSelf: "center",
-          marginTop: windowHeight / 10,
-        }}
-        source={require("../assets/logito.png")}
-      />
+      {!profilePic.uri ? (
+        <Image
+          style={{
+            height: 150,
+            width: 150,
+            alignSelf: "center",
+            marginTop: windowHeight / 10,
+          }}
+          source={require("../assets/logito.png")}
+        />
+      ) : (
+        <Image
+          source={{ uri: profilePic.uri }}
+          style={[styles.userPhoto, { marginTop: windowHeight / 10 }]}
+        />
+      )}
+
       <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
         <View>
           <MyTextInput
@@ -88,6 +126,13 @@ const SignupScreen = () => {
           />
           <View style={styles.spacer}></View>
 
+          <TouchableOpacity
+            style={styles.buttonWrapper}
+            onPress={handleAddProfilePic}
+          >
+            <Text style={styles.textStyle}>Add Profile Pic? (Optional)</Text>
+          </TouchableOpacity>
+
           <MyButton title="Sign Up" onPress={handleSignUpPress} />
         </View>
         <View style={{ paddingBottom: windowHeight / 13 }}>
@@ -117,5 +162,30 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: 10,
+  },
+  buttonWrapper: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: myColors.white,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: myColors.black,
+    padding: 10,
+    width: "80%",
+    alignSelf: "center",
+    marginBottom: 15,
+  },
+  textStyle: {
+    fontFamily: regFont.fontFamily,
+    color: myColors.red,
+    fontSize: 17,
+  },
+  userPhoto: {
+    height: 120,
+    width: 120,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: myColors.red,
+    alignSelf: "center",
   },
 });

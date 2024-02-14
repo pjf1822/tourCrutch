@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { getVenuePDF } from "../storageFunctionUtils";
 import { myColors } from "../theme";
@@ -17,8 +17,6 @@ const RenderPDFItem = ({
   item,
   setVenueInfo,
 }) => {
-  const [firstPart, restPart] = item?.split("-");
-
   const handleLongPress = async () => {
     const updatedPDFs = [...venueData.pdfs];
     const itemIndex = updatedPDFs.indexOf(item);
@@ -47,26 +45,27 @@ const RenderPDFItem = ({
     <TouchableOpacity
       onPress={() => getVenuePDF(venueId, item)}
       onLongPress={handleLongPress}
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
     >
-      <Icon name="file-pdf-o" size={40} color={myColors.black} />
+      <Icon
+        name="file-pdf-o"
+        size={Platform.OS === "ios" && Platform.isPad ? 50 : 30}
+        color={myColors.black}
+      />
       <Text
         style={{
           color: myColors.black,
           fontFamily: regFont.fontFamily,
           flexWrap: "wrap",
+          paddingTop: 9,
+          paddingBottom: 5,
+          fontSize: Platform.OS === "ios" && Platform.isPad ? 29 : 17,
         }}
       >
-        {firstPart}
-      </Text>
-      <Text
-        style={{
-          color: myColors.black,
-          fontFamily: regFont.fontFamily,
-          flexWrap: "wrap",
-          fontSize: 15,
-        }}
-      >
-        {restPart}
+        {item}
       </Text>
     </TouchableOpacity>
   );

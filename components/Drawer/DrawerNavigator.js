@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, Image, View } from "react-native";
+import { Text, TouchableOpacity, Image, View, Platform } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -9,15 +9,15 @@ import HomeScreen from "../../screens/HomeScreen";
 import VenueDetailScreen from "../../screens/VenueDetailScreen";
 import NewVenueScreen from "../../screens/NewVenueScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
-import { auth } from "../../firebaseConfig.js";
 import { showToast } from "../../helpers";
 import { myColors, regFont } from "../../theme";
-import MyButton from "../MyButton";
+import MyButton from "../MyComponents/MyButton";
 import { handleSignOut } from "../../authFunctionUtils";
 
 const commonDrawerStyles = {
   drawerLabelStyle: {
     fontFamily: regFont.fontFamily,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 17,
   },
 
   drawerActiveTintColor: myColors.beige,
@@ -47,12 +47,13 @@ function CustomDrawerContent({ user, ...props }) {
           marginBottom: 10,
           width: "80%",
           alignSelf: "center",
+          fontSize: Platform.OS === "ios" && Platform.isPad ? 25 : 17,
         }}
       >
         {user?.email}
       </Text>
       <DrawerItemList {...props} />
-      <MyButton title="signout" onPress={() => signOut()} />
+      <MyButton title="Signout" onPress={() => signOut()} />
     </DrawerContentScrollView>
   );
 }
@@ -76,7 +77,12 @@ const DrawerNavigator = ({ user }) => {
           >
             <Image
               source={require("../../assets/logo.png")}
-              style={{ width: 40, height: 40, marginLeft: 10 }}
+              style={{
+                width: Platform.OS === "ios" && Platform.isPad ? 70 : 40,
+                height: Platform.OS === "ios" && Platform.isPad ? 70 : 40,
+
+                marginLeft: 10,
+              }}
             />
           </TouchableOpacity>
         ),
@@ -89,6 +95,7 @@ const DrawerNavigator = ({ user }) => {
           drawerItemStyle: {
             width: "80%",
             alignSelf: "center",
+            marginBottom: Platform.OS === "ios" && Platform.isPad ? 6 : 2,
           },
         }}
         component={HomeScreen}
@@ -101,6 +108,7 @@ const DrawerNavigator = ({ user }) => {
           drawerItemStyle: {
             width: "80%",
             alignSelf: "center",
+            marginBottom: Platform.OS === "ios" && Platform.isPad ? 6 : 2,
           },
         }}
         component={NewVenueScreen}
@@ -111,6 +119,7 @@ const DrawerNavigator = ({ user }) => {
           drawerItemStyle: {
             width: "80%",
             alignSelf: "center",
+            marginBottom: Platform.OS === "ios" && Platform.isPad ? 6 : 2,
           },
         }}
         name="Settings"
