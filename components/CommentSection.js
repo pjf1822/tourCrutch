@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
@@ -55,20 +62,23 @@ const CommentSection = ({ venueId, userId, displayName }) => {
     <View>
       {allComments?.map((comment, index) => (
         <View key={index} style={styles.commentWrapper}>
-          <TouchableOpacity
-            onPress={() =>
-              deleteCommentHandler(
-                venueId,
-                comment._id,
-                deleteCommentMutation,
-                setAllComments
-              )
-            }
-          >
-            <Icon name="close" />
-          </TouchableOpacity>
+          {userId === comment.userUid && (
+            <TouchableOpacity
+              onLongPress={() =>
+                deleteCommentHandler(
+                  venueId,
+                  comment._id,
+                  deleteCommentMutation,
+                  setAllComments
+                )
+              }
+            >
+              <Icon size={17} name="close" />
+            </TouchableOpacity>
+          )}
+
           <Text style={styles.commentText}>{comment?.comment}</Text>
-          <Text style={styles.commentText}>{comment?.userDisplayName}</Text>
+          <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
           {userPhotos[comment?.userUid] === "noPic" ? (
             <Image source={Smiley} style={styles.userPhoto} />
           ) : (
@@ -107,7 +117,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: myColors.black,
     borderRadius: 10,
-    padding: 3,
+    padding: Platform.OS === "ios" && Platform.isPad ? 7 : 3,
+    marginBottom: 10,
   },
   commentText: {
     fontFamily: regFont.fontFamily,
@@ -115,7 +126,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexWrap: "wrap",
-    maxWidth: "65%",
+    flex: 4,
+    marginLeft: 5,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 13,
+  },
+  usernameText: {
+    fontFamily: regFont.fontFamily,
+    display: "flex",
+    textAlign: "right",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    flex: 1,
+    marginRight: Platform.OS === "ios" && Platform.isPad ? 14 : 5,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 13,
   },
   userPhoto: { height: 40, width: 40, borderRadius: 25 },
 });

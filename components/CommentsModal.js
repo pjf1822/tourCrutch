@@ -22,23 +22,14 @@ const CommentsModal = ({
           backgroundColor: myColors.beige,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          padding: 20,
+          padding: 7,
         }}
       >
-        {/* <CommentSection
+        <CommentSection
           venueId={venueId}
           userId={user?.uid}
           displayName={user?.displayName}
-        /> */}
-        <Text
-          style={{
-            fontFamily: regFont.fontFamily,
-            fontSize: 18,
-            textAlign: "center",
-          }}
-        >
-          Coming Soon
-        </Text>
+        />
       </View>
     </Modal>
   );

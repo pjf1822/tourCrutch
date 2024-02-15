@@ -7,6 +7,7 @@ import {
   Button,
   TouchableOpacity,
   Text,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   textStyle: {
     fontFamily: regFont.fontFamily,
     color: myColors.red,
-    fontSize: 17,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
   userPhoto: {
     height: 120,

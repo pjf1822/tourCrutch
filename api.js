@@ -93,6 +93,7 @@ export const useFetchVenueComments = (venueId) => {
     }
   );
 };
+
 export const createComment = (venueId, commentData) => {
   return useMutation(async () => {
     return fetch(`${apiUrl}/comments/createcomment/${venueId}`, {
