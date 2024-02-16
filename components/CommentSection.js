@@ -5,6 +5,7 @@ import {
   Image,
   ActivityIndicator,
   Platform,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
@@ -60,41 +61,43 @@ const CommentSection = ({ venueId, userId, displayName }) => {
 
   return (
     <View>
-      {allComments?.map((comment, index) => (
-        <View key={index} style={styles.commentWrapper}>
-          {userId === comment.userUid && (
-            <TouchableOpacity
-              onLongPress={() =>
-                deleteCommentHandler(
-                  venueId,
-                  comment._id,
-                  deleteCommentMutation,
-                  setAllComments
-                )
-              }
-            >
-              <Icon size={17} name="close" />
-            </TouchableOpacity>
-          )}
+      <ScrollView>
+        {allComments?.map((comment, index) => (
+          <View key={index} style={styles.commentWrapper}>
+            {userId === comment.userUid && (
+              <TouchableOpacity
+                onLongPress={() =>
+                  deleteCommentHandler(
+                    venueId,
+                    comment._id,
+                    deleteCommentMutation,
+                    setAllComments
+                  )
+                }
+              >
+                <Icon size={17} name="close" />
+              </TouchableOpacity>
+            )}
 
-          <Text style={styles.commentText}>{comment?.comment}</Text>
-          <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
-          {userPhotos[comment?.userUid] === "noPic" ? (
-            <Image source={Smiley} style={styles.userPhoto} />
-          ) : (
-            <>
-              {arePicsLoading ? (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : (
-                <Image
-                  source={{ uri: userPhotos[comment?.userUid] }}
-                  style={styles.userPhoto}
-                />
-              )}
-            </>
-          )}
-        </View>
-      ))}
+            <Text style={styles.commentText}>{comment?.comment}</Text>
+            <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
+            {userPhotos[comment?.userUid] === "noPic" ? (
+              <Image source={Smiley} style={styles.userPhoto} />
+            ) : (
+              <>
+                {arePicsLoading ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                  <Image
+                    source={{ uri: userPhotos[comment?.userUid] }}
+                    style={styles.userPhoto}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        ))}
+      </ScrollView>
       <AddComment
         venueId={venueId}
         userId={userId}
@@ -128,17 +131,17 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     flex: 4,
     marginLeft: 5,
-    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 13,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 15,
   },
   usernameText: {
     fontFamily: regFont.fontFamily,
     display: "flex",
-    textAlign: "right",
+    textAlign: "left",
     justifyContent: "center",
     flexWrap: "wrap",
     flex: 1,
     marginRight: Platform.OS === "ios" && Platform.isPad ? 14 : 5,
-    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 13,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 15,
   },
   userPhoto: { height: 40, width: 40, borderRadius: 25 },
 });
