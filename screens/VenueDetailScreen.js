@@ -35,7 +35,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [PDFUploadProgress, setPDFUploadProgress] = useState(0);
 
-  const [venueInfo, setVenueInfo] = useState({
+  const [updatedVenueData, setUpdatedVenueData] = useState({
     name: "",
     address: "",
     link: "",
@@ -61,25 +61,29 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
   const windowHeight = Dimensions.get("window").height;
 
-  const { data: venueData, isLoading, isError } = useFetchVenueById(venueId);
+  const {
+    data: initialVenueData,
+    isLoading,
+    isError,
+  } = useFetchVenueById(venueId);
 
   useEffect(() => {
-    if (venueData) {
-      setVenueInfo({
-        name: venueData.name,
-        address: venueData.address,
-        link: venueData.link,
-        pdfs: venueData.pdfs || [],
-        comments: venueData.comments,
-        createdByUID: venueData.createdByUID,
-        contactCards: venueData?.contactCards,
-        description: venueData.description,
+    if (initialVenueData) {
+      setUpdatedVenueData({
+        name: initialVenueData.name,
+        address: initialVenueData.address,
+        link: initialVenueData.link,
+        pdfs: initialVenueData.pdfs || [],
+        comments: initialVenueData.comments,
+        createdByUID: initialVenueData.createdByUID,
+        contactCards: initialVenueData?.contactCards,
+        description: initialVenueData.description,
       });
     }
-  }, [venueData]);
+  }, [initialVenueData]);
 
   const handleUploadPdf = async () => {
-    if (venueData?.pdfs?.length >= 8) {
+    if (initialVenueData?.pdfs?.length >= 8) {
       showToast("This venue has too many files", false, "top");
       return;
     }
@@ -88,14 +92,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
       const updatedInfo = await uploadPDF(
         updateVenueInfoMutation,
         venueId,
-        venueInfo?.createdByUID,
+        updatedVenueData?.createdByUID,
         user?.uid,
-        venueData,
+        initialVenueData,
         {
-          name: venueInfo.name,
-          address: venueInfo.address,
-          link: venueInfo.link,
-          pdfs: venueInfo.pdfs,
+          name: updatedVenueData.name,
+          address: updatedVenueData.address,
+          link: updatedVenueData.link,
+          pdfs: updatedVenueData.pdfs,
         },
         (progress) => {
           setPDFUploadProgress(progress);
@@ -104,7 +108,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
       if (updatedInfo === undefined) {
         return;
       }
-      setVenueInfo(updatedInfo.venue);
+      setUpdatedVenueData(updatedInfo.venue);
     } catch (error) {
       console.error(error);
     }
@@ -123,14 +127,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
           marginRight: 7,
         }}
       >
-        <DisplayedDataForm venueInfo={venueInfo} />
+        <DisplayedDataForm updatedVenueData={updatedVenueData} />
         <ContactSection
-          venueInfo={venueInfo}
+          updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
           venueId={venueId}
           user={user}
-          venueData={venueData}
-          setVenueInfo={setVenueInfo}
+          initialVenueData={initialVenueData}
+          setUpdatedVenueData={setUpdatedVenueData}
         />
         <View
           style={{
@@ -144,7 +148,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
               style={{ color: "white", fontSize: 24, marginTop: 6 }}
             />
           </TouchableOpacity>
-          {venueInfo?.contactCards?.length === 0 && (
+          {updatedVenueData?.contactCards?.length === 0 && (
             <TouchableOpacity
               onPress={toggleContactModal}
               style={{
@@ -166,12 +170,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
           )}
         </View>
         <DescriptionSection
-          venueInfo={venueInfo}
-          setVenueInfo={setVenueInfo}
+          updatedVenueData={updatedVenueData}
+          setUpdatedVenueData={setUpdatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
           venueId={venueId}
           user={user}
-          venueData={venueData}
+          initialVenueData={initialVenueData}
         />
       </View>
 
@@ -203,27 +207,27 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <FilesModal
         isPDFModalVisible={isPDFModalVisible}
         togglePDFModal={togglePDFModal}
-        venueInfo={venueInfo}
-        venueData={venueData}
+        updatedVenueData={updatedVenueData}
+        initialVenueData={initialVenueData}
         updateVenueInfoMutation={updateVenueInfoMutation}
         venueId={venueId}
         user={user}
-        setVenueInfo={setVenueInfo}
+        setUpdatedVenueData={setUpdatedVenueData}
         handleUploadPdf={handleUploadPdf}
         PDFUploadProgress={PDFUploadProgress}
       />
       <UpdateDataFormModal
         isVenueDataModalVisible={isVenueDataModalVisible}
         toggleVenueDataModal={toggleVenueDataModal}
-        venueInfo={venueInfo}
+        updatedVenueData={updatedVenueData}
         updateVenueInfoMutation={updateVenueInfoMutation}
         venueId={venueId}
         user={user}
-        venueData={venueData}
+        initialVenueData={initialVenueData}
         navigation={navigation}
         deleteVenueMutation={deleteVenueMutation}
         windowHeight={windowHeight}
-        setVenueInfo={setVenueInfo}
+        setUpdatedVenueData={setUpdatedVenueData}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}
@@ -234,12 +238,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <AddContactCardModal
         isContactModalVisible={isContactModalVisible}
         toggleContactModal={toggleContactModal}
-        venueInfo={venueInfo}
+        updatedVenueData={updatedVenueData}
         updateVenueInfoMutation={updateVenueInfoMutation}
         venueId={venueId}
         user={user}
-        venueData={venueData}
-        setVenueInfo={setVenueInfo}
+        initialVenueData={initialVenueData}
+        setUpdatedVenueData={setUpdatedVenueData}
       />
     </ImageBackground>
   );

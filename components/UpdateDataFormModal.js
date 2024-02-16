@@ -11,15 +11,15 @@ import VenueForm from "./VenueForm";
 const UpdateDataFormModal = ({
   isVenueDataModalVisible,
   toggleVenueDataModal,
-  venueInfo,
+  updatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  venueData,
+  initialVenueData,
   navigation,
   deleteVenueMutation,
   windowHeight,
-  setVenueInfo,
+  setUpdatedVenueData,
 }) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
@@ -56,16 +56,16 @@ const UpdateDataFormModal = ({
 
     if (
       // Did the fields actually change
-      name !== venueData?.name ||
-      address !== venueData?.address ||
-      link !== venueData?.link
+      name !== initialVenueData?.name ||
+      address !== initialVenueData?.address ||
+      link !== initialVenueData?.link
     ) {
       const response = await handleUpdateVenueInfo(
         updateVenueInfoMutation,
         venueId,
-        venueInfo?.createdByUID,
+        updatedVenueData?.createdByUID,
         user?.uid,
-        venueData,
+        initialVenueData,
         {
           name,
           address,
@@ -73,7 +73,7 @@ const UpdateDataFormModal = ({
         }
       );
 
-      setVenueInfo(response.venue);
+      setUpdatedVenueData(response.venue);
 
       toggleVenueDataModal();
     } else {
@@ -85,7 +85,7 @@ const UpdateDataFormModal = ({
     try {
       await handleDelete(
         venueId,
-        venueInfo?.createdByUID,
+        updatedVenueData?.createdByUID,
         user?.uid,
         navigation,
         deleteVenueMutation
@@ -96,7 +96,7 @@ const UpdateDataFormModal = ({
       console.error("Delete failed:", error);
     }
   };
-  const transformedData = transformVenueData(venueData);
+  const transformedData = transformVenueData(initialVenueData);
 
   return (
     <Modal

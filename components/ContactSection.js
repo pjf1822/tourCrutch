@@ -4,12 +4,12 @@ import ContactCard from "./ContactCard";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 
 const ContactSection = ({
-  venueInfo,
+  updatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  venueData,
-  setVenueInfo,
+  initialVenueData,
+  setUpdatedVenueData,
 }) => {
   const renderItem = ({ item }) => (
     <ContactCard
@@ -19,19 +19,19 @@ const ContactSection = ({
   );
 
   const handleDeleteContactCard = (contactCardId) => {
-    const updatedContactCards = venueInfo?.contactCards.filter(
+    const updatedContactCards = updatedVenueData?.contactCards.filter(
       (card) => card?._id !== contactCardId
     );
 
     handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
-      venueInfo?.createdByUID,
+      updatedVenueData?.createdByUID,
       user?.uid,
-      venueData,
+      initialVenueData,
       { contactCards: updatedContactCards }
     );
-    setVenueInfo((prevVenueInfo) => ({
+    setUpdatedVenueData((prevVenueInfo) => ({
       ...prevVenueInfo,
       contactCards: updatedContactCards,
     }));
@@ -40,7 +40,7 @@ const ContactSection = ({
   return (
     <View style={styles.app}>
       <FlatList
-        data={venueInfo?.contactCards}
+        data={updatedVenueData?.contactCards}
         numColumns={1}
         horizontal={true}
         renderItem={renderItem}

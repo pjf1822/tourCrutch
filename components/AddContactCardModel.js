@@ -9,12 +9,12 @@ import { handleUpdateVenueInfo } from "../crudUtils/venue";
 const AddContactCardModal = ({
   isContactModalVisible,
   toggleContactModal,
-  venueInfo,
+  updatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  venueData,
-  setVenueInfo,
+  initialVenueData,
+  setUpdatedVenueData,
 }) => {
   const [card, setCard] = useState({
     name: "",
@@ -27,18 +27,18 @@ const AddContactCardModal = ({
   };
 
   const handleAddContactCard = () => {
-    const updatedContactCards = [...venueInfo.contactCards];
+    const updatedContactCards = [...updatedVenueData.contactCards];
     updatedContactCards.push(card);
 
     handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
-      venueInfo?.createdByUID,
+      updatedVenueData?.createdByUID,
       user?.uid,
-      venueData,
+      initialVenueData,
       { contactCards: updatedContactCards }
     );
-    setVenueInfo((prevVenueInfo) => ({
+    setUpdatedVenueData((prevVenueInfo) => ({
       ...prevVenueInfo,
       contactCards: updatedContactCards,
     }));
@@ -90,7 +90,7 @@ const AddContactCardModal = ({
         <Text
           style={{
             fontFamily: regFont.fontFamily,
-            fontSize: 20,
+            fontSize: Platform.OS === "ios" && Platform.isPad ? 26 : 20,
             textAlign: "center",
             marginBottom: 7,
           }}

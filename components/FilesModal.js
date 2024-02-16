@@ -9,12 +9,12 @@ import { myColors } from "../theme";
 const FilesModal = ({
   isPDFModalVisible,
   togglePDFModal,
-  venueInfo,
+  updatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  setVenueInfo,
-  venueData,
+  setUpdatedVenueData,
+  initialVenueData,
   handleUploadPdf,
   PDFUploadProgress,
 }) => {
@@ -34,16 +34,16 @@ const FilesModal = ({
         }}
       >
         <FlatList
-          data={venueInfo?.pdfs}
+          data={updatedVenueData?.pdfs}
           renderItem={({ item }) => (
             <RenderPDFItem
               updateVenueInfoMutation={updateVenueInfoMutation}
               venueId={venueId}
-              createdByUID={venueInfo?.createdByUID}
+              createdByUID={updatedVenueData?.createdByUID}
               userUID={user?.uid}
-              venueData={venueData}
+              initialVenueData={initialVenueData}
               item={item}
-              setVenueInfo={setVenueInfo}
+              setUpdatedVenueData={setUpdatedVenueData}
             />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}

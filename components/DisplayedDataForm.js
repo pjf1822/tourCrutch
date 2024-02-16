@@ -9,10 +9,10 @@ import {
 import React from "react";
 import { myColors, regFont } from "../theme";
 
-const DisplayedDataForm = ({ venueInfo }) => {
+const DisplayedDataForm = ({ updatedVenueData }) => {
   const handleLinkPress = () => {
-    if (venueInfo?.link) {
-      Linking.openURL(venueInfo?.link);
+    if (updatedVenueData?.link) {
+      Linking.openURL(updatedVenueData?.link);
     }
   };
 
@@ -21,11 +21,11 @@ const DisplayedDataForm = ({ venueInfo }) => {
   };
   return (
     <View style={styles.displayedDataWrapper}>
-      <Text style={styles.displayedDataText}>{venueInfo?.name}</Text>
+      <Text style={styles.displayedDataText}>{updatedVenueData?.name}</Text>
       <Text style={styles.displayedDataText}>
-        {formatAddress(venueInfo?.address)}
+        {formatAddress(updatedVenueData?.address)}
       </Text>
-      {venueInfo?.link && (
+      {updatedVenueData?.link && (
         <TouchableOpacity onPress={handleLinkPress}>
           <Text
             style={[
