@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
 import { useStorage } from "../Contexts/StorageContext";
@@ -8,6 +16,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { deleteComment, useFetchVenueComments } from "../api";
 import { deleteCommentHandler } from "../crudUtils/comment";
 import { myColors, regFont } from "../theme";
+import { showToast } from "../helpers";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
@@ -53,38 +62,46 @@ const CommentSection = ({ venueId, userId, displayName }) => {
 
   return (
     <View>
-      {allComments?.map((comment, index) => (
-        <View key={index} style={styles.commentWrapper}>
-          <TouchableOpacity
-            onPress={() =>
-              deleteCommentHandler(
-                venueId,
-                comment._id,
-                deleteCommentMutation,
-                setAllComments
-              )
-            }
-          >
-            <Icon name="close" />
-          </TouchableOpacity>
-          <Text style={styles.commentText}>{comment?.comment}</Text>
-          <Text style={styles.commentText}>{comment?.userDisplayName}</Text>
-          {userPhotos[comment?.userUid] === "noPic" ? (
-            <Image source={Smiley} style={styles.userPhoto} />
-          ) : (
-            <>
-              {arePicsLoading ? (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : (
-                <Image
-                  source={{ uri: userPhotos[comment?.userUid] }}
-                  style={styles.userPhoto}
-                />
-              )}
-            </>
-          )}
-        </View>
-      ))}
+      <ScrollView>
+        {allComments?.map((comment, index) => (
+          <View key={index} style={styles.commentWrapper}>
+            {userId === comment.userUid && (
+              <TouchableOpacity
+                onPress={() =>
+                  showToast("Hold down to delete comment", false, "top")
+                }
+                onLongPress={() =>
+                  deleteCommentHandler(
+                    venueId,
+                    comment._id,
+                    deleteCommentMutation,
+                    setAllComments
+                  )
+                }
+              >
+                <Icon size={17} name="close" />
+              </TouchableOpacity>
+            )}
+
+            <Text style={styles.commentText}>{comment?.comment}</Text>
+            <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
+            {userPhotos[comment?.userUid] === "noPic" ? (
+              <Image source={Smiley} style={styles.userPhoto} />
+            ) : (
+              <>
+                {arePicsLoading ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                  <Image
+                    source={{ uri: userPhotos[comment?.userUid] }}
+                    style={styles.userPhoto}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        ))}
+      </ScrollView>
       <AddComment
         venueId={venueId}
         userId={userId}
@@ -107,7 +124,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: myColors.black,
     borderRadius: 10,
-    padding: 3,
+    padding: Platform.OS === "ios" && Platform.isPad ? 7 : 3,
+    marginBottom: 10,
   },
   commentText: {
     fontFamily: regFont.fontFamily,
@@ -115,7 +133,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexWrap: "wrap",
-    maxWidth: "65%",
+    flex: 4,
+    marginLeft: 5,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 15,
+  },
+  usernameText: {
+    fontFamily: regFont.fontFamily,
+    display: "flex",
+    textAlign: "left",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    flex: 1,
+    marginRight: Platform.OS === "ios" && Platform.isPad ? 14 : 5,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 15,
   },
   userPhoto: { height: 40, width: 40, borderRadius: 25 },
 });

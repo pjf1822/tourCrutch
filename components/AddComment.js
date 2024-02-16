@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import React, { useState } from "react";
 import MyTextInput from "./MyComponents/MyTextInput";
 import MyButton from "./MyComponents/MyButton";
@@ -41,7 +41,11 @@ const AddComment = ({
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
       />
-      <MyButton title={"Submitm Cooment"} onPress={handleAddComment} />
+      <View style={{ height: 7 }}></View>
+      <MyButton title={"Submit Comment"} onPress={handleAddComment} />
+      <View
+        style={{ height: Platform.OS === "ios" && Platform.isPad ? 2 : 0 }}
+      ></View>
     </View>
   );
 };

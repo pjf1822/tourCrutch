@@ -83,7 +83,7 @@ export const handleSignIn = (email, password) => {
   }
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      showToast("USer signed in!", true, "top");
+      showToast("User signed in!", true, "top");
     })
     .catch((error) => {
       console.log(error.message);

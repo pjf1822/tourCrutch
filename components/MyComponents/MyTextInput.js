@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     borderColor: myColors.white,
-    padding: 10,
+    padding: Platform.OS === "ios" && Platform.isPad ? 14 : 10,
     marginTop: 2,
     marginBottom: 2,
     fontFamily: regFont.fontFamily,
