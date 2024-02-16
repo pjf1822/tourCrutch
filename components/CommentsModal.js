@@ -23,6 +23,8 @@ const CommentsModal = ({
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 7,
+          borderTopColor: myColors.black,
+          borderTopWidth: 8,
         }}
       >
         <CommentSection

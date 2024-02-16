@@ -16,6 +16,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { deleteComment, useFetchVenueComments } from "../api";
 import { deleteCommentHandler } from "../crudUtils/comment";
 import { myColors, regFont } from "../theme";
+import { showToast } from "../helpers";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
@@ -66,6 +67,9 @@ const CommentSection = ({ venueId, userId, displayName }) => {
           <View key={index} style={styles.commentWrapper}>
             {userId === comment.userUid && (
               <TouchableOpacity
+                onPress={() =>
+                  showToast("Hold down to delete comment", false, "top")
+                }
                 onLongPress={() =>
                   deleteCommentHandler(
                     venueId,
