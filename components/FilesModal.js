@@ -1,23 +1,24 @@
-import { View, Text, Button, FlatList } from "react-native";
+import { View, Text, FlatList, Platform, StyleSheet } from "react-native";
 import React from "react";
 import MyButton from "./MyComponents/MyButton";
 import RenderPDFItem from "../components/RenderPDFItem";
 
 import Modal from "react-native-modal";
-import { myColors } from "../theme";
+import { myColors, regFont } from "../theme";
 
 const FilesModal = ({
   isPDFModalVisible,
   togglePDFModal,
-  venueInfo,
+  updatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  setVenueInfo,
-  venueData,
+  setUpdatedVenueData,
+  initialVenueData,
   handleUploadPdf,
   PDFUploadProgress,
 }) => {
+  console.log(updatedVenueData, "the stuff");
   return (
     <Modal
       isVisible={isPDFModalVisible}
@@ -34,16 +35,16 @@ const FilesModal = ({
         }}
       >
         <FlatList
-          data={venueInfo?.pdfs}
+          data={updatedVenueData?.pdfs}
           renderItem={({ item }) => (
             <RenderPDFItem
               updateVenueInfoMutation={updateVenueInfoMutation}
               venueId={venueId}
-              createdByUID={venueInfo?.createdByUID}
+              createdByUID={updatedVenueData?.createdByUID}
               userUID={user?.uid}
-              venueData={venueData}
+              initialVenueData={initialVenueData}
               item={item}
-              setVenueInfo={setVenueInfo}
+              setUpdatedVenueData={setUpdatedVenueData}
             />
           )}
           keyExtractor={(item, index) => `${item}-${index}`}
@@ -80,6 +81,10 @@ const FilesModal = ({
             ></View>
           </View>
         )}
+        {updatedVenueData?.pdfs?.length === 0 && (
+          <Text style={styles.textStyle}>There are no files yet</Text>
+        )}
+        <View></View>
 
         <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
       </View>
@@ -88,3 +93,14 @@ const FilesModal = ({
 };
 
 export default FilesModal;
+
+const styles = StyleSheet.create({
+  textStyle: {
+    fontFamily: regFont.fontFamily,
+    color: myColors.black,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
+    paddingBottom: 10,
+    textAlign: "center",
+    marginTop: -15,
+  },
+});

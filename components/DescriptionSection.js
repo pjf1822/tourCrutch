@@ -13,15 +13,15 @@ import { myColors, regFont } from "../theme";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 
 const DescriptionSection = ({
-  venueInfo,
-  setVenueInfo,
+  updatedVenueData,
+  setUpdatedVenueData,
   updateVenueInfoMutation,
   venueId,
   user,
-  venueData,
+  initialVenueData,
 }) => {
   const handleDescriptionChange = (newDescription) => {
-    setVenueInfo((prevVenueInfo) => ({
+    setUpdatedVenueData((prevVenueInfo) => ({
       ...prevVenueInfo,
       description: newDescription,
     }));
@@ -31,10 +31,10 @@ const DescriptionSection = ({
     const response = await handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
-      venueInfo?.createdByUID,
+      updatedVenueData?.createdByUID,
       user?.uid,
-      venueData,
-      venueInfo
+      initialVenueData,
+      updatedVenueData
     );
   };
 
@@ -72,7 +72,7 @@ const DescriptionSection = ({
           style={styles.input}
           multiline
           numberOfLines={3}
-          value={venueInfo.description}
+          value={updatedVenueData.description}
           onChangeText={handleDescriptionChange}
           placeholder="Enter your text here"
         />
@@ -101,11 +101,17 @@ const styles = StyleSheet.create({
     padding: 8,
     minHeight: 100,
     fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 17,
+    position: "relative",
   },
 
   localButtonStyle: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    zIndex: 100,
     borderColors: myColors.black,
     backgroundColor: myColors.beige,
+    borderWidth: 3,
     borderRadius: 10,
     display: "flex",
     flexDirection: "row",

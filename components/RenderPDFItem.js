@@ -13,12 +13,12 @@ const RenderPDFItem = ({
   venueId,
   createdByUID,
   userUID,
-  venueData,
+  initialVenueData,
   item,
-  setVenueInfo,
+  setUpdatedVenueData,
 }) => {
   const handleLongPress = async () => {
-    const updatedPDFs = [...venueData.pdfs];
+    const updatedPDFs = [...initialVenueData.pdfs];
     const itemIndex = updatedPDFs.indexOf(item);
     if (itemIndex !== -1) {
       const deletedPDF = updatedPDFs.splice(itemIndex, 1)[0];
@@ -36,10 +36,10 @@ const RenderPDFItem = ({
       venueId,
       createdByUID,
       userUID,
-      venueData,
-      { ...venueData, pdfs: updatedPDFs }
+      initialVenueData,
+      { ...initialVenueData, pdfs: updatedPDFs }
     );
-    setVenueInfo(result.venue);
+    setUpdatedVenueData(result.venue);
   };
   return (
     <TouchableOpacity
