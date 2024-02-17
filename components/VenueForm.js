@@ -83,7 +83,12 @@ const VenueForm = ({
           />
 
           <View style={{ paddingBottom: windowHeight / 13 }}>
-            <MyButton title={buttonTitle} onPress={handleSubmit} />
+            <MyButton
+              title={buttonTitle}
+              onPress={handleSubmit}
+              warning={false}
+              width={"80%"}
+            />
           </View>
         </View>
       )}

@@ -120,6 +120,8 @@ const HomeScreen = ({ navigation, route }) => {
           <MyButton
             title="Create New Venue"
             onPress={() => navigation.navigate("NewVenue")}
+            warning={false}
+            width={"80%"}
           />
         </View>
       </View>

@@ -14,10 +14,10 @@ import { showToast } from "../helpers";
 import { useUser } from "../Contexts/UserContext";
 import MyTextInput from "../components/MyComponents/MyTextInput";
 import MyButton from "../components/MyComponents/MyButton";
-import { pickImage } from "../storageFunctionUtils";
 import { Overlay } from "react-native-elements";
 import DeleteAccountModal from "../components/DeleteAccountModal";
-import { updateDisplayName } from "../authFunctionUtils";
+import { updateDisplayName } from "../functionUtils/authFunctionUtils";
+import { pickImage } from "../functionUtils/storageFunctionUtils";
 const windowHeight = Dimensions.get("window").height;
 
 const SettingsScreen = () => {
@@ -84,6 +84,8 @@ const SettingsScreen = () => {
                 placeholder="displayName"
                 onChangeText={(thing) => setDisplayName(thing)}
                 value={displayName}
+                secureTextEntry={false}
+                width={"80%"}
               />
               <View style={{ height: 8 }}></View>
               <MyButton
@@ -91,6 +93,8 @@ const SettingsScreen = () => {
                 onPress={() =>
                   updateDisplayName(displayName, toggleProfileUpdated)
                 }
+                warning={false}
+                width={"80%"}
               />
             </View>
           </View>
@@ -103,14 +107,26 @@ const SettingsScreen = () => {
               width: "100%",
             }}
           >
-            <MyButton title="Update Password" onPress={updatePassword} />
+            <MyButton
+              title="Update Password"
+              onPress={updatePassword}
+              warning={false}
+              width={"80%"}
+            />
             <View style={styles.spacer}></View>
             <MyButton
               title="Upload Profile Pic"
               onPress={handleUpdateProfilePic}
+              warning={false}
+              width={"80%"}
             />
             <View style={styles.spacer}></View>
-            <MyButton title="Delete Account" onPress={toggleOverlay} />
+            <MyButton
+              title="Delete Account"
+              onPress={toggleOverlay}
+              warning={false}
+              width={"80%"}
+            />
           </View>
         </View>
       </View>

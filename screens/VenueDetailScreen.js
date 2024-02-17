@@ -8,12 +8,10 @@ import {
   Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MyBottomRowButton from "../components/MyComponents/MyBottomRowButton";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
 import { myColors, regFont, upperMargin } from "../theme";
 import { useUser } from "../Contexts/UserContext";
-import { uploadPDF } from "../storageFunctionUtils";
 import FilesModal from "../components/FilesModal";
 import ContactSection from "../components/ContactSection";
 import DisplayedDataForm from "../components/DisplayedDataForm";
@@ -22,6 +20,8 @@ import CommentsModal from "../components/CommentsModal";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AddContactCardModal from "../components/AddContactCardModel";
 import DescriptionSection from "../components/DescriptionSection";
+import MyButton from "../components/MyComponents/MyButton";
+import { uploadPDF } from "../functionUtils/storageFunctionUtils";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -187,20 +187,26 @@ const VenueDetailScreen = ({ route, navigation }) => {
           paddingBottom: windowHeight / 13,
         }}
       >
-        <MyBottomRowButton
+        <MyButton
           title="Venue Files"
           onPress={togglePDFModal}
+          warning={false}
           width={"33%"}
+          iphoneFontSize={14}
         />
-        <MyBottomRowButton
+        <MyButton
           title="Update Venue"
           onPress={toggleVenueDataModal}
+          warning={false}
           width={"33%"}
+          iphoneFontSize={14}
         />
-        <MyBottomRowButton
+        <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}
+          warning={false}
           width={"33%"}
+          iphoneFontSize={14}
         />
       </View>
 

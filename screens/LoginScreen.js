@@ -6,10 +6,10 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState } from "react";
-import { handleSignIn } from "../authFunctionUtils";
 import { useNavigation } from "@react-navigation/native";
 import MyButton from "../components/MyComponents/MyButton";
 import MyTextInput from "../components/MyComponents/MyTextInput";
+import { handleSignIn } from "../functionUtils/authFunctionUtils";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -35,27 +35,32 @@ const LoginScreen = () => {
       <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
         <View>
           <MyTextInput
-            value={email}
+            placeholder={"Email"}
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder={"Email"}
+            value={email}
+            secureTextEntry={false}
+            width={"80%"}
           />
           <View style={styles.spacer}></View>
 
           <MyTextInput
-            value={password}
+            placeholder={"Password"}
             onChangeText={(value) => {
               setPassword(value);
             }}
-            placeholder={"Password"}
+            value={password}
             secureTextEntry={true}
+            width={"80%"}
           />
           <View style={styles.spacer}></View>
 
           <MyButton
             title="Log In"
             onPress={() => handleSignIn(email, password)}
+            warning={false}
+            width={"80%"}
           />
         </View>
 
@@ -63,6 +68,8 @@ const LoginScreen = () => {
           <MyButton
             title="Go to sign up page"
             onPress={() => navigation.navigate("Signup")}
+            warning={false}
+            width={"80%"}
           />
         </View>
       </View>

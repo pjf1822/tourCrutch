@@ -40,9 +40,16 @@ const AddComment = ({
         placeholder="Add a comment"
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
+        secureTextEntry={false}
+        width={"80%"}
       />
       <View style={{ height: 7 }}></View>
-      <MyButton title={"Submit Comment"} onPress={handleAddComment} />
+      <MyButton
+        title={"Submit Comment"}
+        onPress={handleAddComment}
+        warning={false}
+        width={"90%"}
+      />
       <View
         style={{ height: Platform.OS === "ios" && Platform.isPad ? 2 : 0 }}
       ></View>

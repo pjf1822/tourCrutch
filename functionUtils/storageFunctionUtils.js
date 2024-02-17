@@ -6,9 +6,9 @@ import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storage } from "./firebaseConfig";
-import { showToast } from "./helpers";
-import { handleUpdateVenueInfo } from "./crudUtils/venue";
+import { showToast } from "../helpers";
+import { handleUpdateVenueInfo } from "../crudUtils/venue";
+import { storage } from "../firebaseConfig";
 
 export const pickImage = async (user, setUser, toggleProfileUpdated) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;

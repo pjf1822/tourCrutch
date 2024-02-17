@@ -1,12 +1,12 @@
 import { Platform, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { getVenuePDF } from "../storageFunctionUtils";
 import { myColors } from "../theme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { deleteObject, ref } from "@firebase/storage";
 import { storage } from "../firebaseConfig";
 import { regFont } from "../theme";
+import { getVenuePDF } from "../functionUtils/storageFunctionUtils";
 
 const RenderPDFItem = ({
   updateVenueInfoMutation,

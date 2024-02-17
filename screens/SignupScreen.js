@@ -9,14 +9,14 @@ import {
   Text,
   Platform,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { handleSignUp } from "../authFunctionUtils";
 import MyButton from "../components/MyComponents/MyButton";
 import MyTextInput from "../components/MyComponents/MyTextInput";
 import { showToast } from "../helpers";
 import * as ImagePicker from "expo-image-picker";
 import { myColors, regFont } from "../theme";
+import { handleSignUp } from "../functionUtils/authFunctionUtils";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -96,34 +96,42 @@ const SignupScreen = () => {
       <View style={[styles.pageWrapper, { paddingTop: windowHeight / 20 }]}>
         <View>
           <MyTextInput
-            value={email}
+            placeholder={"Email"}
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder={"Email"}
+            value={email}
+            secureTextEntry={false}
+            width={"80%"}
           />
 
           <View style={styles.spacer}></View>
           <MyTextInput
-            value={password}
+            placeholder={"Password"}
             onChangeText={(value) => {
               setPassword(value);
             }}
-            placeholder={"Password"}
+            value={password}
             secureTextEntry={true}
+            width={"80%"}
           />
           <View style={styles.spacer}></View>
 
           <MyTextInput
             placeholder="Type Your Password Again"
             onChangeText={(text) => setPassword2(text)}
+            value={password2}
             secureTextEntry={true}
+            width={"80%"}
           />
           <View style={styles.spacer}></View>
 
           <MyTextInput
             placeholder="Display Name"
             onChangeText={(text) => setDisplayName(text)}
+            value={displayName}
+            secureTextEntry={false}
+            width={"80%"}
           />
           <View style={styles.spacer}></View>
 
@@ -134,12 +142,19 @@ const SignupScreen = () => {
             <Text style={styles.textStyle}>Add Profile Pic? (Optional)</Text>
           </TouchableOpacity>
 
-          <MyButton title="Sign Up" onPress={handleSignUpPress} />
+          <MyButton
+            title="Sign Up"
+            onPress={handleSignUpPress}
+            warning={false}
+            width={"80%"}
+          />
         </View>
         <View style={{ paddingBottom: windowHeight / 13 }}>
           <MyButton
             title="Go to Login Page"
             onPress={() => navigation.navigate("Login")}
+            warning={false}
+            width={"80%"}
           />
         </View>
       </View>

@@ -2,10 +2,16 @@ import { TextInput, StyleSheet, Platform } from "react-native";
 import React from "react";
 import { myColors, regFont } from "../../theme";
 
-const MyTextInput = ({ placeholder, onChangeText, value, secureTextEntry }) => {
+const MyTextInput = ({
+  placeholder,
+  onChangeText,
+  value,
+  secureTextEntry,
+  width,
+}) => {
   return (
     <TextInput
-      style={styles.formTextInput}
+      style={[styles.formTextInput, { width: width }]}
       placeholder={placeholder}
       onChangeText={onChangeText}
       value={value}
@@ -27,7 +33,6 @@ const styles = StyleSheet.create({
     fontFamily: regFont.fontFamily,
     color: myColors.beige,
     backgroundColor: myColors.black,
-    width: "80%",
     alignSelf: "center",
     fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
   },
