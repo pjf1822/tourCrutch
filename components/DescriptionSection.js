@@ -34,7 +34,7 @@ const DescriptionSection = ({
       updatedVenueData?.createdByUID,
       user?.uid,
       initialVenueData,
-      updatedVenueData
+      { description: updatedVenueData.description }
     );
   };
 

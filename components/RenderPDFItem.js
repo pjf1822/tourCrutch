@@ -37,7 +37,7 @@ const RenderPDFItem = ({
       createdByUID,
       userUID,
       initialVenueData,
-      { ...initialVenueData, pdfs: updatedPDFs }
+      { pdfs: updatedPDFs }
     );
     setUpdatedVenueData(result.venue);
   };

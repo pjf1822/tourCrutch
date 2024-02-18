@@ -16,7 +16,8 @@ const MyButton = ({ title, onPress, warning, width, iphoneFontSize }) => {
         style={[
           styles.textStyle,
           warning && styles.warningText,
-          iphoneFontSize && { fontSize: iphoneFontSize },
+          (Platform.isPad && { fontSize: 24 }) ||
+            (iphoneFontSize && { fontSize: iphoneFontSize }),
         ]}
       >
         {title}
