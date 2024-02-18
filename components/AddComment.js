@@ -41,7 +41,7 @@ const AddComment = ({
         onChangeText={(text) => setNewComment(text)}
         value={newComment}
         secureTextEntry={false}
-        width={"80%"}
+        width={"90%"}
       />
       <View style={{ height: 7 }}></View>
       <MyButton
