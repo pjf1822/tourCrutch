@@ -7,8 +7,8 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "./firebaseConfig";
-import { showToast } from "./helpers";
+import { auth } from "../firebaseConfig";
+import { showToast } from "../helpers";
 import { uploadUserProfilePic } from "./storageFunctionUtils";
 
 export const handleSignUp = (email, password, displayName, profilePic) => {

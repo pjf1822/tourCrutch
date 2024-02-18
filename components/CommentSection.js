@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AddComment from "./AddComment";
-import { useStorage } from "../Contexts/StorageContext";
 import Smiley from "../assets/logo.png";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -17,13 +16,13 @@ import { deleteComment, useFetchVenueComments } from "../api";
 import { deleteCommentHandler } from "../crudUtils/comment";
 import { myColors, regFont } from "../theme";
 import { showToast } from "../helpers";
+import { useStorage } from "../Contexts/StorageContext";
 
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
   const [userPhotos, setUserPhotos] = useState({});
   const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
-  const [arePicsLoading, setArePicsLoading] = useState(true);
 
   const {
     data: venueCommentsData,
@@ -53,7 +52,6 @@ const CommentSection = ({ venueId, userId, displayName }) => {
         }
 
         setUserPhotos(photos);
-        setArePicsLoading(false);
       };
 
       fetchUserProfilePic();
@@ -85,19 +83,17 @@ const CommentSection = ({ venueId, userId, displayName }) => {
 
             <Text style={styles.commentText}>{comment?.comment}</Text>
             <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
-            {userPhotos[comment?.userUid] === "noPic" ? (
-              <Image source={Smiley} style={styles.userPhoto} />
+            {!userPhotos[comment?.userUid] ? (
+              <ActivityIndicator size="small" color="#0000ff" />
             ) : (
-              <>
-                {arePicsLoading ? (
-                  <ActivityIndicator size="small" color="#0000ff" />
-                ) : (
-                  <Image
-                    source={{ uri: userPhotos[comment?.userUid] }}
-                    style={styles.userPhoto}
-                  />
-                )}
-              </>
+              <Image
+                source={
+                  userPhotos[comment?.userUid] === "noPic"
+                    ? Smiley
+                    : { uri: userPhotos[comment?.userUid] }
+                }
+                style={styles.userPhoto}
+              />
             )}
           </View>
         ))}

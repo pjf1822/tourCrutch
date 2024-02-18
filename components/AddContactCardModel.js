@@ -1,10 +1,10 @@
 import { View, Text, Keyboard, Platform } from "react-native";
 import React, { useState, useEffect } from "react";
 import MyTextInput from "./MyComponents/MyTextInput";
-import MyButton from "./MyComponents/MyBottomRowButton";
 import Modal from "react-native-modal";
 import { myColors, regFont } from "../theme";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
+import MyButton from "./MyComponents/MyButton";
 
 const AddContactCardModal = ({
   isContactModalVisible,
@@ -98,30 +98,43 @@ const AddContactCardModal = ({
           Add Contact
         </Text>
         <MyTextInput
-          value={card.name}
-          onChangeText={(newName) => handleFieldChange("name", newName)}
           placeholder="Name"
+          onChangeText={(newName) => handleFieldChange("name", newName)}
+          value={card?.name}
+          secureTextEntry={false}
+          width={"80%"}
         />
         <MyTextInput
-          value={card.position}
+          placeholder="Position"
           onChangeText={(newPosition) =>
             handleFieldChange("position", newPosition)
           }
-          placeholder="Position"
+          value={card.position}
+          secureTextEntry={false}
+          width={"80%"}
         />
         <MyTextInput
-          value={card.email}
-          onChangeText={(newEmail) => handleFieldChange("email", newEmail)}
           placeholder="Email"
+          onChangeText={(newEmail) => handleFieldChange("email", newEmail)}
+          value={card?.email}
+          secureTextEntry={false}
+          width={"80%"}
         />
         <MyTextInput
-          value={card.phoneNumber}
+          placeholder="Phone Number"
           onChangeText={(newPhoneNumber) =>
             handleFieldChange("phoneNumber", newPhoneNumber)
           }
-          placeholder="Phone Number"
+          value={card?.phoneNumber}
+          secureTextEntry={false}
+          width={"80%"}
         />
-        <MyButton title="Add Contact" onPress={handleAddContactCard} />
+        <MyButton
+          title="Add Contact"
+          onPress={handleAddContactCard}
+          warning={false}
+          width={"80%"}
+        />
       </View>
     </Modal>
   );

@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { myColors, regFont } from "../theme";
-import { handleDeleteUser } from "../authFunctionUtils";
 import { showToast } from "../helpers";
+import { handleDeleteUser } from "../functionUtils/authFunctionUtils";
 
 const DeleteAccountModal = ({ toggleOverlay }) => {
   const [email, setEmail] = useState("");

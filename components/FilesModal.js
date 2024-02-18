@@ -18,7 +18,6 @@ const FilesModal = ({
   handleUploadPdf,
   PDFUploadProgress,
 }) => {
-  console.log(updatedVenueData, "the stuff");
   return (
     <Modal
       isVisible={isPDFModalVisible}
@@ -60,6 +59,9 @@ const FilesModal = ({
             ></View>
           }
         />
+        {updatedVenueData?.pdfs?.length === 0 && (
+          <Text style={styles.textStyle}>There are no files yet</Text>
+        )}
         {PDFUploadProgress !== 100 && (
           <View
             style={{
@@ -81,12 +83,13 @@ const FilesModal = ({
             ></View>
           </View>
         )}
-        {updatedVenueData?.pdfs?.length === 0 && (
-          <Text style={styles.textStyle}>There are no files yet</Text>
-        )}
-        <View></View>
 
-        <MyButton title="Upload Pdf" onPress={handleUploadPdf} />
+        <MyButton
+          title="Upload Pdf"
+          onPress={handleUploadPdf}
+          warning={false}
+          width={"80%"}
+        />
       </View>
     </Modal>
   );
@@ -101,6 +104,5 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
     paddingBottom: 10,
     textAlign: "center",
-    marginTop: -15,
   },
 });

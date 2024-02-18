@@ -12,7 +12,7 @@ import SettingsScreen from "../../screens/SettingsScreen";
 import { showToast } from "../../helpers";
 import { myColors, regFont } from "../../theme";
 import MyButton from "../MyComponents/MyButton";
-import { handleSignOut } from "../../authFunctionUtils";
+import { handleSignOut } from "../../functionUtils/authFunctionUtils";
 
 const commonDrawerStyles = {
   drawerLabelStyle: {
@@ -53,7 +53,12 @@ function CustomDrawerContent({ user, ...props }) {
         {user?.email}
       </Text>
       <DrawerItemList {...props} />
-      <MyButton title="Signout" onPress={() => signOut()} />
+      <MyButton
+        title="Signout"
+        onPress={() => signOut()}
+        warning={false}
+        width={"80%"}
+      />
     </DrawerContentScrollView>
   );
 }
