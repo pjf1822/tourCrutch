@@ -167,18 +167,13 @@ export const uploadPDF = async (
 
     await uploadPDFToFirebase(uri, name, venueId, progressCallback);
 
-    const updatedDataWithNewPDF = {
-      ...updatedVenueData,
-      pdfs: [...updatedVenueData.pdfs, name],
-    };
-
     const updateVenuePDFs = await handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
       createdByUID,
       userUID,
       originalVenueData,
-      updatedDataWithNewPDF
+      { pdfs: [...updatedVenueData.pdfs, name] }
     );
 
     return updateVenuePDFs;
