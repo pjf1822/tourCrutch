@@ -16,6 +16,7 @@ const VenueForm = ({
   buttonTitle,
   formStyles,
 }) => {
+  console.log(initialValues.name);
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -29,14 +30,14 @@ const VenueForm = ({
         >
           <View>
             <MyTextInput2
-              placeholder="Name"
+              placeholder={initialValues.name || "Name"}
               onChangeText={handleChange("name")}
               onBlur={handleBlur("name")}
               value={values.name}
             />
 
             <MyTextInput2
-              placeholder="Venue Link"
+              placeholder={initialValues.link || "Link"}
               onChangeText={handleChange("link")}
               onBlur={handleBlur("link")}
               value={values.link}
@@ -82,6 +83,7 @@ const VenueForm = ({
                   color: myColors.beige,
                 },
               }}
+              nearbyPlacesAPI="false"
               onPress={(data, details = null) => {
                 handleChange("address")(data.description);
               }}
@@ -98,9 +100,9 @@ const VenueForm = ({
               enableHighAccuracyLocation={false}
               enablePoweredByContainer={false}
               minLength={2}
-              placeholder={initialValues.address}
+              placeholder={initialValues.address || "Address"}
               textInputProps={{
-                placeholderTextColor: myColors.beige,
+                placeholderTextColor: "gray",
                 fontFamily: regFont.fontFamily,
                 fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
               }}

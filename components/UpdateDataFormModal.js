@@ -48,15 +48,9 @@ const UpdateDataFormModal = ({
     Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
 
   const handleUpdate = async (values) => {
-    // Recombine Address
-    // const newAddress = combineAddress(values);
-    // values.address = newAddress;
-
     const { name, address, link } = values;
 
-    console.log(address, initialVenueData?.address, "these should be diff");
     if (
-      // Did the fields actually change
       name !== initialVenueData?.name ||
       address !== initialVenueData?.address ||
       link !== initialVenueData?.link
@@ -73,10 +67,9 @@ const UpdateDataFormModal = ({
           link,
         }
       );
-
       setUpdatedVenueData(response.venue);
-
       toggleVenueDataModal();
+      navigation.navigate("Home", { venueUpdated: true });
     } else {
       showToast("You didnt change anything bozo", false, "top");
     }
@@ -97,7 +90,6 @@ const UpdateDataFormModal = ({
       console.error("Delete failed:", error);
     }
   };
-  // const transformedData = transformVenueData(initialVenueData);
 
   return (
     <Modal

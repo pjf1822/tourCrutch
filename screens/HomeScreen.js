@@ -19,7 +19,6 @@ import { useUser } from "../Contexts/UserContext";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const HomeScreen = ({ navigation, route }) => {
-  console.log(route.params, "the route params");
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
   const windowHeight = Dimensions.get("window").height;
@@ -41,17 +40,27 @@ const HomeScreen = ({ navigation, route }) => {
       if (route?.params?.venueCreated || route?.params?.venueUpdated) {
         refetch();
       }
-      if (route.params?.venueDeleted) {
+      if (route?.params?.venueDeleted) {
         const deletedVenueId = route?.params?.venueId;
         setVenues((prevVenues) =>
           prevVenues.filter((venue) => venue?._id !== deletedVenueId)
         );
       }
-    }, [route.params?.venueCreated, route.params?.venueDeleted, refetch])
+    }, [
+      route.params?.venueCreated,
+      route.params?.venueDeleted,
+      route?.params?.venueUpdated,
+      ,
+      refetch,
+    ])
   );
 
   useEffect(() => {
-    if (route.params?.venueCreated || route.params?.venueDeleted) {
+    if (
+      route.params?.venueCreated ||
+      route.params?.venueDeleted ||
+      route?.params?.venueUpdated
+    ) {
       navigation.setParams({
         venueCreated: false,
         venueDeleted: false,
@@ -59,7 +68,12 @@ const HomeScreen = ({ navigation, route }) => {
         venueId: null,
       });
     }
-  }, [route?.params?.venueCreated, route?.params?.venueDeleted, navigation]);
+  }, [
+    route?.params?.venueCreated,
+    route?.params?.venueDeleted,
+    route?.params?.venueUpdated,
+    navigation,
+  ]);
 
   return (
     <ImageBackground

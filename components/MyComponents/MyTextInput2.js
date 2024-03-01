@@ -10,7 +10,10 @@ const MyTextInput2 = ({
 }) => {
   return (
     <TextInput
-      style={styles.formTextInput}
+      style={[
+        styles.formTextInput,
+        { color: value === placeholder ? "gray" : myColors.beige },
+      ]}
       placeholder={placeholder}
       onChangeText={onChangeText}
       value={value}
@@ -29,7 +32,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     fontFamily: regFont.fontFamily,
-    color: myColors.beige,
     backgroundColor: myColors.black,
     width: "80%",
     alignSelf: "center",
