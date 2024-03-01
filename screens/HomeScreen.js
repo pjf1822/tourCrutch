@@ -19,6 +19,7 @@ import { useUser } from "../Contexts/UserContext";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const HomeScreen = ({ navigation, route }) => {
+  console.log(route.params, "the route params");
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
   const windowHeight = Dimensions.get("window").height;

@@ -49,11 +49,12 @@ const UpdateDataFormModal = ({
 
   const handleUpdate = async (values) => {
     // Recombine Address
-    const newAddress = combineAddress(values);
-    values.address = newAddress;
+    // const newAddress = combineAddress(values);
+    // values.address = newAddress;
 
     const { name, address, link } = values;
 
+    console.log(address, initialVenueData?.address, "these should be diff");
     if (
       // Did the fields actually change
       name !== initialVenueData?.name ||
@@ -96,7 +97,7 @@ const UpdateDataFormModal = ({
       console.error("Delete failed:", error);
     }
   };
-  const transformedData = transformVenueData(initialVenueData);
+  // const transformedData = transformVenueData(initialVenueData);
 
   return (
     <Modal
@@ -113,13 +114,14 @@ const UpdateDataFormModal = ({
           padding: 20,
           borderTopWidth: 10,
           borderTopColor: myColors.black,
+          height: 500,
         }}
       >
         <VenueForm
           windowHeight={windowHeight}
           handleSubmit={handleUpdate}
           buttonTitle="Update"
-          initialValues={transformedData}
+          initialValues={initialVenueData}
           formStyles={{}}
         />
 

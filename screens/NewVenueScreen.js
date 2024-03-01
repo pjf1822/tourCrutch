@@ -27,11 +27,7 @@ const NewVenueScreen = ({ navigation }) => {
 
   const initialValues = {
     name: "",
-    streetNameNumber: "",
-    apartmentNumber: "",
-    city: "",
-    state: "",
-    zip: "",
+    address: "",
     link: "",
     description: "",
     pdfs: [],

@@ -8,9 +8,9 @@ const HomePageFlatListItem = ({ item, navigation }) => {
     navigation.navigate("VenueDetail", { venueId: item._id });
   };
 
-  const formatAddress = (address) => {
-    return address.replace(/,+/g, ",").trim();
-  };
+  // const formatAddress = (address) => {
+  //   return address.replace(/,+/g, ",").trim();
+  // };
 
   return (
     <TouchableOpacity
@@ -25,7 +25,8 @@ const HomePageFlatListItem = ({ item, navigation }) => {
     >
       <Text style={styles.itemStyle}>{item?.name}</Text>
       <Text style={styles.displayedDataText}>
-        {formatAddress(item?.address.substring(0, 30))}
+        {/* {formatAddress(item?.address.substring(0, 30))} */}
+        {item?.address}
       </Text>
       <Icon name="arrow-right" color={myColors.black} />
     </TouchableOpacity>
