@@ -4,7 +4,7 @@
     "slug": "tourCrutch",
     "version": "1.2.6",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/logito.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/DJ.jpg",
@@ -32,8 +32,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
       "buildNumber": "6",
+      "icon": "./assets/logito.png",  
       "config": {
         "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "CFBundleIconName": "logito",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "I am not using any user location data nor do i have access to it",
+        "NSLocationWhenInUseUsageDescription":"I am not using any user location data nor do i have access to it"
       }
     },
     "android": {

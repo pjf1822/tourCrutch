@@ -106,7 +106,7 @@ const UpdateDataFormModal = ({
           padding: 20,
           borderTopWidth: 10,
           borderTopColor: myColors.black,
-          height: 500,
+          minHeight: 400,
         }}
       >
         <VenueForm

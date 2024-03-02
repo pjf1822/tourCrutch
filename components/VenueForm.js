@@ -16,7 +16,6 @@ const VenueForm = ({
   buttonTitle,
   formStyles,
 }) => {
-  console.log(initialValues.name);
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -83,11 +82,12 @@ const VenueForm = ({
                   color: myColors.beige,
                 },
               }}
-              nearbyPlacesAPI="false"
+              nearbyPlacesAPI="none"
               onPress={(data, details = null) => {
                 handleChange("address")(data.description);
               }}
               currentLocation={false}
+              currentLocationLabel=""
               onFail={(error) => {
                 console.error("Google Places Autocomplete failed:", error);
               }}

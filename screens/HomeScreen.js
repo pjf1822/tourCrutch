@@ -83,7 +83,7 @@ const HomeScreen = ({ navigation, route }) => {
     >
       <View style={{ marginTop: windowHeight / upperMargin.margy, flex: 1 }}>
         <SearchBar
-          placeholder="search a venue"
+          placeholder="Search A Venue"
           value={search}
           placeholderTextColor={myColors.beige}
           onChangeText={(search) => setSearch(search)}
