@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform, Keyboard } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
-import { combineAddress, showToast, transformVenueData } from "../helpers";
+import { showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyComponents/MyLongPressButton";
@@ -47,7 +47,7 @@ const UpdateDataFormModal = ({
   }, []);
 
   const modalPosition =
-    Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
+    Platform.OS === "ios" ? { marginTop: keyboardHeight } : {};
   // clean keyboard attempt end
 
   const handleUpdate = async (values) => {
@@ -98,19 +98,15 @@ const UpdateDataFormModal = ({
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
-      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
-      onBackdropPress={toggleVenueDataModal}
-      backdropOpacity={0}
+      onBackdropPress={() => toggleVenueDataModal()}
+      avoidKeyboard={true}
     >
       <View
         style={{
           backgroundColor: myColors.beige,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          padding: 20,
-          borderTopWidth: 10,
-          borderTopColor: myColors.black,
-          minHeight: 400,
+          paddingTop: 30,
+          paddingBottom: 30,
+          borderRadius: 20,
         }}
       >
         <VenueForm
@@ -118,7 +114,6 @@ const UpdateDataFormModal = ({
           handleSubmit={handleUpdate}
           buttonTitle="Update"
           initialValues={initialVenueData}
-          formStyles={{}}
         />
 
         <MyLongPressButton

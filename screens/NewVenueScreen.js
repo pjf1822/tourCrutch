@@ -35,48 +35,25 @@ const NewVenueScreen = ({ navigation }) => {
   };
 
   const createVenueStyles = {
-    // marginTop: windowHeight / upperMargin.margy,
     flex: 1,
     display: "flex",
     justifyContent: "center",
   };
 
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      (event) => {
-        setKeyboardHeight(20);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-  const modalPosition = Platform.OS === "ios" ? { bottom: keyboardHeight } : {};
   return (
     <ImageBackground
       source={require("../assets/gear.jpg")}
       style={[styles.pageWrapper]}
       imageStyle={{ opacity: 0.6 }}
     >
-      <View style={[modalPosition, { flex: 1 }]}>
+      <View style={[{ flex: 1 }]}>
         <Image
           style={{
             height: 150,
             width: 150,
             alignSelf: "center",
             marginTop: windowHeight / 10,
+            marginBottom: 10,
           }}
           source={require("../assets/logito.png")}
         />
