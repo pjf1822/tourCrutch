@@ -1,10 +1,8 @@
 import { Platform, View, Text } from "react-native";
 import React from "react";
-import { stateOptions } from "../helpers";
 import MyButton from "../components/MyComponents/MyButton";
 import { myColors, regFont, upperMargin } from "../theme";
 import MyTextInput2 from "../components/MyComponents/MyTextInput2";
-import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_AUTOCOMPLETE_KEY } from "@env";

@@ -2,9 +2,9 @@
   "expo": {
     "name": "tourCrutch",
     "slug": "tourCrutch",
-    "version": "1.2.6",
+    "version": "1.2.10",
     "orientation": "portrait",
-    "icon": "./assets/logito.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/DJ.jpg",
@@ -31,8 +31,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "6",
-      "icon": "./assets/logito.png",  
+      "buildNumber": "10",
+      "icon": "./assets/logo.png",  
       "config": {
         "usesNonExemptEncryption": false
       },

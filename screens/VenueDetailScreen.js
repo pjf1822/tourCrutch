@@ -65,6 +65,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     data: initialVenueData,
     isLoading,
     isError,
+    refetch,
   } = useFetchVenueById(venueId);
 
   useEffect(() => {
@@ -234,6 +235,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         deleteVenueMutation={deleteVenueMutation}
         windowHeight={windowHeight}
         setUpdatedVenueData={setUpdatedVenueData}
+        refetch={refetch}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

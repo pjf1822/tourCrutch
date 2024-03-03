@@ -35,45 +35,33 @@ const HomeScreen = ({ navigation, route }) => {
   // For the search bar
   const result = filterVenues(venues, search);
 
+  // use effect that reads route params when the page is opened
   useFocusEffect(
     useCallback(() => {
       if (route?.params?.venueCreated || route?.params?.venueUpdated) {
         refetch();
+        navigation.setParams({
+          venueCreated: false,
+          venueUpdated: false,
+        });
       }
       if (route?.params?.venueDeleted) {
         const deletedVenueId = route?.params?.venueId;
         setVenues((prevVenues) =>
           prevVenues.filter((venue) => venue?._id !== deletedVenueId)
         );
+        navigation.setParams({
+          venueDeleted: false,
+          venueId: null,
+        });
       }
     }, [
       route.params?.venueCreated,
       route.params?.venueDeleted,
       route?.params?.venueUpdated,
-      ,
-      refetch,
+      navigation,
     ])
   );
-
-  useEffect(() => {
-    if (
-      route.params?.venueCreated ||
-      route.params?.venueDeleted ||
-      route?.params?.venueUpdated
-    ) {
-      navigation.setParams({
-        venueCreated: false,
-        venueDeleted: false,
-        venueUpdated: false,
-        venueId: null,
-      });
-    }
-  }, [
-    route?.params?.venueCreated,
-    route?.params?.venueDeleted,
-    route?.params?.venueUpdated,
-    navigation,
-  ]);
 
   return (
     <ImageBackground
@@ -93,7 +81,6 @@ const HomeScreen = ({ navigation, route }) => {
             backgroundColor: "transparent",
             fontSize: Platform.OS === "ios" && Platform.isPad ? 28 : 18,
           }}
-          // onClear={() => setSearch("")}
           containerStyle={{
             backgroundColor: "transparent",
             borderBottomWidth: "0px",

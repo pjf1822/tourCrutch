@@ -20,7 +20,9 @@ const UpdateDataFormModal = ({
   deleteVenueMutation,
   windowHeight,
   setUpdatedVenueData,
+  refetch,
 }) => {
+  // clean keyboard attempt beginning
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const UpdateDataFormModal = ({
 
   const modalPosition =
     Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
+  // clean keyboard attempt end
 
   const handleUpdate = async (values) => {
     const { name, address, link } = values;
@@ -69,6 +72,7 @@ const UpdateDataFormModal = ({
       );
       setUpdatedVenueData(response.venue);
       toggleVenueDataModal();
+      refetch();
       navigation.navigate("Home", { venueUpdated: true });
     } else {
       showToast("You didnt change anything bozo", false, "top");
