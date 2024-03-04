@@ -2,13 +2,10 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  KeyboardAvoidingView,
-  Platform,
   View,
-  Keyboard,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useUser } from "../Contexts/UserContext";
 import VenueForm from "../components/VenueForm";
 import { createVenue } from "../crudUtils/venue";

@@ -59,7 +59,6 @@ const HomeScreen = ({ navigation, route }) => {
       route.params?.venueCreated,
       route.params?.venueDeleted,
       route?.params?.venueUpdated,
-      navigation,
     ])
   );
 

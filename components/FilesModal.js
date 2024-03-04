@@ -31,6 +31,7 @@ const FilesModal = ({
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
+          borderTopWidth: 10,
         }}
       >
         <FlatList

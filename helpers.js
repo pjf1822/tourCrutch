@@ -4,6 +4,7 @@ import { myColors, regFont } from "./theme";
 import { Platform } from "react-native";
 
 export const showToast = (toastMessage, success, position) => {
+  console.log("we want to throw the toast", toastMessage, success, position);
   let backgroundColor;
   let textColor;
 
@@ -24,6 +25,7 @@ export const showToast = (toastMessage, success, position) => {
     opacity: 1,
     zIndex: 999,
     fontSize: Platform.OS === "ios" && Platform.isPad ? 30 : 23,
+    textStyle: { fontFamily: regFont.fontFamily },
   });
 };
 
