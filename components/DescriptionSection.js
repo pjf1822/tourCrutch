@@ -38,11 +38,8 @@ const DescriptionSection = ({
     );
   };
 
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+    <TouchableWithoutFeedback>
       <View style={styles.container}>
         <View
           style={{
