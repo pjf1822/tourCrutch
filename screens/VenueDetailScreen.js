@@ -22,6 +22,7 @@ import AddContactCardModal from "../components/AddContactCardModel";
 import DescriptionSection from "../components/DescriptionSection";
 import MyButton from "../components/MyComponents/MyButton";
 import { uploadPDF } from "../functionUtils/storageFunctionUtils";
+import GoogleMapComp from "../components/GoogleMapComp";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -179,6 +180,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           initialVenueData={initialVenueData}
         />
       </View>
+      <GoogleMapComp address={updatedVenueData.address} />
 
       <View
         style={{
