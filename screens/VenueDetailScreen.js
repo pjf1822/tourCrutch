@@ -65,6 +65,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     data: initialVenueData,
     isLoading,
     isError,
+    refetch,
   } = useFetchVenueById(venueId);
 
   useEffect(() => {
@@ -182,31 +183,31 @@ const VenueDetailScreen = ({ route, navigation }) => {
       <View
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           justifyContent: "space-around",
-          paddingBottom: windowHeight / 13,
+          paddingBottom: windowHeight / 20,
         }}
       >
         <MyButton
           title="Venue Files"
           onPress={togglePDFModal}
           warning={false}
-          width={"33%"}
-          iphoneFontSize={14}
+          width={"80%"}
+          iphoneFontSize={19}
         />
         <MyButton
           title="Update Venue"
           onPress={toggleVenueDataModal}
           warning={false}
-          width={"33%"}
-          iphoneFontSize={14}
+          width={"80%"}
+          iphoneFontSize={19}
         />
         <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}
           warning={false}
-          width={"33%"}
-          iphoneFontSize={14}
+          width={"80%"}
+          iphoneFontSize={19}
         />
       </View>
 
@@ -234,6 +235,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         deleteVenueMutation={deleteVenueMutation}
         windowHeight={windowHeight}
         setUpdatedVenueData={setUpdatedVenueData}
+        refetch={refetch}
       />
       <CommentsModal
         isCommentsModalVisible={isCommentsModalVisible}

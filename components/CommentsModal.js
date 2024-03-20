@@ -15,7 +15,7 @@ const CommentsModal = ({
       isVisible={isCommentsModalVisible}
       style={{ justifyContent: "flex-end", margin: 0 }}
       onBackdropPress={toggleCommentsModal}
-      backdropOpacity={0}
+      avoidKeyboard={true}
     >
       <View
         style={{

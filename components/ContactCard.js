@@ -16,22 +16,21 @@ const ContactCard = ({ data, handleDeleteContactCard }) => {
     Linking.openURL(phoneURL);
   };
   return (
-    <View
+    <TouchableOpacity
       style={styles.cardWrapper}
-      // onLongPress={() => handleDeleteContactCard(data._id)}
+      onLongPress={() => handleDeleteContactCard(data._id)}
     >
       <View style={styles.half}>
         <Text style={styles.cardText}>{data.name}</Text>
         <Text style={styles.cardText}>{data.position}</Text>
       </View>
-
       <View style={[styles.half, { alignItems: "flex-end", marginLeft: 10 }]}>
         <Text style={styles.cardText}>{data.email}</Text>
         <TouchableOpacity onPress={handlePhonePress}>
           <Text style={styles.cardText}>{data.phoneNumber}</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,11 +1,11 @@
-import { Platform, View } from "react-native";
+import { Platform, View, Text } from "react-native";
 import React from "react";
-import { stateOptions } from "../helpers";
 import MyButton from "../components/MyComponents/MyButton";
 import { myColors, regFont, upperMargin } from "../theme";
 import MyTextInput2 from "../components/MyComponents/MyTextInput2";
-import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { GOOGLE_AUTOCOMPLETE_KEY } from "@env";
 
 const VenueForm = ({
   windowHeight,
@@ -17,72 +17,92 @@ const VenueForm = ({
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ handleChange, handleBlur, handleSubmit, values }) => (
-        <View
-          style={{
-            ...formStyles,
-          }}
-        >
+        <View>
           <MyTextInput2
-            placeholder="Name"
+            placeholder={initialValues.name || "Name"}
             onChangeText={handleChange("name")}
             onBlur={handleBlur("name")}
             value={values.name}
           />
+
           <MyTextInput2
-            placeholder="Street Name and Number"
-            onChangeText={handleChange("streetNameNumber")}
-            onBlur={handleBlur("streetNameNumber")}
-            value={values.streetNameNumber}
-          />
-          <MyTextInput2
-            placeholder="Apartment Number (Optional)"
-            onChangeText={handleChange("apartmentNumber")}
-            onBlur={handleBlur("apartmentNumber")}
-            value={values.apartmentNumber}
-          />
-          <MyTextInput2
-            placeholder="City"
-            onChangeText={handleChange("city")}
-            onBlur={handleBlur("city")}
-            value={values.city}
-          />
-          <Picker
-            selectedValue={values.state}
-            onValueChange={(itemValue) => handleChange("state")(itemValue)}
-            numberOfLines={1}
-            itemStyle={{
-              fontFamily: regFont.fontFamily,
-              fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 18,
-              width: "80%",
-              backgroundColor: myColors.beige,
-              alignSelf: "center",
-              height: 60,
-              borderRadius: 10,
-              marginBottom: 15,
-            }}
-          >
-            {stateOptions?.map((option) => (
-              <Picker.Item
-                key={option.value}
-                label={option.label}
-                value={option.value}
-              />
-            ))}
-          </Picker>
-          <MyTextInput2
-            placeholder="Zip Code"
-            onChangeText={handleChange("zip")}
-            onBlur={handleBlur("zip")}
-            value={values.zip}
-          />
-          <MyTextInput2
-            placeholder="Venue Link"
+            placeholder={initialValues.link || "Link"}
             onChangeText={handleChange("link")}
             onBlur={handleBlur("link")}
             value={values.link}
           />
+          <GooglePlacesAutocomplete
+            styles={{
+              textInputContainer: {
+                borderWidth: 2,
+                borderRadius: 6,
+                borderColor: myColors.white,
+                padding: 10,
+                marginBottom: 15,
+                fontFamily: regFont.fontFamily,
+                backgroundColor: myColors.black,
+                color: myColors.beige,
+                width: "80%",
+                alignSelf: "center",
+                fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
+                placeholderColor: "green",
+              },
+              description: {
+                color: myColors.beige,
+              },
+              predefinedPlacesDescription: {
+                color: myColors.beige,
+              },
+              poweredContainer: {
+                paddingBottom: 7,
+                paddingTop: 7,
+              },
 
-          <View style={{ paddingBottom: windowHeight / 13 }}>
+              textInput: {
+                color: myColors.beige,
+              },
+              separator: {
+                height: 0.9,
+              },
+              row: {
+                padding: 13,
+                height: 44,
+                flexDirection: "row",
+                backgroundColor: myColors.black,
+                color: myColors.beige,
+              },
+            }}
+            nearbyPlacesAPI="none"
+            onPress={(data, details = null) => {
+              handleChange("address")(data.description);
+            }}
+            currentLocation={false}
+            currentLocationLabel=""
+            onFail={(error) => {
+              console.error("Google Places Autocomplete failed:", error);
+            }}
+            suppressDefaultStyles={true}
+            query={{
+              key: GOOGLE_AUTOCOMPLETE_KEY,
+              language: "en",
+            }}
+            debounce={100}
+            enableHighAccuracyLocation={false}
+            enablePoweredByContainer={false}
+            minLength={2}
+            placeholder={initialValues.address || "Address"}
+            textInputProps={{
+              placeholderTextColor: "gray",
+              fontFamily: regFont.fontFamily,
+              fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 17,
+            }}
+          />
+
+          <View
+            style={{
+              paddingBottom: buttonTitle === "Update" ? 8 : windowHeight / 13,
+            }}
+          >
             <MyButton
               title={buttonTitle}
               onPress={handleSubmit}

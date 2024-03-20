@@ -1,4 +1,10 @@
-import { Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  View,
+} from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
 import { myColors, regFont } from "../theme";
@@ -8,25 +14,16 @@ const HomePageFlatListItem = ({ item, navigation }) => {
     navigation.navigate("VenueDetail", { venueId: item._id });
   };
 
-  const formatAddress = (address) => {
-    return address.replace(/,+/g, ",").trim();
-  };
-
   return (
     <TouchableOpacity
       style={styles.flatListItemWrapper}
-      // onPress={() =>
-      //   navigation.reset({
-      //     index: 0,
-      //     routes: [{ name: "VenueDetail", params: { venueId: item._id } }],
-      //   })
-      // }
       onPress={navigateToVenueDetail}
     >
-      <Text style={styles.itemStyle}>{item?.name}</Text>
-      <Text style={styles.displayedDataText}>
-        {formatAddress(item?.address.substring(0, 30))}
-      </Text>
+      <View>
+        <Text style={styles.itemStyle}>{item?.name}</Text>
+        <Text style={styles.displayedDataText}>{item?.address}</Text>
+      </View>
+
       <Icon name="arrow-right" color={myColors.black} />
     </TouchableOpacity>
   );
@@ -49,13 +46,14 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     fontFamily: regFont.fontFamily,
-    flex: 1,
     color: myColors.black,
-    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 15,
+
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 18,
   },
   displayedDataText: {
     fontFamily: regFont.fontFamily,
-    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 15,
+    fontSize: Platform.OS === "ios" && Platform.isPad ? 24 : 13,
     paddingRight: Platform.OS === "ios" && Platform.isPad ? 20 : 0,
+    color: myColors.black,
   },
 });

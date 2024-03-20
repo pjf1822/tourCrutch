@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform, Keyboard } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
-import { combineAddress, showToast, transformVenueData } from "../helpers";
+import { showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyComponents/MyLongPressButton";
@@ -20,7 +20,9 @@ const UpdateDataFormModal = ({
   deleteVenueMutation,
   windowHeight,
   setUpdatedVenueData,
+  refetch,
 }) => {
+  // clean keyboard attempt beginning
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -45,17 +47,13 @@ const UpdateDataFormModal = ({
   }, []);
 
   const modalPosition =
-    Platform.OS === "ios" ? { marginBottom: keyboardHeight } : {};
+    Platform.OS === "ios" ? { marginTop: keyboardHeight } : {};
+  // clean keyboard attempt end
 
   const handleUpdate = async (values) => {
-    // Recombine Address
-    const newAddress = combineAddress(values);
-    values.address = newAddress;
-
     const { name, address, link } = values;
 
     if (
-      // Did the fields actually change
       name !== initialVenueData?.name ||
       address !== initialVenueData?.address ||
       link !== initialVenueData?.link
@@ -72,10 +70,10 @@ const UpdateDataFormModal = ({
           link,
         }
       );
-
       setUpdatedVenueData(response.venue);
-
       toggleVenueDataModal();
+      refetch();
+      navigation.navigate("Home", { venueUpdated: true });
     } else {
       showToast("You didnt change anything bozo", false, "top");
     }
@@ -96,31 +94,26 @@ const UpdateDataFormModal = ({
       console.error("Delete failed:", error);
     }
   };
-  const transformedData = transformVenueData(initialVenueData);
 
   return (
     <Modal
       isVisible={isVenueDataModalVisible}
-      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
-      onBackdropPress={toggleVenueDataModal}
-      backdropOpacity={0}
+      onBackdropPress={() => toggleVenueDataModal()}
+      avoidKeyboard={true}
     >
       <View
         style={{
           backgroundColor: myColors.beige,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          padding: 20,
-          borderTopWidth: 10,
-          borderTopColor: myColors.black,
+          paddingTop: 30,
+          paddingBottom: 30,
+          borderRadius: 20,
         }}
       >
         <VenueForm
           windowHeight={windowHeight}
           handleSubmit={handleUpdate}
           buttonTitle="Update"
-          initialValues={transformedData}
-          formStyles={{}}
+          initialValues={initialVenueData}
         />
 
         <MyLongPressButton

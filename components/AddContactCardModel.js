@@ -47,36 +47,12 @@ const AddContactCardModal = ({
     toggleContactModal();
   };
 
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      (event) => {
-        setKeyboardHeight(event.endCoordinates.height);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-  const modalPosition = Platform.OS === "ios" ? { bottom: keyboardHeight } : {};
-
   return (
     <Modal
       isVisible={isContactModalVisible}
-      style={[{ justifyContent: "flex-end", margin: 0 }, modalPosition]}
+      style={{ justifyContent: "flex-end", margin: 0 }}
       onBackdropPress={toggleContactModal}
-      backdropOpacity={0}
+      avoidKeyboard={true}
     >
       <View
         style={{
