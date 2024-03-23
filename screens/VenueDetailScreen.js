@@ -23,6 +23,7 @@ import DescriptionSection from "../components/DescriptionSection";
 import MyButton from "../components/MyComponents/MyButton";
 import { uploadPDF } from "../functionUtils/storageFunctionUtils";
 import GoogleMapComp from "../components/GoogleMapComp";
+import YelpList from "../components/YelpList";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -35,7 +36,10 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [PDFUploadProgress, setPDFUploadProgress] = useState(0);
-
+  const coords = {
+    latitude: (42.3601).toFixed(4), // Ensure four decimal places
+    longitude: -(71.0589).toFixed(4), // Ensure four decimal places
+  };
   const [updatedVenueData, setUpdatedVenueData] = useState({
     name: "",
     address: "",
@@ -171,16 +175,17 @@ const VenueDetailScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        <DescriptionSection
+        {/* <DescriptionSection
           updatedVenueData={updatedVenueData}
           setUpdatedVenueData={setUpdatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
           venueId={venueId}
           user={user}
           initialVenueData={initialVenueData}
-        />
+        /> */}
       </View>
       <GoogleMapComp address={updatedVenueData.address} />
+      <YelpList coords={coords} />
 
       <View
         style={{
