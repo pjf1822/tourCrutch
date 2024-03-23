@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useQuery } from "react-query";
 import { myColors } from "../theme.js";
+import { GOOGLE_MAP_KEY } from "@env";
 
 const GoogleMapComp = ({ address }) => {
   const [coordinates, setCoordinates] = useState({
@@ -10,39 +11,23 @@ const GoogleMapComp = ({ address }) => {
     longitude: 45.231,
   });
 
-  const { isLoading, isError, data } = useQuery(
-    ["coordinates", address],
-    async () => {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          address
-        )}&key=${"AIzaSyCRH38tk2q3mZJinvxYKmH6XBGJNnXQEtQ"}`
-      );
+  // const { isLoading, isError, data } = useQuery(
+  //   ["coordinates", address],
+  //   async () => {
+  //     const response = await fetch(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+  //         address
+  //       )}&key=${GOOGLE_MAP_KEY}`
+  //     );
 
-      //maps.googleapis.com/maps/api/geocode/outputFormat?parameters
-      // console.log(response, "the response");
-
-      console.log(response, "the repo");
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const json = await response.json();
-      return json;
-    }
-  );
-
-  useEffect(() => {
-    if (data && data.results && data.results.length > 0) {
-      const location = data.results[0].geometry.location;
-      setCoordinates({
-        latitude: location.lat,
-        longitude: location.lng,
-      });
-    }
-  }, [data]);
-
-  // if (isLoading) return <LoadingSpinner />;
-  // if (isError) return <ErrorComponent />;
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch data");
+  //     }
+  //     const json = await response.json();
+  //     console.log(json, "the json");
+  //     return json;
+  //   }
+  // );
 
   return (
     <MapView
@@ -70,7 +55,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     borderRadius: 50,
-    borderColor: myColors.black,
+    borderColor: myColors.beige,
     borderWidth: 4,
     margin: 20,
   },
