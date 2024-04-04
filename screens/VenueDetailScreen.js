@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   Text,
   Platform,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
-import { myColors, regFont, upperMargin } from "../theme";
+import { myColors, regFont } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import FilesModal from "../components/FilesModal";
 import ContactSection from "../components/ContactSection";
@@ -125,14 +126,15 @@ const VenueDetailScreen = ({ route, navigation }) => {
       style={styles.imagePageWrapper}
       imageStyle={{ opacity: 0.6 }}
     >
-      <View
-        style={{
-          marginTop: windowHeight / upperMargin.margy,
-          marginLeft: 7,
-          marginRight: 7,
-        }}
+      <DisplayedDataForm
+        updatedVenueData={updatedVenueData}
+        windowHeight={windowHeight}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator="false"
+        contentContainerStyle={{ marginLeft: 7, marginRight: 7 }}
       >
-        <DisplayedDataForm updatedVenueData={updatedVenueData} />
         <ContactSection
           updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
@@ -174,7 +176,18 @@ const VenueDetailScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        {/* <DescriptionSection
+        {updatedVenueData?.coordinates?.longitude && (
+          <GoogleMapComp
+            address={updatedVenueData.address}
+            coordinates={updatedVenueData.coordinates}
+          />
+        )}
+
+        {updatedVenueData?.coordinates?.longitude && (
+          <YelpList coordinates={updatedVenueData.coordinates} />
+        )}
+      </ScrollView>
+      {/* <DescriptionSection
           updatedVenueData={updatedVenueData}
           setUpdatedVenueData={setUpdatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
@@ -182,24 +195,15 @@ const VenueDetailScreen = ({ route, navigation }) => {
           user={user}
           initialVenueData={initialVenueData}
         /> */}
-      </View>
-      {updatedVenueData?.coordinates?.longitude && (
-        <GoogleMapComp
-          address={updatedVenueData.address}
-          coordinates={updatedVenueData.coordinates}
-        />
-      )}
-
-      {updatedVenueData?.coordinates?.longitude && (
-        <YelpList coordinates={updatedVenueData.coordinates} />
-      )}
 
       <View
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          paddingBottom: windowHeight / 20,
+          paddingBottom: windowHeight / 29,
+          paddingTop: 8,
+          // backgroundColor: "rgba(0, 0, 220, 0.0.4)",
         }}
       >
         <MyButton
@@ -209,6 +213,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           width={"80%"}
           iphoneFontSize={19}
         />
+        <View style={{ height: 5 }}></View>
         <MyButton
           title="Update Venue"
           onPress={toggleVenueDataModal}
@@ -216,6 +221,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
           width={"80%"}
           iphoneFontSize={19}
         />
+        <View style={{ height: 5 }}></View>
+
         <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}

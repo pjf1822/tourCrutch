@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     borderColor: myColors.beige,
     borderWidth: 4,
     margin: 20,
+    minHeight: 300,
   },
 });
 export default GoogleMapComp;
