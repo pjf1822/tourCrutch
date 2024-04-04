@@ -9,14 +9,17 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Stars from "react-native-stars";
 
 import { YELP_KEY } from "@env";
 import { myColors, regFont } from "../theme";
 
-const YelpList = ({ coords }) => {
+const YelpList = ({ coordinates }) => {
   const fetchRestaurants = async () => {
+    console.log("hey", coordinates);
     const response = await fetch(
-      `https://api.yelp.com/v3/businesses/search?latitude=${coords.latitude}&longitude=${coords.longitude}&radius=16093&categories=restaurants&limit=10`,
+      `https://api.yelp.com/v3/businesses/search?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=16093&categories=restaurants&limit=10`,
       {
         headers: {
           Authorization: `Bearer ${YELP_KEY}`,
@@ -24,7 +27,6 @@ const YelpList = ({ coords }) => {
       }
     );
     const data = await response.json();
-    console.log(data, "teh datae");
     return data.businesses;
   };
 
@@ -38,24 +40,52 @@ const YelpList = ({ coords }) => {
     Linking.openURL(url);
   };
   return (
-    <ScrollView style={styles.wrapper}>
-      <View>
+    <View style={styles.wrapper}>
+      <Text style={[styles.listItem, { fontSize: 20 }]}>Roger here you go</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {restaurants &&
           restaurants.map((place) => (
             <TouchableOpacity
-              key={place.id}
-              onPress={() => handlePress(place.url)}
+              key={place?.id}
+              onPress={() => handlePress(place?.url)}
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
             >
-              <Text style={styles.listItem}>{place.name}</Text>
-              <Image source={{ uri: place.image_url }} style={styles.image} />
-              <Text style={styles.listItem}>
-                {place.distance.toFixed()} meters away
-              </Text>
-              <View></View>
+              <View>
+                <Text style={styles.listItem}>{place?.name}</Text>
+                <Image
+                  source={{ uri: place?.image_url }}
+                  style={styles.image}
+                />
+              </View>
+              <View>
+                <Text style={styles.listItem}>
+                  {place?.distance.toFixed()} meters away
+                </Text>
+                <Stars
+                  default={place?.rating}
+                  count={5}
+                  half={true}
+                  disabled={true}
+                  starSize={100}
+                  fullStar={<Icon name={"star"} style={[styles.myStarStyle]} />}
+                  emptyStar={
+                    <Icon
+                      name={"star-outline"}
+                      style={[styles.myStarStyle, styles.myEmptyStarStyle]}
+                    />
+                  }
+                  halfStar={
+                    <Icon name={"star-half"} style={[styles.myStarStyle]} />
+                  }
+                />
+              </View>
             </TouchableOpacity>
           ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -64,11 +94,14 @@ const styles = StyleSheet.create({
     borderColors: myColors.black,
     backgroundColor: myColors.beige,
     borderRadius: 10,
+    maxHeight: 200,
+    width: "90%",
     display: "flex",
-    flexDirection: "row",
-    padding: 5,
-    minWidth: 120,
+    alignSelf: "center",
+    marginBottom: 20,
+    padding: 10,
   },
+
   image: {
     width: 50,
     height: 50,
@@ -78,6 +111,16 @@ const styles = StyleSheet.create({
 
   listItem: {
     fontFamily: regFont.fontFamily,
+  },
+  myStarStyle: {
+    color: myColors.pink,
+    backgroundColor: "transparent",
+    textShadowColor: myColors.black,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  myEmptyStarStyle: {
+    color: myColors.black,
   },
 });
 
