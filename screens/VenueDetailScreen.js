@@ -36,10 +36,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [isContactModalVisible, setIsContactModalVisible] = useState(false);
   const [PDFUploadProgress, setPDFUploadProgress] = useState(0);
-  const coords = {
-    latitude: (42.3601).toFixed(4), // Ensure four decimal places
-    longitude: -(71.0589).toFixed(4), // Ensure four decimal places
-  };
+
   const [updatedVenueData, setUpdatedVenueData] = useState({
     name: "",
     address: "",
@@ -49,6 +46,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
     contactCards: [],
     createdByUID: "",
     description: "",
+    coordinates: {},
   });
 
   const togglePDFModal = () => {
@@ -84,6 +82,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         createdByUID: initialVenueData.createdByUID,
         contactCards: initialVenueData?.contactCards,
         description: initialVenueData.description,
+        coordinates: initialVenueData.coordinates,
       });
     }
   }, [initialVenueData]);
@@ -184,8 +183,16 @@ const VenueDetailScreen = ({ route, navigation }) => {
           initialVenueData={initialVenueData}
         /> */}
       </View>
-      <GoogleMapComp address={updatedVenueData.address} />
-      <YelpList coords={coords} />
+      {updatedVenueData?.coordinates?.longitude && (
+        <GoogleMapComp
+          address={updatedVenueData.address}
+          coordinates={updatedVenueData.coordinates}
+        />
+      )}
+
+      {updatedVenueData?.coordinates?.longitude && (
+        <YelpList coordinates={updatedVenueData.coordinates} />
+      )}
 
       <View
         style={{

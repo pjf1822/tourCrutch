@@ -5,11 +5,11 @@ import { useQuery } from "react-query";
 import { myColors } from "../theme.js";
 import { GOOGLE_MAP_KEY } from "@env";
 
-const GoogleMapComp = ({ address }) => {
-  const [coordinates, setCoordinates] = useState({
-    latitude: 37.78825,
-    longitude: 45.231,
-  });
+const GoogleMapComp = ({ address, coordinates }) => {
+  // console.log(coordinates, typeof coordinates.latitude);
+  if (!coordinates || !coordinates.latitude || !coordinates.longitude) {
+    return null;
+  }
 
   // const { isLoading, isError, data } = useQuery(
   //   ["coordinates", address],
@@ -40,7 +40,10 @@ const GoogleMapComp = ({ address }) => {
       }}
     >
       <Marker
-        coordinate={coordinates}
+        coordinate={{
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        }}
         title="Marker Title"
         description="Marker Description"
       />
