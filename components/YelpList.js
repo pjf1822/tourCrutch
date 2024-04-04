@@ -41,7 +41,7 @@ const YelpList = ({ coordinates }) => {
   };
   return (
     <View style={styles.wrapper}>
-      <Text style={[styles.listItem, { fontSize: 20 }]}>Roger here you go</Text>
+      <Text style={[styles.listItem, { fontSize: 20 }]}>Local Eats</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {restaurants &&
           restaurants.map((place) => (
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     borderColors: myColors.black,
     backgroundColor: myColors.beige,
     borderRadius: 10,
-    maxHeight: 200,
+    maxHeight: 300,
     width: "90%",
     display: "flex",
     alignSelf: "center",
