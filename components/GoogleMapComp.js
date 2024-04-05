@@ -12,29 +12,10 @@ const GoogleMapComp = ({ coordinates }) => {
     // Increment the key to force a re-render whenever coordinates change
     setMapKey((prevKey) => prevKey + 1);
   }, [coordinates]);
-  // console.log(coordinates, "they loaded");
 
   if (!coordinates || !coordinates.latitude || !coordinates.longitude) {
     return null;
   }
-
-  // const { isLoading, isError, data } = useQuery(
-  //   ["coordinates", address],
-  //   async () => {
-  //     const response = await fetch(
-  //       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-  //         address
-  //       )}&key=${GOOGLE_MAP_KEY}`
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch data");
-  //     }
-  //     const json = await response.json();
-  //     console.log(json, "the json");
-  //     return json;
-  //   }
-  // );
 
   return (
     <MapView

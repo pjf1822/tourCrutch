@@ -26,9 +26,11 @@ const NewVenueScreen = ({ navigation }) => {
     name: "",
     address: "",
     link: "",
-    description: "",
     pdfs: [],
+    comments: [],
     contactCards: [],
+    description: "",
+    coordinates: {},
   };
 
   const createVenueStyles = {

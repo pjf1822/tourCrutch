@@ -1,4 +1,5 @@
-import { combineAddress, isValidUrl, showToast } from "../helpers";
+import { isValidUrl, showToast } from "../helpers";
+import { GOOGLE_MAP_KEY } from "@env";
 
 export const createVenue = async (
   values,
@@ -15,6 +16,22 @@ export const createVenue = async (
     if (!isValidUrl(values?.link)) {
       showToast("Please enter a valid URL for the venue link", false, "top");
       return;
+    }
+
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        values.address
+      )}&key=${GOOGLE_MAP_KEY}`
+    );
+    const json = await response.json();
+
+    if (json.status === "OK") {
+      const latitude = json.results[0].geometry.location.lat;
+      const longitude = json.results[0].geometry.location.lng;
+      values.coordinates = {
+        latitude,
+        longitude,
+      };
     }
 
     const result = await createVenueMutation.mutateAsync({

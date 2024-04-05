@@ -42,8 +42,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
     pdfs: [],
     comments: [],
     contactCards: [],
-    createdByUID: "",
     description: "",
+    createdByUID: "",
     coordinates: {},
   });
 
