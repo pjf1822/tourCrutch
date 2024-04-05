@@ -5,8 +5,15 @@ import { useQuery } from "react-query";
 import { myColors } from "../theme.js";
 import { GOOGLE_MAP_KEY } from "@env";
 
-const GoogleMapComp = ({ address, coordinates }) => {
-  // console.log(coordinates, typeof coordinates.latitude);
+const GoogleMapComp = ({ coordinates }) => {
+  const [mapKey, setMapKey] = useState(0);
+
+  useEffect(() => {
+    // Increment the key to force a re-render whenever coordinates change
+    setMapKey((prevKey) => prevKey + 1);
+  }, [coordinates]);
+  // console.log(coordinates, "they loaded");
+
   if (!coordinates || !coordinates.latitude || !coordinates.longitude) {
     return null;
   }
@@ -31,6 +38,7 @@ const GoogleMapComp = ({ address, coordinates }) => {
 
   return (
     <MapView
+      key={mapKey}
       style={styles.map}
       initialRegion={{
         latitude: coordinates.latitude,

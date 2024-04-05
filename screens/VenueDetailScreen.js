@@ -3,28 +3,25 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
-  TouchableOpacity,
-  Text,
-  Platform,
   ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
-import { myColors, regFont } from "../theme";
+import { myColors } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import FilesModal from "../components/FilesModal";
 import ContactSection from "../components/ContactSection";
 import DisplayedDataForm from "../components/DisplayedDataForm";
 import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
-import Icon from "react-native-vector-icons/FontAwesome";
 import AddContactCardModal from "../components/AddContactCardModel";
 import DescriptionSection from "../components/DescriptionSection";
 import MyButton from "../components/MyComponents/MyButton";
 import { uploadPDF } from "../functionUtils/storageFunctionUtils";
 import GoogleMapComp from "../components/GoogleMapComp";
 import YelpList from "../components/YelpList";
+import AddContact from "../components/AddContact";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -143,44 +140,14 @@ const VenueDetailScreen = ({ route, navigation }) => {
           initialVenueData={initialVenueData}
           setUpdatedVenueData={setUpdatedVenueData}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity onPress={toggleContactModal}>
-            <Icon
-              name="plus"
-              style={{ color: "white", fontSize: 24, marginTop: 6 }}
-            />
-          </TouchableOpacity>
-          {updatedVenueData?.contactCards?.length === 0 && (
-            <TouchableOpacity
-              onPress={toggleContactModal}
-              style={{
-                backgroundColor: myColors.beige,
-                borderRadius: 10,
-                marginLeft: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: regFont.fontFamily,
-                  padding: 10,
-                  fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 16,
-                }}
-              >
-                Add Contact Cards
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+
+        <AddContact
+          toggleContactModal={toggleContactModal}
+          updatedVenueData={updatedVenueData}
+        />
+
         {updatedVenueData?.coordinates?.longitude && (
-          <GoogleMapComp
-            address={updatedVenueData.address}
-            coordinates={updatedVenueData.coordinates}
-          />
+          <GoogleMapComp coordinates={updatedVenueData.coordinates} />
         )}
 
         {updatedVenueData?.coordinates?.longitude && (
@@ -203,7 +170,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           justifyContent: "space-around",
           paddingBottom: windowHeight / 29,
           paddingTop: 8,
-          // backgroundColor: "rgba(0, 0, 220, 0.0.4)",
         }}
       >
         <MyButton

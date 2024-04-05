@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Stars from "react-native-stars";
@@ -17,7 +17,6 @@ import { myColors, regFont } from "../theme";
 
 const YelpList = ({ coordinates }) => {
   const fetchRestaurants = async () => {
-    console.log("hey", coordinates);
     const response = await fetch(
       `https://api.yelp.com/v3/businesses/search?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=16093&categories=restaurants&limit=10`,
       {
@@ -34,14 +33,21 @@ const YelpList = ({ coordinates }) => {
     data: restaurants,
     error,
     isLoading,
+    refetch,
   } = useQuery("restaurants", fetchRestaurants);
+
+  useEffect(() => {
+    refetch();
+  }, [coordinates]);
 
   const handlePress = (url) => {
     Linking.openURL(url);
   };
   return (
     <View style={styles.wrapper}>
-      <Text style={[styles.listItem, { fontSize: 20 }]}>Local Eats</Text>
+      <Text style={[styles.listItem, { fontSize: 20, paddingBottom: 8 }]}>
+        Local Eats
+      </Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {restaurants &&
           restaurants.map((place) => (
@@ -51,6 +57,7 @@ const YelpList = ({ coordinates }) => {
               style={{
                 justifyContent: "space-between",
                 flexDirection: "row",
+                marginTop: 10,
               }}
             >
               <View>
@@ -62,7 +69,7 @@ const YelpList = ({ coordinates }) => {
               </View>
               <View>
                 <Text style={styles.listItem}>
-                  {place?.distance.toFixed()} meters away
+                  {(place?.distance * 0.000621371).toFixed(2)} miles away
                 </Text>
                 <Stars
                   default={place?.rating}
