@@ -23,6 +23,7 @@ export const createVenue = async (
         values.address
       )}&key=${GOOGLE_MAP_KEY}`
     );
+
     const json = await response.json();
 
     if (json.status === "OK") {

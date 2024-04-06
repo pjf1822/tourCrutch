@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useQuery } from "react-query";
 import { myColors } from "../theme.js";
-import { GOOGLE_MAP_KEY } from "@env";
 
 const GoogleMapComp = ({ coordinates }) => {
   const [mapKey, setMapKey] = useState(0);
