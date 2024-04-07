@@ -9,14 +9,18 @@ export const createVenue = async (
   resetForm
 ) => {
   try {
-    if (!values?.name || !values?.link || !values?.address) {
+    if (!values?.name || !values?.address) {
       showToast("Please fill out all fields", false, "top");
       return;
     }
-    if (!isValidUrl(values?.link)) {
-      showToast("Please enter a valid URL for the venue link", false, "top");
-      return;
+
+    if (values.link === "") {
+      delete values.link;
     }
+    // if (!isValidUrl(values?.link)) {
+    //   showToast("Please enter a valid URL for the venue link", false, "top");
+    //   return;
+    // }
 
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
