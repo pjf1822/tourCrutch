@@ -39,15 +39,14 @@ const GoogleMapComp = ({ coordinates }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   map: {
     flex: 1,
+    width: "100%",
     borderRadius: 50,
     borderColor: myColors.beige,
     borderWidth: 4,
-    margin: 20,
+    marginTop: 20,
+    marginBottom: 20,
     minHeight: 300,
   },
 });

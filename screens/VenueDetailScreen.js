@@ -16,12 +16,12 @@ import DisplayedDataForm from "../components/DisplayedDataForm";
 import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
 import AddContactCardModal from "../components/AddContactCardModel";
-import DescriptionSection from "../components/DescriptionSection";
 import MyButton from "../components/MyComponents/MyButton";
 import { uploadPDF } from "../functionUtils/storageFunctionUtils";
 import GoogleMapComp from "../components/GoogleMapComp";
 import YelpList from "../components/YelpList";
 import AddContact from "../components/AddContact";
+import AudioLightingDetails from "../components/AudioLightingDetails";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -146,6 +146,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
           updatedVenueData={updatedVenueData}
         />
 
+        <AudioLightingDetails />
+
         {updatedVenueData?.coordinates?.longitude && (
           <GoogleMapComp coordinates={updatedVenueData.coordinates} />
         )}
@@ -154,14 +156,6 @@ const VenueDetailScreen = ({ route, navigation }) => {
           <YelpList coordinates={updatedVenueData.coordinates} />
         )}
       </ScrollView>
-      {/* <DescriptionSection
-          updatedVenueData={updatedVenueData}
-          setUpdatedVenueData={setUpdatedVenueData}
-          updateVenueInfoMutation={updateVenueInfoMutation}
-          venueId={venueId}
-          user={user}
-          initialVenueData={initialVenueData}
-        /> */}
 
       <View
         style={{

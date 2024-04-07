@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: myColors.beige,
     borderRadius: 10,
     maxHeight: 300,
-    width: "90%",
+    width: "100%",
     display: "flex",
     alignSelf: "center",
     marginBottom: 20,
