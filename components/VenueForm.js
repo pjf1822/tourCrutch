@@ -26,7 +26,7 @@ const VenueForm = ({
           />
 
           <MyTextInput2
-            placeholder={initialValues.link || "Link"}
+            placeholder={initialValues.link || "Link (optional)"}
             onChangeText={handleChange("link")}
             onBlur={handleBlur("link")}
             value={values.link}
