@@ -1,34 +1,48 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { myColors, regFont } from "../theme";
 import { Picker } from "@react-native-picker/picker";
 import MyButton from "./MyComponents/MyButton";
-const AudioLightingDetails = () => {
+import { handleUpdateVenueInfo } from "../crudUtils/venue";
+const AudioLightingDetails = ({
+  updatedVenueData,
+  updateVenueInfoMutation,
+  venueId,
+  setUpdatedVenueData,
+  user,
+}) => {
   const [editing, setEditing] = useState(false);
+
   const [formData, setFormData] = useState({
     // general
-    venueType: "Club",
-    capicity: "345",
-    stageSize: "a bsolutel enormo",
-    loadIn: "back door",
-    parking: "no thanks",
-    housePower: "hella amps",
+    venueType: "",
+    capacity: "",
+    stageSize: "",
+    loadIn: "",
+    parking: "",
+    housePower: "",
     // audio
-    pa: "banana hang",
-    micPackage: "only shotguns",
-    fohDesk: "fisherprice",
-    monDesk: "midas 3k",
-    monitors: "MJF214",
+    pa: "",
+    micPackage: "",
+    fohDesk: "",
+    monDesk: "",
+    monitors: "",
     // lighting
-    lightingDesk: "HOG",
-    lightingPackage: "lampy things",
-    greenRooms: "not for you",
-    showers: "-1",
+    lightingDesk: "",
+    lightingPackage: "",
+    greenRooms: "",
+    showers: "",
     // video
-    video: "yes",
+    video: "",
     // rigging
-    rigging: "doggy bones everywhere",
+    rigging: "",
   });
+  const resetFormData = () => {
+    setFormData(updatedVenueData.productionInfo);
+  };
+  useEffect(() => {
+    resetFormData();
+  }, [updatedVenueData]);
 
   const handleInputChange = (fieldName, text) => {
     setFormData((prevState) => ({
@@ -37,9 +51,23 @@ const AudioLightingDetails = () => {
     }));
   };
 
+  const handleUpdate = async (values) => {
+    const response = await handleUpdateVenueInfo(
+      updateVenueInfoMutation,
+      venueId,
+      updatedVenueData?.createdByUID,
+      user?.uid,
+      updatedVenueData,
+      {
+        productionInfo: formData,
+      }
+    );
+    setUpdatedVenueData(response.venue);
+  };
+
   return (
     <View style={styles.wrapper}>
-      {editing && (
+      {/* {editing && (
         <Text
           style={[styles.sectionHeader, { marginBottom: editing ? -3 : 10 }]}
         >
@@ -84,15 +112,15 @@ const AudioLightingDetails = () => {
         {editing ? (
           <TextInput
             // placeholder="Capacity"
-            onChangeText={(text) => handleInputChange("capicity", text)}
-            value={formData.capicity}
+            onChangeText={(text) => handleInputChange("capacity", text)}
+            value={formData.capacity}
             secureTextEntry={false}
             width={"80%"}
             style={styles.formTextInput}
             placeholderTextColor={"gray"}
           />
         ) : (
-          <Text style={styles.formText}>{formData.capicity}</Text>
+          <Text style={styles.formText}>{formData.capacity}</Text>
         )}
       </View>
       <View style={styles.entryWrapper}>
@@ -364,15 +392,162 @@ const AudioLightingDetails = () => {
         ) : (
           <Text style={styles.formText}>{formData.showers}</Text>
         )}
-      </View>
+      </View> */}
+      {editing && (
+        <Text
+          style={[styles.sectionHeader, { marginBottom: editing ? -3 : 10 }]}
+        >
+          Venue Type
+        </Text>
+      )}
+
+      {editing && (
+        <Picker
+          selectedValue={formData.venueType}
+          onValueChange={(itemValue) =>
+            handleInputChange("venueType", itemValue)
+          }
+          itemStyle={{
+            fontFamily: regFont.fontFamily,
+            fontSize: 18,
+            width: "80%",
+            backgroundColor: myColors.beige,
+            alignSelf: "center",
+            height: 100,
+            borderRadius: 10,
+          }}
+        >
+          <Picker.Item label="Club" value="Club" />
+          <Picker.Item label="Arena" value="Arena" />
+          <Picker.Item label="Shed" value="Shed" />
+          <Picker.Item label="Festival" value="Festival" />
+        </Picker>
+      )}
+
+      <Text style={styles.sectionHeader}>General</Text>
+
+      {!editing && (
+        <View
+          style={[styles.entryWrapper, { borderBottomWidth: editing ? 0 : 3 }]}
+        >
+          <Text style={[styles.listItem, { fontSize: editing ? 15 : 17 }]}>
+            Venue Type
+          </Text>
+          <Text style={styles.formText}>{formData.venueType}</Text>
+        </View>
+      )}
+
+      {Object.entries(formData).map(([fieldName, value], index) => {
+        if (index === 0) {
+          return null; // Skip rendering the first entry
+        }
+        const formattedFieldName = fieldName
+          .replace(/([A-Z])/g, " $1")
+          .trim()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+
+        const headers = {
+          housePower: "Audio",
+          lightingDesk: "Lighting",
+          greenRooms: "General",
+          // Add more headers for other field names as needed
+        };
+        return (
+          <View
+            key={fieldName}
+            style={[
+              styles.entryWrapper,
+              { borderBottomWidth: editing ? 0 : 3 },
+              { paddingBottom: editing ? 0 : 3 },
+            ]}
+          >
+            <View style={{ width: "100%" }}>
+              {headers[fieldName] && (
+                <Text style={styles.sectionHeader}>{headers[fieldName]}</Text>
+              )}
+              <View
+                style={{
+                  // width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[styles.listItem, { fontSize: editing ? 15 : 17 }]}
+                >
+                  {formattedFieldName}
+                </Text>
+                {editing ? (
+                  <TextInput
+                    multiline={
+                      fieldName === "lightingPackage" ||
+                      fieldName === "loadIn" ||
+                      fieldName === "parking" ||
+                      fieldName === "housePower" ||
+                      fieldName === "pa" ||
+                      fieldName === "micPackage" ||
+                      fieldName === "monitors" ||
+                      fieldName === "video" ||
+                      fieldName === "rigging"
+                        ? true
+                        : false
+                    }
+                    numberOfLines={4}
+                    maxLength={
+                      fieldName === "lightingPackage" ||
+                      fieldName === "loadIn" ||
+                      fieldName === "parking" ||
+                      fieldName === "housePower" ||
+                      fieldName === "pa" ||
+                      fieldName === "micPackage" ||
+                      fieldName === "monitors" ||
+                      fieldName === "video" ||
+                      fieldName === "rigging"
+                        ? 300
+                        : 100
+                    }
+                    onChangeText={(text) => handleInputChange(fieldName, text)}
+                    value={value}
+                    style={styles.formTextInput}
+                    placeholderTextColor={"gray"}
+                  />
+                ) : (
+                  <Text style={[styles.formText, { flexShrink: 1 }]}>
+                    {value}
+                  </Text>
+                )}
+              </View>
+            </View>
+          </View>
+        );
+      })}
       <View style={{ height: 10 }}></View>
       <MyButton
         title={editing ? "Update" : "Edit"}
         onPress={() => {
+          if (editing) {
+            handleUpdate();
+          }
           setEditing(!editing);
         }}
         width={"80%"}
       />
+      <View style={{ height: 10 }}></View>
+
+      {editing && (
+        <MyButton
+          title={"Cancel"}
+          onPress={() => {
+            resetFormData();
+            setEditing(!editing);
+          }}
+          width={"80%"}
+        />
+      )}
     </View>
   );
 };
@@ -405,19 +580,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 2,
+    borderColor: "rgba(203,114,89,0.2)",
+    marginBottom: 14,
   },
+
   title: {
     fontFamily: regFont.fontFamily,
   },
   listItem: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
-    fontSize: 15,
   },
   formText: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
     fontSize: 16,
+    maxWidth: "70%",
+    textAlign: "right",
   },
   formTextInput: {
     borderWidth: 2,
@@ -425,7 +604,7 @@ const styles = StyleSheet.create({
     borderColor: myColors.white,
     padding: 10,
     flex: 1,
-    maxWidth: "75%",
+    maxWidth: "73%",
     fontFamily: regFont.fontFamily,
     backgroundColor: myColors.black,
     alignSelf: "center",

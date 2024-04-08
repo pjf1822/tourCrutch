@@ -29,7 +29,6 @@ const NewVenueScreen = ({ navigation }) => {
     pdfs: [],
     comments: [],
     contactCards: [],
-    description: "",
     coordinates: {},
   };
 

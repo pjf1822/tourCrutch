@@ -42,9 +42,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
     pdfs: [],
     comments: [],
     contactCards: [],
-    description: "",
     createdByUID: "",
     coordinates: {},
+    productionInfo: {},
   });
 
   const togglePDFModal = () => {
@@ -79,8 +79,26 @@ const VenueDetailScreen = ({ route, navigation }) => {
         comments: initialVenueData.comments,
         createdByUID: initialVenueData.createdByUID,
         contactCards: initialVenueData?.contactCards,
-        description: initialVenueData.description,
         coordinates: initialVenueData.coordinates,
+        productionInfo: initialVenueData.productionInfo || {
+          venueType: "",
+          capacity: "",
+          stageSize: "",
+          loadIn: "",
+          parking: "",
+          housePower: "",
+          pa: "",
+          micPackage: "",
+          fohDesk: "",
+          monDesk: "",
+          monitors: "",
+          lightingDesk: "",
+          lightingPackage: "",
+          greenRooms: "",
+          showers: "",
+          video: "",
+          rigging: "",
+        },
       });
     }
   }, [initialVenueData]);
@@ -130,7 +148,11 @@ const VenueDetailScreen = ({ route, navigation }) => {
 
       <ScrollView
         showsVerticalScrollIndicator="false"
-        contentContainerStyle={{ marginLeft: 7, marginRight: 7 }}
+        contentContainerStyle={{
+          marginLeft: 7,
+          marginRight: 7,
+        }}
+        style={{ borderRadius: 10 }}
       >
         <ContactSection
           updatedVenueData={updatedVenueData}
@@ -146,7 +168,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
           updatedVenueData={updatedVenueData}
         />
 
-        <AudioLightingDetails />
+        <AudioLightingDetails
+          updatedVenueData={updatedVenueData}
+          updateVenueInfoMutation={updateVenueInfoMutation}
+          venueId={venueId}
+          setUpdatedVenueData={setUpdatedVenueData}
+          user={user}
+        />
 
         {updatedVenueData?.coordinates?.longitude && (
           <GoogleMapComp coordinates={updatedVenueData.coordinates} />
@@ -175,7 +203,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         />
         <View style={{ height: 5 }}></View>
         <MyButton
-          title="Update Venue"
+          title="Update Venue Address/URL"
           onPress={toggleVenueDataModal}
           warning={false}
           width={"80%"}
