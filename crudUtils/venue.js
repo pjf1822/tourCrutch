@@ -9,19 +9,20 @@ export const createVenue = async (
   resetForm
 ) => {
   try {
-    if (!values?.name || !values?.address) {
-      showToast("Please fill out all fields", false, "top");
+    if (!values?.name) {
+      showToast("Please fill out the name field", false, "top");
       return;
     }
 
-    if (values.link === "") {
-      delete values.link;
+    if (!values?.address) {
+      showToast("Please select an address from the dropdown", false, "top");
+      return;
     }
-    // if (!isValidUrl(values?.link)) {
-    //   showToast("Please enter a valid URL for the venue link", false, "top");
-    //   return;
-    // }
 
+    if (values?.link && !isValidUrl(values?.link)) {
+      showToast("Please enter a valid URL for the venue link", false, "top");
+      return;
+    }
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         values.address
