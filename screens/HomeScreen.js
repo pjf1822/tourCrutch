@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Dimensions,
   Platform,
+  ScrollView,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
@@ -21,10 +22,18 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
+  const [page, setPage] = useState(1);
+  const [searchTimeout, setSearchTimeout] = useState(null); // State to hold the timeout
+
   const windowHeight = Dimensions.get("window").height;
 
   const { loading: userLoading, setLoading: setUserLoading } = useUser();
-  const { data: fetchedVenues, isLoading, isError, refetch } = useFetchVenues();
+  const {
+    data: fetchedVenues,
+    isLoading,
+    isError,
+    refetch,
+  } = useFetchVenues(search, page);
 
   useEffect(() => {
     if (!isLoading && !isError) {
@@ -32,8 +41,21 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [fetchedVenues, isLoading, isError]);
 
+  const handleSearchChange = (text) => {
+    setSearch(text);
+    clearTimeout(searchTimeout); // Clear the previous timeout
+    // Set a new timeout to trigger the search after 500 milliseconds
+    if (text.length >= 2) {
+      // Change the condition to check for at least two characters
+      setSearchTimeout(
+        setTimeout(() => {
+          refetch(); // Fetch venues
+        }, 500)
+      );
+    }
+  };
   // For the search bar
-  const result = filterVenues(venues, search);
+  // const result = filterVenues(venues, search);
 
   // use effect that reads route params when the page is opened
   useFocusEffect(
@@ -73,7 +95,7 @@ const HomeScreen = ({ navigation, route }) => {
           placeholder="Search A Venue"
           value={search}
           placeholderTextColor={myColors.beige}
-          onChangeText={(search) => setSearch(search)}
+          onChangeText={(text) => setSearch(text)} // Use the new handler
           style={{
             flex: 1,
             fontFamily: regFont.fontFamily,
@@ -101,17 +123,17 @@ const HomeScreen = ({ navigation, route }) => {
           searchIcon={<Icon name="search" size={17} color={myColors.beige} />}
         />
         {!userLoading && !isLoading && (
-          <FlatList
-            contentContainerStyle={{
-              flex: 1,
-            }}
-            data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
-            renderItem={({ item, index }) => (
-              <HomePageFlatListItem item={item} navigation={navigation} />
-            )}
-            ItemSeparatorComponent={<FlatListSeparator />}
-            keyExtractor={(item, index) => item?._id || index.toString()}
-          />
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            {venues.map((fuseResult, index) => (
+              <View key={index}>
+                <HomePageFlatListItem
+                  item={fuseResult?.item || fuseResult}
+                  navigation={navigation}
+                />
+                {index < venues.length - 1 && <FlatListSeparator />}
+              </View>
+            ))}
+          </ScrollView>
         )}
         <View
           style={{
