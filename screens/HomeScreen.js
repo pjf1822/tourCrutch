@@ -23,7 +23,6 @@ const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
   const [page, setPage] = useState(1);
-  const [searchTimeout, setSearchTimeout] = useState(null); // State to hold the timeout
 
   const windowHeight = Dimensions.get("window").height;
 
@@ -40,22 +39,6 @@ const HomeScreen = ({ navigation, route }) => {
       setVenues(fetchedVenues || []);
     }
   }, [fetchedVenues, isLoading, isError]);
-
-  const handleSearchChange = (text) => {
-    setSearch(text);
-    clearTimeout(searchTimeout); // Clear the previous timeout
-    // Set a new timeout to trigger the search after 500 milliseconds
-    if (text.length >= 2) {
-      // Change the condition to check for at least two characters
-      setSearchTimeout(
-        setTimeout(() => {
-          refetch(); // Fetch venues
-        }, 500)
-      );
-    }
-  };
-  // For the search bar
-  // const result = filterVenues(venues, search);
 
   // use effect that reads route params when the page is opened
   useFocusEffect(
