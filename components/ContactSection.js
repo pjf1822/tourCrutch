@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import React from "react";
 import ContactCard from "./ContactCard";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";

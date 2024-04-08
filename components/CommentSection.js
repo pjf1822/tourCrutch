@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  ActivityIndicator,
   Platform,
   ScrollView,
 } from "react-native";
@@ -83,18 +82,15 @@ const CommentSection = ({ venueId, userId, displayName }) => {
 
             <Text style={styles.commentText}>{comment?.comment}</Text>
             <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
-            {!userPhotos[comment?.userUid] ? (
-              <ActivityIndicator size="small" color="#0000ff" />
-            ) : (
-              <Image
-                source={
-                  userPhotos[comment?.userUid] === "noPic"
-                    ? Smiley
-                    : { uri: userPhotos[comment?.userUid] }
-                }
-                style={styles.userPhoto}
-              />
-            )}
+
+            <Image
+              source={
+                userPhotos[comment?.userUid] === "noPic"
+                  ? Smiley
+                  : { uri: userPhotos[comment?.userUid] }
+              }
+              style={styles.userPhoto}
+            />
           </View>
         ))}
       </ScrollView>

@@ -1,6 +1,5 @@
 import {
   View,
-  FlatList,
   StyleSheet,
   ImageBackground,
   Dimensions,
@@ -107,10 +106,10 @@ const HomeScreen = ({ navigation, route }) => {
         />
         {!userLoading && !isLoading && (
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            {venues.map((fuseResult, index) => (
+            {venues.map((venue, index) => (
               <View key={index}>
                 <HomePageFlatListItem
-                  item={fuseResult?.item || fuseResult}
+                  item={venue?.item || venue}
                   navigation={navigation}
                 />
                 {index < venues.length - 1 && <FlatListSeparator />}
