@@ -36,7 +36,6 @@ export const pickImage = async (user, setUser, toggleProfileUpdated) => {
     }
 
     const imageURL = await uploadUserProfilePic(uri, user);
-    console.log(imageURL, "we have escaped that ");
     await updateProfile(user, { photoURL: imageURL });
     toggleProfileUpdated();
   } catch (error) {
