@@ -83,8 +83,8 @@ const DrawerNavigator = ({ user }) => {
             <Image
               source={require("../../assets/logito.png")}
               style={{
-                width: Platform.OS === "ios" && Platform.isPad ? 70 : 45,
-                height: Platform.OS === "ios" && Platform.isPad ? 70 : 45,
+                width: Platform.OS === "ios" && Platform.isPad ? 70 : 50,
+                height: Platform.OS === "ios" && Platform.isPad ? 70 : 50,
 
                 marginLeft: 10,
               }}

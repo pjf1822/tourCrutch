@@ -74,10 +74,8 @@ export const uploadUserProfilePic = async (imageUri, user) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(progress);
         },
         (error) => {
-          console.log("are we in here");
           reject(error);
         },
         async () => {
@@ -85,8 +83,6 @@ export const uploadUserProfilePic = async (imageUri, user) => {
             const downloadURL = await getDownloadURL(uploadTask?.snapshot?.ref);
             resolve(downloadURL);
           } catch (error) {
-            console.log("or here");
-
             showToast(error, false, "top");
             reject(error);
           }
