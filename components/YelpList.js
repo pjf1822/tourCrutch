@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   myEmptyStarStyle: {
-    color: myColors.black,
+    color: myColors.pink,
   },
 });
 

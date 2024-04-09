@@ -9,6 +9,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 
 // AUTH STACK
 const AuthStack = createNativeStackNavigator();
+
 const AuthNavigator = () => (
   <AuthStack.Navigator
     screenOptions={{

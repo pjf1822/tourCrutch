@@ -2,9 +2,9 @@
   "expo": {
     "name": "Tour Crutch",
     "slug": "tourCrutch",
-    "version": "1.2.25",
+    "version": "1.2.26",
     "orientation": "portrait",
-    "icon": "./assets/dope.png",
+    "icon": "./assets/nailed-it.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/DJ.jpg",
@@ -31,7 +31,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "25",
+      "buildNumber": "26",
       "icon": "./assets/nailed-it.jpg",  
       "config": {
         "usesNonExemptEncryption": false
@@ -70,7 +70,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/nailed-it.jpg"
     },
     "extra": {
       "eas": {
