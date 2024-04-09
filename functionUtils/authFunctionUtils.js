@@ -26,7 +26,7 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
             profileData.photoURL = imageURL;
             updateProfile(user, profileData)
               .then(() => {
-                handleSignIn(email, password);
+                handleSignIn(email, password, true);
                 showToast("Account created!", true, "top");
               })
               .catch((profileError) => {
@@ -49,7 +49,7 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
       } else {
         updateProfile(user, profileData)
           .then(() => {
-            handleSignIn(email, password);
+            handleSignIn(email, password, true);
             showToast("Account created!", true, "top");
           })
           .catch((profileError) => {
@@ -76,14 +76,14 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
     });
 };
 
-export const handleSignIn = (email, password) => {
+export const handleSignIn = (email, password, accountCreated) => {
   if (!email || !password) {
     showToast("Please fill in all fields", false, "top");
     return;
   }
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      showToast("User signed in!", true, "top");
+      !accountCreated && showToast("User signed in!", true, "top");
     })
     .catch((error) => {
       console.log(error.message);
@@ -114,11 +114,9 @@ export const handleDeleteUser = (email, password, toggleOverlay) => {
 
     reauthenticateWithCredential(user, credentials)
       .then(() => {
+        showToast("User Deleted", true, "top");
         toggleOverlay();
         return deleteUser(user);
-      })
-      .then(() => {
-        showToast("User Deleted", true, "top");
       })
       .catch((error) => {
         if (error.message === "Firebase: Error (auth/invalid-email).") {
