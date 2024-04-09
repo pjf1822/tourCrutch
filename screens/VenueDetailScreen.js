@@ -101,6 +101,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           showers: "",
           video: "",
           rigging: "",
+          moreInfo: "",
         },
       });
     }

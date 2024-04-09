@@ -30,12 +30,13 @@ const AudioLightingDetails = ({
     // lighting
     lightingDesk: "",
     lightingPackage: "",
-    greenRooms: "",
-    showers: "",
     // video
     video: "",
     // rigging
     rigging: "",
+    greenRooms: "",
+    showers: "",
+    moreInfo: "",
   });
 
   const resetFormData = () => {
@@ -44,6 +45,7 @@ const AudioLightingDetails = ({
 
   useEffect(() => {
     resetFormData();
+    setEditing(false);
   }, [updatedVenueData]);
 
   const handleInputChange = (fieldName, text) => {
@@ -120,6 +122,7 @@ const AudioLightingDetails = ({
       {/*  */}
 
       {Object.entries(formData).map(([fieldName, value], index) => {
+        console.log(fieldName, "check it");
         if (index === 0) {
           return null; // Skip rendering the first entry
         }
@@ -132,8 +135,10 @@ const AudioLightingDetails = ({
           .join(" ");
 
         const headers = {
-          housePower: "Audio",
+          pa: "Audio",
           lightingDesk: "Lighting",
+          video: "Video",
+          rigging: "Rigging",
           greenRooms: "Misc",
         };
         return (
@@ -162,6 +167,7 @@ const AudioLightingDetails = ({
                 >
                   {formattedFieldName}
                 </Text>
+
                 {editing ? (
                   <TextInput
                     multiline={
@@ -173,11 +179,12 @@ const AudioLightingDetails = ({
                       fieldName === "micPackage" ||
                       fieldName === "monitors" ||
                       fieldName === "video" ||
-                      fieldName === "rigging"
+                      fieldName === "rigging" ||
+                      fieldName === "moreInfo"
                         ? true
                         : false
                     }
-                    numberOfLines={4}
+                    numberOfLines={10}
                     maxLength={
                       fieldName === "lightingPackage" ||
                       fieldName === "loadIn" ||
@@ -187,8 +194,9 @@ const AudioLightingDetails = ({
                       fieldName === "micPackage" ||
                       fieldName === "monitors" ||
                       fieldName === "video" ||
-                      fieldName === "rigging"
-                        ? 300
+                      fieldName === "rigging" ||
+                      fieldName === "moreInfo"
+                        ? 1000
                         : 100
                     }
                     onChangeText={(text) => handleInputChange(fieldName, text)}
@@ -271,13 +279,14 @@ const styles = StyleSheet.create({
   listItem: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
+    maxWidth: "20%",
   },
   formText: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
     fontSize: 16,
-    maxWidth: "70%",
-    textAlign: "right",
+    width: "70%",
+    textAlign: "left",
   },
   formTextInput: {
     borderWidth: 2,
