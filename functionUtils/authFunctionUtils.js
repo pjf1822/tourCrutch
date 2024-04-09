@@ -117,7 +117,9 @@ export const handleDeleteUser = (email, password, toggleOverlay) => {
         toggleOverlay();
         return deleteUser(user);
       })
-      .then(() => {})
+      .then(() => {
+        showToast("User Deleted", true, "top");
+      })
       .catch((error) => {
         if (error.message === "Firebase: Error (auth/invalid-email).") {
           showToast("Invalid email or password", false, "top");

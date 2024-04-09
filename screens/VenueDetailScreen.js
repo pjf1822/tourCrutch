@@ -4,8 +4,6 @@ import {
   Dimensions,
   ImageBackground,
   ScrollView,
-  Button,
-  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
