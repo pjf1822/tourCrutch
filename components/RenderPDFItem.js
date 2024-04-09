@@ -22,6 +22,7 @@ const RenderPDFItem = ({
     const itemIndex = updatedPDFs.indexOf(item);
     if (itemIndex !== -1) {
       const deletedPDF = updatedPDFs.splice(itemIndex, 1)[0];
+
       const storageRef = ref(storage, `venue-info/${venueId}/${deletedPDF}`);
       try {
         await deleteObject(storageRef);

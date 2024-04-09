@@ -22,6 +22,7 @@ import GoogleMapComp from "../components/GoogleMapComp";
 import YelpList from "../components/YelpList";
 import AddContact from "../components/AddContact";
 import AudioLightingDetails from "../components/AudioLightingDetails";
+import OpenInGoogleMaps from "../components/OpenInGoogleMaps";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -98,6 +99,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           showers: "",
           video: "",
           rigging: "",
+          moreInfo: "",
         },
       });
     }
@@ -168,6 +170,9 @@ const VenueDetailScreen = ({ route, navigation }) => {
           updatedVenueData={updatedVenueData}
         />
 
+        {updatedVenueData?.coordinates?.longitude && (
+          <GoogleMapComp coordinates={updatedVenueData.coordinates} />
+        )}
         <AudioLightingDetails
           updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
@@ -177,11 +182,12 @@ const VenueDetailScreen = ({ route, navigation }) => {
         />
 
         {updatedVenueData?.coordinates?.longitude && (
-          <GoogleMapComp coordinates={updatedVenueData.coordinates} />
-        )}
-
-        {updatedVenueData?.coordinates?.longitude && (
-          <YelpList coordinates={updatedVenueData.coordinates} />
+          <View>
+            <YelpList coordinates={updatedVenueData.coordinates} />
+            <OpenInGoogleMaps
+              updatedVenueDataCoordinates={updatedVenueData.coordinates}
+            />
+          </View>
         )}
       </ScrollView>
 

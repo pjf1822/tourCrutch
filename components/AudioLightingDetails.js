@@ -30,18 +30,22 @@ const AudioLightingDetails = ({
     // lighting
     lightingDesk: "",
     lightingPackage: "",
-    greenRooms: "",
-    showers: "",
     // video
     video: "",
     // rigging
     rigging: "",
+    greenRooms: "",
+    showers: "",
+    moreInfo: "",
   });
+
   const resetFormData = () => {
     setFormData(updatedVenueData.productionInfo);
   };
+
   useEffect(() => {
     resetFormData();
+    setEditing(false);
   }, [updatedVenueData]);
 
   const handleInputChange = (fieldName, text) => {
@@ -51,7 +55,7 @@ const AudioLightingDetails = ({
     }));
   };
 
-  const handleUpdate = async (values) => {
+  const handleUpdate = async () => {
     const response = await handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,
@@ -64,335 +68,33 @@ const AudioLightingDetails = ({
     );
     setUpdatedVenueData(response.venue);
   };
+  // this is used strictly for order
+  const fieldOrder = [
+    "venueType",
+    "capacity",
+    "stageSize",
+    "loadIn",
+    "parking",
+    "housePower",
+    "pa",
+    "micPackage",
+    "fohDesk",
+    "monDesk",
+    "monitors",
+    "lightingDesk",
+    "lightingPackage",
+    "video",
+    "rigging",
+    "greenRooms",
+    "showers",
+    "moreInfo",
+  ];
 
   return (
     <View style={styles.wrapper}>
-      {/* {editing && (
-        <Text
-          style={[styles.sectionHeader, { marginBottom: editing ? -3 : 10 }]}
-        >
-          Venue Type
-        </Text>
-      )}
-
-      {editing && (
-        <Picker
-          selectedValue={formData.venueType}
-          onValueChange={(itemValue) =>
-            handleInputChange("venueType", itemValue)
-          }
-          itemStyle={{
-            fontFamily: regFont.fontFamily,
-            fontSize: 18,
-            width: "80%",
-            backgroundColor: myColors.beige,
-            alignSelf: "center",
-            height: 100,
-            borderRadius: 10,
-          }}
-        >
-          <Picker.Item label="Club" value="Club" />
-          <Picker.Item label="Arena" value="Arena" />
-          <Picker.Item label="Shed" value="Shed" />
-          <Picker.Item label="Festival" value="Festival" />
-        </Picker>
-      )}
-
-      <Text style={styles.sectionHeader}>General</Text>
-
-      {!editing && (
-        <View style={styles.entryWrapper}>
-          <Text style={styles.listItem}>Venue Type</Text>
-          <Text style={styles.formText}>{formData.venueType}</Text>
-        </View>
-      )}
-
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Capacity</Text>
-        {editing ? (
-          <TextInput
-            // placeholder="Capacity"
-            onChangeText={(text) => handleInputChange("capacity", text)}
-            value={formData.capacity}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.capacity}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Stage Size</Text>
-        {editing ? (
-          <TextInput
-            // placeholder="Stage Size"
-            onChangeText={(text) => handleInputChange("stageSize", text)}
-            value={formData.stageSize}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.stageSize}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Load in</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="Load in"
-            onChangeText={(text) => handleInputChange("loadIn", text)}
-            value={formData.loadIn}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.loadIn}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>House Power</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="House Power"
-            onChangeText={(text) => handleInputChange("housePower", text)}
-            value={formData.housePower}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.housePower}</Text>
-        )}
-      </View>
-
-      <Text style={styles.sectionHeader}>Audio</Text>
-
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>FOH Desk</Text>
-        {editing ? (
-          <TextInput
-            // placeholder="Foh Desk"
-            onChangeText={(text) => handleInputChange("fohDesk", text)}
-            value={formData.fohDesk}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.fohDesk}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Mon Desk</Text>
-        {editing ? (
-          <TextInput
-            // placeholder="Mon Desk"
-            onChangeText={(text) => handleInputChange("monDesk", text)}
-            value={formData.monDesk}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.monDesk}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Monitors</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="Monitors"
-            onChangeText={(text) => handleInputChange("monitors", text)}
-            value={formData.monitors}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.monitors}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>PA:</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="PA"
-            onChangeText={(text) => handleInputChange("pa", text)}
-            value={formData.pa}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.pa}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Mic package</Text>
-        {editing ? (
-          <TextInput
-            editable
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            onChangeText={(text) => handleInputChange("micPackage", text)}
-            value={formData.micPackage}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Mic Package"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.micPackage}</Text>
-        )}
-      </View>
-      <Text style={styles.sectionHeader}>Lighting</Text>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Lighting Desk</Text>
-        {editing ? (
-          <TextInput
-            editable
-            onChangeText={(text) => handleInputChange("lightingDesk", text)}
-            value={formData.lightingDesk}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Lighting Desk"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.lightingDesk}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Floor package</Text>
-        {editing ? (
-          <TextInput
-            editable
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            onChangeText={(text) => handleInputChange("lightingPackage", text)}
-            value={formData.lightingPackage}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Floor Package"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.lightingPackage}</Text>
-        )}
-      </View>
-      <Text style={styles.sectionHeader}>Video</Text>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Video</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="Video"
-            onChangeText={(text) => handleInputChange("video", text)}
-            value={formData.video}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.video}</Text>
-        )}
-      </View>
-      <Text style={styles.sectionHeader}>Rigging</Text>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Rigging</Text>
-        {editing ? (
-          <TextInput
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            // placeholder="Rigging"
-            onChangeText={(text) => handleInputChange("rigging", text)}
-            value={formData.rigging}
-            secureTextEntry={false}
-            width={"80%"}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.rigging}</Text>
-        )}
-      </View>
-      <Text style={styles.sectionHeader}>Misc.</Text>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Parking</Text>
-        {editing ? (
-          <TextInput
-            editable
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            onChangeText={(text) => handleInputChange("parking", text)}
-            value={formData.parking}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Parking"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.parking}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Green Rooms</Text>
-        {editing ? (
-          <TextInput
-            editable
-            multiline
-            numberOfLines={4}
-            maxLength={300}
-            onChangeText={(text) => handleInputChange("greenRooms", text)}
-            value={formData.greenRooms}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Green Rooms"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.greenRooms}</Text>
-        )}
-      </View>
-      <View style={styles.entryWrapper}>
-        <Text style={styles.listItem}>Showers</Text>
-        {editing ? (
-          <TextInput
-            onChangeText={(text) => handleInputChange("showers", text)}
-            value={formData.showers}
-            style={styles.formTextInput}
-            placeholderTextColor={"gray"}
-            // placeholder="Showers"
-          />
-        ) : (
-          <Text style={styles.formText}>{formData.showers}</Text>
-        )}
-      </View> */}
+      {/*  */}
+      {/* First entry is a picker so theres an extra space for it */}
+      {/*  */}
       {editing && (
         <Text
           style={[styles.sectionHeader, { marginBottom: editing ? -3 : 10 }]}
@@ -433,14 +135,15 @@ const AudioLightingDetails = ({
           <Text style={[styles.listItem, { fontSize: editing ? 15 : 17 }]}>
             Venue Type
           </Text>
-          <Text style={styles.formText}>{formData.venueType}</Text>
+          <Text style={styles.formText}>{formData.venueType || "---"}</Text>
         </View>
       )}
+      {/*  */}
+      {/* actual list begins*/}
+      {/*  */}
 
-      {Object.entries(formData).map(([fieldName, value], index) => {
-        if (index === 0) {
-          return null; // Skip rendering the first entry
-        }
+      {fieldOrder.map((fieldName, index) => {
+        const value = formData[fieldName];
         const formattedFieldName = fieldName
           .replace(/([A-Z])/g, " $1")
           .trim()
@@ -448,11 +151,16 @@ const AudioLightingDetails = ({
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ");
 
+        if (index === 0) {
+          return null; // Skip rendering the first entry
+        }
+
         const headers = {
-          housePower: "Audio",
+          pa: "Audio",
           lightingDesk: "Lighting",
-          greenRooms: "General",
-          // Add more headers for other field names as needed
+          video: "Video",
+          rigging: "Rigging",
+          greenRooms: "Misc",
         };
         return (
           <View
@@ -469,7 +177,6 @@ const AudioLightingDetails = ({
               )}
               <View
                 style={{
-                  // width: "100%",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -481,6 +188,7 @@ const AudioLightingDetails = ({
                 >
                   {formattedFieldName}
                 </Text>
+
                 {editing ? (
                   <TextInput
                     multiline={
@@ -492,11 +200,12 @@ const AudioLightingDetails = ({
                       fieldName === "micPackage" ||
                       fieldName === "monitors" ||
                       fieldName === "video" ||
-                      fieldName === "rigging"
+                      fieldName === "rigging" ||
+                      fieldName === "moreInfo"
                         ? true
                         : false
                     }
-                    numberOfLines={4}
+                    numberOfLines={10}
                     maxLength={
                       fieldName === "lightingPackage" ||
                       fieldName === "loadIn" ||
@@ -506,8 +215,9 @@ const AudioLightingDetails = ({
                       fieldName === "micPackage" ||
                       fieldName === "monitors" ||
                       fieldName === "video" ||
-                      fieldName === "rigging"
-                        ? 300
+                      fieldName === "rigging" ||
+                      fieldName === "moreInfo"
+                        ? 1000
                         : 100
                     }
                     onChangeText={(text) => handleInputChange(fieldName, text)}
@@ -517,7 +227,7 @@ const AudioLightingDetails = ({
                   />
                 ) : (
                   <Text style={[styles.formText, { flexShrink: 1 }]}>
-                    {value}
+                    {value ? value : "---"}
                   </Text>
                 )}
               </View>
@@ -590,13 +300,14 @@ const styles = StyleSheet.create({
   listItem: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
+    maxWidth: "20%",
   },
   formText: {
     fontFamily: regFont.fontFamily,
     color: myColors.black,
     fontSize: 16,
-    maxWidth: "70%",
-    textAlign: "right",
+    width: "70%",
+    textAlign: "left",
   },
   formTextInput: {
     borderWidth: 2,

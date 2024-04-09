@@ -66,6 +66,7 @@ export const handleUpdateVenueInfo = async (
     // }
 
     const updatedFields = {};
+    // asdf
 
     Object.keys(updatedVenueData).forEach((field) => {
       if (originalVenueData[field] !== updatedVenueData[field]) {

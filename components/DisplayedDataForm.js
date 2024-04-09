@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
     backgroundColor: myColors.beige,
     padding: 2,
     borderRadius: 10,
+    borderBottomColor: myColors.pink,
+    borderBottomWidth: 3,
   },
   displayedDataText: {
     fontFamily: regFont.fontFamily,
