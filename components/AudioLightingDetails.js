@@ -68,6 +68,27 @@ const AudioLightingDetails = ({
     );
     setUpdatedVenueData(response.venue);
   };
+  // this is used strictly for order
+  const fieldOrder = [
+    "venueType",
+    "capacity",
+    "stageSize",
+    "loadIn",
+    "parking",
+    "housePower",
+    "pa",
+    "micPackage",
+    "fohDesk",
+    "monDesk",
+    "monitors",
+    "lightingDesk",
+    "lightingPackage",
+    "video",
+    "rigging",
+    "greenRooms",
+    "showers",
+    "moreInfo",
+  ];
 
   return (
     <View style={styles.wrapper}>
@@ -121,18 +142,18 @@ const AudioLightingDetails = ({
       {/* actual list begins*/}
       {/*  */}
 
-      {Object.entries(formData).map(([fieldName, value], index) => {
-        console.log(fieldName, "check it");
-        if (index === 0) {
-          return null; // Skip rendering the first entry
-        }
-
+      {fieldOrder.map((fieldName, index) => {
+        const value = formData[fieldName];
         const formattedFieldName = fieldName
           .replace(/([A-Z])/g, " $1")
           .trim()
           .split(" ")
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ");
+
+        if (index === 0) {
+          return null; // Skip rendering the first entry
+        }
 
         const headers = {
           pa: "Audio",
