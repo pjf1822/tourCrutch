@@ -39,26 +39,18 @@ export const filterVenues = (venues, search) => {
   return search ? fuse.search(search) : venues || [];
 };
 
-// export const isValidUrl = (url) => {
-//   const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-//   return urlRegex.test(url);
-// };
-
-// export const isValidUrl = (url) => {
-//   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-//   const wwwUrlRegex = /^www\.[^.]+(\.[^.]+)+$/;
-//   return urlRegex.test(url) || wwwUrlRegex.test(url);
-// };
-
 export const isValidUrl = (url) => {
+  url = url.toLowerCase();
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
   const wwwUrlRegex = /^www\.[^.]+(\.[^.]+)+$/;
 
-  if (!urlRegex.test(url) && wwwUrlRegex.test(url)) {
+  if (!urlRegex.test(url) && !wwwUrlRegex.test(url)) {
+    return "notURL"; // Return a custom value indicating it's not a valid URL
+  }
+
+  if (!urlRegex.test(url)) {
+    // If the URL doesn't start with a valid protocol, add "https://"
     url = `https://${url}`;
-  } else if (!urlRegex.test(url) && !wwwUrlRegex.test(url)) {
-    showToast("Not a URL", false, "top");
-    return;
   }
 
   return url;

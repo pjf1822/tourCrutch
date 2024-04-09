@@ -20,7 +20,12 @@ export const createVenue = async (
     }
 
     if (values?.link) {
-      values.link = isValidUrl(values.link);
+      const validatedUrl = isValidUrl(values.link);
+      if (validatedUrl === "notURL") {
+        showToast("Please enter a valid URL for the venue link", false, "top");
+        return;
+      }
+      values.link = validatedUrl;
     }
 
     const response = await fetch(
@@ -73,18 +78,11 @@ export const handleUpdateVenueInfo = async (
       }
     });
 
-    console.log(updatedFields.link, "before the validator");
-
-    if (updatedFields?.link) {
-      updatedFields.link = isValidUrl(updatedVenueData.link);
-    }
-
-    console.log(updatedFields.link, "after the validator");
-
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,
       updatedData: updatedFields,
     });
+
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (
