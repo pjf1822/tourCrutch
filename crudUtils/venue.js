@@ -19,10 +19,10 @@ export const createVenue = async (
       return;
     }
 
-    if (values?.link && !isValidUrl(values?.link)) {
-      showToast("Please enter a valid URL for the venue link", false, "top");
-      return;
+    if (values?.link) {
+      values.link = isValidUrl(values.link);
     }
+
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         values.address
@@ -72,6 +72,14 @@ export const handleUpdateVenueInfo = async (
         updatedFields[field] = updatedVenueData[field];
       }
     });
+
+    console.log(updatedFields.link, "before the validator");
+
+    if (updatedFields?.link) {
+      updatedFields.link = isValidUrl(updatedVenueData.link);
+    }
+
+    console.log(updatedFields.link, "after the validator");
 
     const response = await updateVenueInfoMutation.mutateAsync({
       id: venueId,

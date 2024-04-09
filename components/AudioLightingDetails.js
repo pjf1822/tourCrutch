@@ -119,6 +119,7 @@ const AudioLightingDetails = ({
             borderRadius: 10,
           }}
         >
+          <Picker.Item label="" value="" />
           <Picker.Item label="Club" value="Club" />
           <Picker.Item label="Arena" value="Arena" />
           <Picker.Item label="Shed" value="Shed" />
