@@ -20,12 +20,12 @@ export const pickImage = async (user, setUser, toggleProfileUpdated) => {
       aspect: [4, 3],
       quality: 1,
     });
+    if (result.canceled === true) {
+      showToast("Image pick canceled", false, "top");
+      return;
+    }
     const { uri, type, fileSize } = result.assets[0];
 
-    if (result.canceled === true) {
-      showToast("Error uploading image", false, "top");
-      throw new Error("Upload canncelled.");
-    }
     if (!type === "image") {
       showToast("not an image", false, "top");
       throw new Error("Not an image");

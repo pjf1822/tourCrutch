@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
   half: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   cardText: {
     fontFamily: regFont.fontFamily,

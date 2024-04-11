@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform, Keyboard } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { handleDelete, handleUpdateVenueInfo } from "../crudUtils/venue";
-import { showToast } from "../helpers";
+import { isValidUrl, showToast } from "../helpers";
 import { myColors, regFont } from "../theme";
 import Modal from "react-native-modal";
 import MyLongPressButton from "./MyComponents/MyLongPressButton";
@@ -51,8 +51,16 @@ const UpdateDataFormModal = ({
   // clean keyboard attempt end
 
   const handleUpdate = async (values) => {
-    const { name, address, link } = values;
+    if (values?.link) {
+      const validatedUrl = isValidUrl(values.link);
+      if (validatedUrl === "notURL") {
+        showToast("Please enter a valid URL for the venue link", false, "top");
+        return;
+      }
+      values.link = validatedUrl;
+    }
 
+    const { name, address, link } = values;
     if (
       name !== initialVenueData?.name ||
       address !== initialVenueData?.address ||
@@ -70,6 +78,7 @@ const UpdateDataFormModal = ({
           link,
         }
       );
+
       setUpdatedVenueData(response.venue);
       toggleVenueDataModal();
       refetch();

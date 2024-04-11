@@ -19,10 +19,15 @@ export const createVenue = async (
       return;
     }
 
-    if (values?.link && !isValidUrl(values?.link)) {
-      showToast("Please enter a valid URL for the venue link", false, "top");
-      return;
+    if (values?.link) {
+      const validatedUrl = isValidUrl(values.link);
+      if (validatedUrl === "notURL") {
+        showToast("Please enter a valid URL for the venue link", false, "top");
+        return;
+      }
+      values.link = validatedUrl;
     }
+
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         values.address
@@ -66,7 +71,6 @@ export const handleUpdateVenueInfo = async (
     // }
 
     const updatedFields = {};
-    // asdf
 
     Object.keys(updatedVenueData).forEach((field) => {
       if (originalVenueData[field] !== updatedVenueData[field]) {
@@ -78,6 +82,7 @@ export const handleUpdateVenueInfo = async (
       id: venueId,
       updatedData: updatedFields,
     });
+
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (

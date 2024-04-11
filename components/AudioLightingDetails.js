@@ -105,7 +105,7 @@ const AudioLightingDetails = ({
 
       {editing && (
         <Picker
-          selectedValue={formData.venueType}
+          selectedValue={formData?.venueType}
           onValueChange={(itemValue) =>
             handleInputChange("venueType", itemValue)
           }
@@ -119,6 +119,7 @@ const AudioLightingDetails = ({
             borderRadius: 10,
           }}
         >
+          <Picker.Item label="" value="" />
           <Picker.Item label="Club" value="Club" />
           <Picker.Item label="Arena" value="Arena" />
           <Picker.Item label="Shed" value="Shed" />
@@ -135,7 +136,7 @@ const AudioLightingDetails = ({
           <Text style={[styles.listItem, { fontSize: editing ? 15 : 17 }]}>
             Venue Type
           </Text>
-          <Text style={styles.formText}>{formData.venueType || "---"}</Text>
+          <Text style={styles.formText}>{formData?.venueType || "---"}</Text>
         </View>
       )}
       {/*  */}
