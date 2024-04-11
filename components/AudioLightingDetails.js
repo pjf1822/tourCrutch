@@ -34,6 +34,10 @@ const AudioLightingDetails = ({
     video: "",
     // rigging
     rigging: "",
+    // misc
+    merch: "",
+    runner: "",
+    shorePower: "",
     greenRooms: "",
     showers: "",
     moreInfo: "",
@@ -85,6 +89,9 @@ const AudioLightingDetails = ({
     "lightingPackage",
     "video",
     "rigging",
+    "merch",
+    "runner",
+    "shorePower",
     "greenRooms",
     "showers",
     "moreInfo",
@@ -161,7 +168,7 @@ const AudioLightingDetails = ({
           lightingDesk: "Lighting",
           video: "Video",
           rigging: "Rigging",
-          greenRooms: "Misc",
+          merch: "Misc",
         };
         return (
           <View
@@ -202,6 +209,7 @@ const AudioLightingDetails = ({
                       fieldName === "monitors" ||
                       fieldName === "video" ||
                       fieldName === "rigging" ||
+                      fieldName === "merch" ||
                       fieldName === "moreInfo"
                         ? true
                         : false
@@ -217,6 +225,7 @@ const AudioLightingDetails = ({
                       fieldName === "monitors" ||
                       fieldName === "video" ||
                       fieldName === "rigging" ||
+                      fieldName === "merch" ||
                       fieldName === "moreInfo"
                         ? 1000
                         : 100
