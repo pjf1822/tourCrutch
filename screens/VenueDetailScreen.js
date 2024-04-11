@@ -201,7 +201,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         }}
       >
         <MyButton
-          title="Venue Files"
+          title="Tech Packs"
           onPress={togglePDFModal}
           warning={false}
           width={"80%"}
