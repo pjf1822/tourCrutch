@@ -206,7 +206,7 @@ const AudioLightingDetails = ({
                         ? true
                         : false
                     }
-                    numberOfLines={10}
+                    numberOfLines={15}
                     maxLength={
                       fieldName === "lightingPackage" ||
                       fieldName === "loadIn" ||
