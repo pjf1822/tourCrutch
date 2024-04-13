@@ -50,18 +50,33 @@ const YelpList = ({ coordinates }) => {
       </Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {restaurants &&
-          restaurants.map((place) => (
+          restaurants.map((place, index) => (
             <TouchableOpacity
               key={place?.id}
               onPress={() => handlePress(place?.url)}
               style={{
                 justifyContent: "space-between",
                 flexDirection: "row",
-                marginTop: 10,
+                marginTop: 5,
+                borderTopWidth: index === 0 ? "" : 2,
+                borderColor: myColors.pink,
+                paddingTop: 5,
+                marginBottom: 3,
+                paddingLeft: 5,
+                paddingRight: 5,
               }}
             >
-              <View>
-                <Text style={styles.listItem}>{place?.name}</Text>
+              <View
+                style={{
+                  display: "flex",
+                  alignItems: "start",
+                }}
+              >
+                <Text
+                  style={[styles.listItem, { marginBottom: 7, marginLeft: 7 }]}
+                >
+                  {place?.name}
+                </Text>
                 <Image
                   source={{ uri: place?.image_url }}
                   style={styles.image}
@@ -110,8 +125,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
     borderRadius: 25,
     marginRight: 10,
   },
