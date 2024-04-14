@@ -27,6 +27,7 @@ const SettingsScreen = () => {
 
   const [visible, setVisible] = useState(false);
 
+  console.log(user?.photoURL, "does this exist.step one");
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -70,7 +71,16 @@ const SettingsScreen = () => {
           <DeleteAccountModal toggleOverlay={toggleOverlay} />
         </Overlay>
         <Text style={styles.header}>Account Details </Text>
-        <Image source={{ uri: user?.photoURL }} style={styles.userPhoto} />
+        {user?.photoURL ? (
+          <Image source={{ uri: user?.photoURL }} style={styles.userPhoto} />
+        ) : (
+          <Image
+            source={require("../assets/logito.png")}
+            style={styles.userPhoto}
+          />
+        )}
+
+        {/*  */}
 
         <View style={styles.formWrapper}>
           <View style={styles.entryWrapper}>

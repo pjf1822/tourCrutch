@@ -11,10 +11,12 @@ export const UserProvider = ({ children }) => {
 
   const toggleProfileUpdated = () => {
     setProfileUpdated((prev) => !prev);
+    console.log("is it a trigger");
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      console.log(authUser, "the auth user");
       setUser(authUser);
       setAuthCompleted(true);
     });
@@ -26,6 +28,7 @@ export const UserProvider = ({ children }) => {
     return null;
   }
 
+  // console.log(user, "show me the full user in the context page. ");
   return (
     <UserContext.Provider value={{ user, setUser, toggleProfileUpdated }}>
       {children}
