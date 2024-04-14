@@ -72,9 +72,7 @@ const YelpList = ({ coordinates }) => {
                   alignItems: "start",
                 }}
               >
-                <Text
-                  style={[styles.listItem, { marginBottom: 7, marginLeft: 7 }]}
-                >
+                <Text style={[styles.listItem, { marginBottom: 7 }]}>
                   {place?.name}
                 </Text>
                 <Image
@@ -82,7 +80,13 @@ const YelpList = ({ coordinates }) => {
                   style={styles.image}
                 />
               </View>
-              <View>
+              <View
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Text style={styles.listItem}>
                   {(place?.distance * 0.000621371).toFixed(2)} miles away
                 </Text>
@@ -127,12 +131,14 @@ const styles = StyleSheet.create({
   image: {
     width: 80,
     height: 80,
-    borderRadius: 25,
-    marginRight: 10,
+    borderRadius: 10,
+    borderWidth: 4,
+    borderColor: myColors.pink,
   },
 
   listItem: {
     fontFamily: regFont.fontFamily,
+    fontSize: 15,
   },
   myStarStyle: {
     color: myColors.pink,
