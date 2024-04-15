@@ -21,13 +21,11 @@ import { pickImage } from "../functionUtils/storageFunctionUtils";
 const windowHeight = Dimensions.get("window").height;
 
 const SettingsScreen = () => {
-  const { user, setUser, toggleProfileUpdated } = useUser();
+  const { user } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState("");
-
   const [visible, setVisible] = useState(false);
 
-  console.log(user?.photoURL, "does this exist.step one");
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -50,7 +48,8 @@ const SettingsScreen = () => {
 
   const handleUpdateProfilePic = async () => {
     try {
-      await pickImage(user, setUser, toggleProfileUpdated);
+      const shit = await pickImage(user);
+      setUserProfilePic(shit);
     } catch (error) {
       console.error("Error updating profile picture:", error);
     }

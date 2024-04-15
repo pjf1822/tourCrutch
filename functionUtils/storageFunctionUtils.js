@@ -10,7 +10,7 @@ import { showToast } from "../helpers";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { storage } from "../firebaseConfig";
 
-export const pickImage = async (user, setUser, toggleProfileUpdated) => {
+export const pickImage = async (user) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   try {
@@ -37,7 +37,7 @@ export const pickImage = async (user, setUser, toggleProfileUpdated) => {
 
     const imageURL = await uploadUserProfilePic(uri, user);
     await updateProfile(user, { photoURL: imageURL });
-    toggleProfileUpdated();
+    return imageURL;
   } catch (error) {
     console.error("Error picking an image:", error);
   }

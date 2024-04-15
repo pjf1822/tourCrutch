@@ -11,7 +11,13 @@ import { auth } from "../firebaseConfig";
 import { showToast } from "../helpers";
 import { uploadUserProfilePic } from "./storageFunctionUtils";
 
-export const handleSignUp = (email, password, displayName, profilePic) => {
+export const handleSignUp = (
+  email,
+  password,
+  displayName,
+  profilePic,
+  toggleProfileUpdated
+) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -28,6 +34,7 @@ export const handleSignUp = (email, password, displayName, profilePic) => {
               .then(() => {
                 handleSignIn(email, password, true);
                 showToast("Account created!", true, "top");
+                toggleProfileUpdated();
               })
               .catch((profileError) => {
                 console.error("Error updating profile:", profileError);
