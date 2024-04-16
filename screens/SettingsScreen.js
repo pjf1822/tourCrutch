@@ -21,7 +21,7 @@ import { pickImage } from "../functionUtils/storageFunctionUtils";
 const windowHeight = Dimensions.get("window").height;
 
 const SettingsScreen = () => {
-  const { user } = useUser();
+  const { user, toggleProfileUpdated } = useUser();
   const [displayName, setDisplayName] = useState("");
   const [userProfilePic, setUserProfilePic] = useState("");
   const [visible, setVisible] = useState(false);

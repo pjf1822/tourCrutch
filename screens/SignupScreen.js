@@ -54,6 +54,7 @@ const SignupScreen = () => {
     if (result.canceled == true) {
       return;
     }
+
     setProfilePic(result.assets[0]);
   };
 
