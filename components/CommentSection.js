@@ -81,16 +81,26 @@ const CommentSection = ({ venueId, userId, displayName }) => {
             )}
 
             <Text style={styles.commentText}>{comment?.comment}</Text>
-            <Text style={styles.usernameText}>{comment?.userDisplayName}</Text>
+            <View
+              style={{
+                marginLeft: 9,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.usernameText}>
+                {comment?.userDisplayName}
+              </Text>
 
-            <Image
-              source={
-                userPhotos[comment?.userUid] === "noPic"
-                  ? Smiley
-                  : { uri: userPhotos[comment?.userUid] }
-              }
-              style={styles.userPhoto}
-            />
+              <Image
+                source={
+                  userPhotos[comment?.userUid] === "noPic"
+                    ? Smiley
+                    : { uri: userPhotos[comment?.userUid] }
+                }
+                style={styles.userPhoto}
+              />
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -135,9 +145,13 @@ const styles = StyleSheet.create({
     textAlign: "left",
     justifyContent: "center",
     flexWrap: "wrap",
-    flex: 1,
+    marginBottom: 5,
     marginRight: Platform.OS === "ios" && Platform.isPad ? 14 : 5,
     fontSize: Platform.OS === "ios" && Platform.isPad ? 22 : 15,
   },
-  userPhoto: { height: 40, width: 40, borderRadius: 25 },
+  userPhoto: {
+    height: 40,
+    width: 40,
+    borderRadius: 25,
+  },
 });
