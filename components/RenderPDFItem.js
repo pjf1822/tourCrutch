@@ -18,6 +18,7 @@ const RenderPDFItem = ({
   setUpdatedVenueData,
 }) => {
   const handleLongPress = async () => {
+    return;
     const updatedPDFs = [...initialVenueData.pdfs];
     const itemIndex = updatedPDFs.indexOf(item);
     if (itemIndex !== -1) {

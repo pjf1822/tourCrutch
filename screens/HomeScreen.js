@@ -119,7 +119,9 @@ const HomeScreen = ({ navigation, route }) => {
         )}
         <View
           style={{
-            paddingBottom: windowHeight / 13,
+            paddingBottom: windowHeight / 18,
+            // backgroundColor: "red",
+            paddingTop: 10,
           }}
         >
           <MyButton

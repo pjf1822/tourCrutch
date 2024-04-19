@@ -50,24 +50,43 @@ const YelpList = ({ coordinates }) => {
       </Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {restaurants &&
-          restaurants.map((place) => (
+          restaurants.map((place, index) => (
             <TouchableOpacity
               key={place?.id}
               onPress={() => handlePress(place?.url)}
               style={{
                 justifyContent: "space-between",
                 flexDirection: "row",
-                marginTop: 10,
+                marginTop: 5,
+                borderTopWidth: index === 0 ? "" : 2,
+                borderColor: myColors.pink,
+                paddingTop: 5,
+                marginBottom: 3,
+                paddingLeft: 5,
+                paddingRight: 5,
               }}
             >
-              <View>
-                <Text style={styles.listItem}>{place?.name}</Text>
+              <View
+                style={{
+                  display: "flex",
+                  alignItems: "start",
+                }}
+              >
+                <Text style={[styles.listItem, { marginBottom: 7 }]}>
+                  {place?.name}
+                </Text>
                 <Image
                   source={{ uri: place?.image_url }}
                   style={styles.image}
                 />
               </View>
-              <View>
+              <View
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Text style={styles.listItem}>
                   {(place?.distance * 0.000621371).toFixed(2)} miles away
                 </Text>
@@ -110,14 +129,16 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    borderWidth: 4,
+    borderColor: myColors.pink,
   },
 
   listItem: {
     fontFamily: regFont.fontFamily,
+    fontSize: 15,
   },
   myStarStyle: {
     color: myColors.pink,

@@ -66,7 +66,7 @@ const LoginScreen = () => {
 
         <View style={{ paddingBottom: windowHeight / 13 }}>
           <MyButton
-            title="Go to sign up page"
+            title="Go to Sign Up Page"
             onPress={() => navigation.navigate("Signup")}
             warning={false}
             width={"80%"}

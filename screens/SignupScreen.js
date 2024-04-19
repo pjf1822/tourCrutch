@@ -17,8 +17,11 @@ import { showToast } from "../helpers";
 import * as ImagePicker from "expo-image-picker";
 import { myColors, regFont } from "../theme";
 import { handleSignUp } from "../functionUtils/authFunctionUtils";
+import { useUser } from "../Contexts/UserContext";
 
 const SignupScreen = () => {
+  const { toggleProfileUpdated } = useUser();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -51,6 +54,7 @@ const SignupScreen = () => {
     if (result.canceled == true) {
       return;
     }
+
     setProfilePic(result.assets[0]);
   };
 
@@ -65,7 +69,13 @@ const SignupScreen = () => {
         return;
       }
 
-      handleSignUp(email, password, displayName, profilePic);
+      handleSignUp(
+        email,
+        password,
+        displayName,
+        profilePic,
+        toggleProfileUpdated
+      );
     } catch (error) {
       console.error("Sign Up Error:", error);
     }
