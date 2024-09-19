@@ -17,21 +17,24 @@ import { myColors, regFont } from "../theme";
 
 const YelpList = ({ coordinates }) => {
   const fetchRestaurants = async () => {
-    const response = await fetch(
-      `https://api.yelp.com/v3/businesses/search?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=16093&categories=restaurants&limit=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${YELP_KEY}`,
-        },
-      }
-    );
-    const data = await response.json();
-    return data.businesses;
+    try {
+      const response = await fetch(
+        `https://api.yelp.com/v3/businesses/search?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=16093&categories=restaurants&limit=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${YELP_KEY}`,
+          },
+        }
+      );
+      const data = await response.json();
+      return data.businesses;
+    } catch (error) {
+      console.error("Failed to fetch data from Yelp:", error);
+      return [];
+    }
   };
-
   const {
-    data: restaurants,
-    error,
+    data: restaurants = [],
     isLoading,
     refetch,
   } = useQuery("restaurants", fetchRestaurants);

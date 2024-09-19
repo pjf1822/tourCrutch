@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tour Crutch",
     "slug": "tourCrutch",
-    "version": "2.0.8",
+    "version": "2.0.10",
     "orientation": "portrait",
     "icon": "./assets/nailed-it.jpg",
     "userInterfaceStyle": "light",
@@ -31,7 +31,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "8",
+      "buildNumber": "1",
       "icon": "./assets/nailed-it.jpg",  
       "config": {
         "usesNonExemptEncryption": false
