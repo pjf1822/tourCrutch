@@ -1,0 +1,35 @@
+{
+    "SDKName": "FirebaseAuth",
+    "SDKVersion": "5.9.0",
+    "DataCollected": [
+      {
+        "DataType": "User authentication information",
+        "Purpose": "To authenticate users and provide access to app features.",
+        "Storage": "Data is securely stored in Firebase Authentication services.",
+        "SecurityMeasures": "Data is encrypted in transit and at rest.",
+        "Compliance": "Complies with relevant privacy laws and regulations (e.g., GDPR, CCPA)."
+      },
+      {
+        "DataType": "User profile information",
+        "Purpose": "To personalize user experiences within the app.",
+        "Storage": "Stored securely in Firebase services.",
+        "SecurityMeasures": "Access controls and encryption protocols are in place to protect user data.",
+        "Compliance": "Compliant with applicable privacy regulations."
+      }
+    ],
+    "DataUsage": {
+      "Analytics": "Anonymous usage analytics may be collected to improve the performance and reliability of the SDK.",
+      "Personalization": "Data may be used to personalize user experiences within the app.",
+      "Advertising": "No advertising-related data collection or tracking is performed by the FirebaseAuth SDK."
+    },
+    "SecurityMeasures": {
+      "Encryption": "Data is encrypted both in transit and at rest.",
+      "AccessControls": "Strict access controls are enforced to ensure that only authorized personnel can access user data.",
+      "RegularSecurityAudits": "Regular security audits are conducted to identify and address potential vulnerabilities."
+    },
+    "Compliance": {
+      "GDPR": "Compliant with GDPR requirements for handling user data.",
+      "CCPA": "Compliant with CCPA regulations regarding user privacy."
+    }
+  }
+  

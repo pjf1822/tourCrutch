@@ -40,6 +40,18 @@ export const filterVenues = (venues, search) => {
 };
 
 export const isValidUrl = (url) => {
-  const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-  return urlRegex.test(url);
+  url = url.toLowerCase();
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  const wwwUrlRegex = /^www\.[^.]+(\.[^.]+)+$/;
+
+  if (!urlRegex.test(url) && !wwwUrlRegex.test(url)) {
+    return "notURL"; // Return a custom value indicating it's not a valid URL
+  }
+
+  if (!urlRegex.test(url)) {
+    // If the URL doesn't start with a valid protocol, add "https://"
+    url = `https://${url}`;
+  }
+
+  return url;
 };

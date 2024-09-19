@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "tourCrutch",
+    "name": "Tour Crutch",
     "slug": "tourCrutch",
-    "version": "1.2.13",
+    "version": "2.0.10",
     "orientation": "portrait",
-    "icon": "./assets/dope.png",
+    "icon": "./assets/nailed-it.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/DJ.jpg",
@@ -31,15 +31,33 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "13",
-      "icon": "./assets/dope.png",  
+      "buildNumber": "1",
+      "icon": "./assets/nailed-it.jpg",  
       "config": {
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
         "CFBundleIconName": "logito",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "I am not using any user location data nor do i have access to it",
-        "NSLocationWhenInUseUsageDescription":"I am not using any user location data nor do i have access to it"
+        "NSLocationWhenInUseUsageDescription":"I am not using any user location data nor do i have access to it",
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+            "NSPrivacyAccessedAPITypeReasons": ["DDA9.1", "C617.1", "3B52.1", "0A2A.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+            "NSPrivacyAccessedAPITypeReasons": ["35F9.1", "8FFB.1", "3D61.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
+            "NSPrivacyAccessedAPITypeReasons": ["85F4.1", "E174.1", "7D9E.1", "B728.1"]
+          },
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": ["CA92.1", "1C8F.1", "C56D.1", "AC6B.1"]
+          }
+        ]
       }
     },
     "android": {
@@ -52,7 +70,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/nailed-it.jpg"
     },
     "extra": {
       "eas": {

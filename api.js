@@ -3,9 +3,11 @@ import { useMutation, useQuery } from "react-query";
 // const apiUrl = "http://localhost:8001/api";
 const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
-export const useFetchVenues = () => {
-  return useQuery("venues", async () => {
-    const res = await fetch(`${apiUrl}/venues/getallvenues`);
+export const useFetchVenues = (searchQuery, page) => {
+  return useQuery(["venues", searchQuery, page], async () => {
+    const res = await fetch(
+      `${apiUrl}/venues/getallvenues?searchQuery=${searchQuery}&page=${page}`
+    );
     if (!res.ok) {
       const errorResponse = await res.json();
       throw new Error(errorResponse.message || "Failed to get venues");
@@ -13,6 +15,7 @@ export const useFetchVenues = () => {
     return res.json();
   });
 };
+
 export const useFetchVenueById = (venueId) => {
   return useQuery(["venue", venueId], async () => {
     const res = await fetch(`${apiUrl}/venues/${venueId}`);

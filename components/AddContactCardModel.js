@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 import { myColors, regFont } from "../theme";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import MyButton from "./MyComponents/MyButton";
+import { showToast } from "../helpers";
 
 const AddContactCardModal = ({
   isContactModalVisible,
@@ -27,6 +28,10 @@ const AddContactCardModal = ({
   };
 
   const handleAddContactCard = () => {
+    if (card?.name === "") {
+      showToast("Please fill out the name field", false, "top");
+      return;
+    }
     const updatedContactCards = [...updatedVenueData.contactCards];
     updatedContactCards.push(card);
 

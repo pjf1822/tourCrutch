@@ -18,16 +18,16 @@ const ContactCard = ({ data, handleDeleteContactCard }) => {
   return (
     <TouchableOpacity
       style={styles.cardWrapper}
-      onLongPress={() => handleDeleteContactCard(data._id)}
+      onLongPress={() => handleDeleteContactCard(data?._id)}
     >
       <View style={styles.half}>
-        <Text style={styles.cardText}>{data.name}</Text>
-        <Text style={styles.cardText}>{data.position}</Text>
+        <Text style={styles.cardText}>{data?.name}</Text>
+        <Text style={styles.cardText}>{data?.position}</Text>
       </View>
       <View style={[styles.half, { alignItems: "flex-end", marginLeft: 10 }]}>
-        <Text style={styles.cardText}>{data.email}</Text>
+        <Text style={styles.cardText}>{data?.email}</Text>
         <TouchableOpacity onPress={handlePhonePress}>
-          <Text style={styles.cardText}>{data.phoneNumber}</Text>
+          <Text style={styles.cardText}>{data?.phoneNumber}</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
   half: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   cardText: {
     fontFamily: regFont.fontFamily,

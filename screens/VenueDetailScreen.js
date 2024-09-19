@@ -3,25 +3,26 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
-  TouchableOpacity,
-  Text,
-  Platform,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDeleteVenue, useFetchVenueById, useUpdateVenueInfo } from "../api";
 import { showToast } from "../helpers";
-import { myColors, regFont, upperMargin } from "../theme";
+import { myColors } from "../theme";
 import { useUser } from "../Contexts/UserContext";
 import FilesModal from "../components/FilesModal";
 import ContactSection from "../components/ContactSection";
 import DisplayedDataForm from "../components/DisplayedDataForm";
 import UpdateDataFormModal from "../components/UpdateDataFormModal";
 import CommentsModal from "../components/CommentsModal";
-import Icon from "react-native-vector-icons/FontAwesome";
 import AddContactCardModal from "../components/AddContactCardModel";
-import DescriptionSection from "../components/DescriptionSection";
 import MyButton from "../components/MyComponents/MyButton";
 import { uploadPDF } from "../functionUtils/storageFunctionUtils";
+import GoogleMapComp from "../components/GoogleMapComp";
+import YelpList from "../components/YelpList";
+import AddContact from "../components/AddContact";
+import AudioLightingDetails from "../components/AudioLightingDetails";
+import OpenInGoogleMaps from "../components/OpenInGoogleMaps";
 
 const VenueDetailScreen = ({ route, navigation }) => {
   const deleteVenueMutation = useDeleteVenue();
@@ -43,7 +44,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
     comments: [],
     contactCards: [],
     createdByUID: "",
-    description: "",
+    coordinates: {},
+    productionInfo: {},
   });
 
   const togglePDFModal = () => {
@@ -78,7 +80,30 @@ const VenueDetailScreen = ({ route, navigation }) => {
         comments: initialVenueData.comments,
         createdByUID: initialVenueData.createdByUID,
         contactCards: initialVenueData?.contactCards,
-        description: initialVenueData.description,
+        coordinates: initialVenueData.coordinates,
+        productionInfo: initialVenueData.productionInfo || {
+          venueType: "",
+          capacity: "",
+          stageSize: "",
+          loadIn: "",
+          parking: "",
+          housePower: "",
+          pa: "",
+          micPackage: "",
+          fohDesk: "",
+          monDesk: "",
+          monitors: "",
+          lightingDesk: "",
+          lightingPackage: "",
+          video: "",
+          rigging: "",
+          merch: "",
+          runner: "",
+          shorePower: "",
+          greenRooms: "",
+          showers: "",
+          moreInfo: "",
+        },
       });
     }
   }, [initialVenueData]);
@@ -121,14 +146,19 @@ const VenueDetailScreen = ({ route, navigation }) => {
       style={styles.imagePageWrapper}
       imageStyle={{ opacity: 0.6 }}
     >
-      <View
-        style={{
-          marginTop: windowHeight / upperMargin.margy,
+      <DisplayedDataForm
+        updatedVenueData={updatedVenueData}
+        windowHeight={windowHeight}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator="false"
+        contentContainerStyle={{
           marginLeft: 7,
           marginRight: 7,
         }}
+        style={{ borderRadius: 10 }}
       >
-        <DisplayedDataForm updatedVenueData={updatedVenueData} />
         <ContactSection
           updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
@@ -137,71 +167,59 @@ const VenueDetailScreen = ({ route, navigation }) => {
           initialVenueData={initialVenueData}
           setUpdatedVenueData={setUpdatedVenueData}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity onPress={toggleContactModal}>
-            <Icon
-              name="plus"
-              style={{ color: "white", fontSize: 24, marginTop: 6 }}
-            />
-          </TouchableOpacity>
-          {updatedVenueData?.contactCards?.length === 0 && (
-            <TouchableOpacity
-              onPress={toggleContactModal}
-              style={{
-                backgroundColor: myColors.beige,
-                borderRadius: 10,
-                marginLeft: 10,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: regFont.fontFamily,
-                  padding: 10,
-                  fontSize: Platform.OS === "ios" && Platform.isPad ? 23 : 16,
-                }}
-              >
-                Add Contact Cards
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        <DescriptionSection
+
+        <AddContact
+          toggleContactModal={toggleContactModal}
           updatedVenueData={updatedVenueData}
-          setUpdatedVenueData={setUpdatedVenueData}
+        />
+
+        {updatedVenueData?.coordinates?.longitude && (
+          <GoogleMapComp coordinates={updatedVenueData.coordinates} />
+        )}
+        <AudioLightingDetails
+          updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
           venueId={venueId}
+          setUpdatedVenueData={setUpdatedVenueData}
           user={user}
-          initialVenueData={initialVenueData}
         />
-      </View>
+
+        {updatedVenueData?.coordinates?.longitude && (
+          <View>
+            <YelpList coordinates={updatedVenueData.coordinates} />
+            <OpenInGoogleMaps
+              updatedVenueDataCoordinates={updatedVenueData.coordinates}
+            />
+          </View>
+        )}
+      </ScrollView>
 
       <View
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          paddingBottom: windowHeight / 20,
+          paddingBottom: windowHeight / 29,
+          paddingTop: 8,
         }}
       >
         <MyButton
-          title="Venue Files"
+          title="Tech Packs"
           onPress={togglePDFModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
         />
+        <View style={{ height: 5 }}></View>
         <MyButton
-          title="Update Venue"
+          title="Update Venue Address/URL"
           onPress={toggleVenueDataModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
         />
+        <View style={{ height: 5 }}></View>
+
         <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, Image, View, Platform } from "react-native";
+import { Text, TouchableOpacity, Image, Platform } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -35,6 +35,7 @@ function CustomDrawerContent({ user, ...props }) {
       console.error("Error signing out:", error);
     }
   };
+
   return (
     <DrawerContentScrollView
       style={{ backgroundColor: myColors.black }}
@@ -81,10 +82,10 @@ const DrawerNavigator = ({ user }) => {
             style={{ marginBottom: 20 }}
           >
             <Image
-              source={require("../../assets/logo.png")}
+              source={require("../../assets/logito.png")}
               style={{
-                width: Platform.OS === "ios" && Platform.isPad ? 70 : 40,
-                height: Platform.OS === "ios" && Platform.isPad ? 70 : 40,
+                width: Platform.OS === "ios" && Platform.isPad ? 70 : 48,
+                height: Platform.OS === "ios" && Platform.isPad ? 70 : 48,
 
                 marginLeft: 10,
               }}

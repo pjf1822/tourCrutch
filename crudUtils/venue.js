@@ -1,4 +1,5 @@
-import { combineAddress, isValidUrl, showToast } from "../helpers";
+import { isValidUrl, showToast } from "../helpers";
+import { GOOGLE_MAP_KEY } from "@env";
 
 export const createVenue = async (
   values,
@@ -8,13 +9,40 @@ export const createVenue = async (
   resetForm
 ) => {
   try {
-    if (!values?.name || !values?.link || !values?.address) {
-      showToast("Please fill out all fields", false, "top");
+    if (!values?.name) {
+      showToast("Please fill out the name field", false, "top");
       return;
     }
-    if (!isValidUrl(values?.link)) {
-      showToast("Please enter a valid URL for the venue link", false, "top");
+
+    if (!values?.address) {
+      showToast("Please select an address from the dropdown", false, "top");
       return;
+    }
+
+    if (values?.link) {
+      const validatedUrl = isValidUrl(values.link);
+      if (validatedUrl === "notURL") {
+        showToast("Please enter a valid URL for the venue link", false, "top");
+        return;
+      }
+      values.link = validatedUrl;
+    }
+
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        values.address
+      )}&key=${GOOGLE_MAP_KEY}`
+    );
+
+    const json = await response.json();
+
+    if (json.status === "OK") {
+      const latitude = json.results[0].geometry.location.lat;
+      const longitude = json.results[0].geometry.location.lng;
+      values.coordinates = {
+        latitude,
+        longitude,
+      };
     }
 
     const result = await createVenueMutation.mutateAsync({
@@ -54,6 +82,7 @@ export const handleUpdateVenueInfo = async (
       id: venueId,
       updatedData: updatedFields,
     });
+
     if (originalVenueData?.pdfs?.length > updatedVenueData?.pdfs?.length) {
       showToast("You Deleted a file", true, "top");
     } else if (

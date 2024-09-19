@@ -7,9 +7,9 @@ import {
   Platform,
 } from "react-native";
 import React from "react";
-import { myColors, regFont } from "../theme";
+import { myColors, regFont, upperMargin } from "../theme";
 
-const DisplayedDataForm = ({ updatedVenueData }) => {
+const DisplayedDataForm = ({ updatedVenueData, windowHeight }) => {
   const handleLinkPress = () => {
     if (updatedVenueData?.link) {
       Linking.openURL(updatedVenueData?.link);
@@ -20,7 +20,16 @@ const DisplayedDataForm = ({ updatedVenueData }) => {
     return address?.replace(/,+/g, ",").trim();
   };
   return (
-    <View style={styles.displayedDataWrapper}>
+    <View
+      style={[
+        styles.displayedDataWrapper,
+        {
+          marginTop: windowHeight / upperMargin.margy,
+          marginLeft: 7,
+          marginRight: 7,
+        },
+      ]}
+    >
       <Text style={styles.displayedDataText}>{updatedVenueData?.name}</Text>
       <Text style={styles.displayedDataText}>
         {formatAddress(updatedVenueData?.address)}
@@ -49,6 +58,8 @@ const styles = StyleSheet.create({
     backgroundColor: myColors.beige,
     padding: 2,
     borderRadius: 10,
+    borderBottomColor: myColors.pink,
+    borderBottomWidth: 3,
   },
   displayedDataText: {
     fontFamily: regFont.fontFamily,

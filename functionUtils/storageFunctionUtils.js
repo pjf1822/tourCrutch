@@ -10,7 +10,7 @@ import { showToast } from "../helpers";
 import { handleUpdateVenueInfo } from "../crudUtils/venue";
 import { storage } from "../firebaseConfig";
 
-export const pickImage = async (user, setUser, toggleProfileUpdated) => {
+export const pickImage = async (user) => {
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   try {
@@ -20,12 +20,12 @@ export const pickImage = async (user, setUser, toggleProfileUpdated) => {
       aspect: [4, 3],
       quality: 1,
     });
+    if (result.canceled === true) {
+      showToast("Image pick canceled", false, "top");
+      return;
+    }
     const { uri, type, fileSize } = result.assets[0];
 
-    if (result.canceled === true) {
-      showToast("Error uploading image", false, "top");
-      throw new Error("Upload canncelled.");
-    }
     if (!type === "image") {
       showToast("not an image", false, "top");
       throw new Error("Not an image");
@@ -36,9 +36,8 @@ export const pickImage = async (user, setUser, toggleProfileUpdated) => {
     }
 
     const imageURL = await uploadUserProfilePic(uri, user);
-    console.log(imageURL, "we have escaped that ");
     await updateProfile(user, { photoURL: imageURL });
-    toggleProfileUpdated();
+    return imageURL;
   } catch (error) {
     console.error("Error picking an image:", error);
   }
@@ -75,10 +74,8 @@ export const uploadUserProfilePic = async (imageUri, user) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(progress);
         },
         (error) => {
-          console.log("are we in here");
           reject(error);
         },
         async () => {
@@ -86,8 +83,6 @@ export const uploadUserProfilePic = async (imageUri, user) => {
             const downloadURL = await getDownloadURL(uploadTask?.snapshot?.ref);
             resolve(downloadURL);
           } catch (error) {
-            console.log("or here");
-
             showToast(error, false, "top");
             reject(error);
           }
@@ -150,23 +145,26 @@ export const uploadPDF = async (
 
     const { uri, mimeType, size, name } = result.assets[0];
 
+    console.log(result.assets[0]);
     // error catching section
     if (result.canceled === true) {
       showToast("Error uploading PDF", false, "top");
       throw new Error("Upload canncelled.");
     }
+
     if (updatedVenueData?.pdfs?.includes(name)) {
       showToast("That file already exists", false, "top");
       throw new Error("File with the same name already exists.");
     }
+
     if (!mimeType === "application/pdf" || size > 10 * 1024 * 1024) {
-      showToast(error?.message, false, "top");
-      throw new Error("Document Picking Cancelled");
+      showToast("File too big", false, "top");
+      throw new Error("File is above 10mb");
     }
+
     // if successful
 
     await uploadPDFToFirebase(uri, name, venueId, progressCallback);
-
     const updateVenuePDFs = await handleUpdateVenueInfo(
       updateVenueInfoMutation,
       venueId,

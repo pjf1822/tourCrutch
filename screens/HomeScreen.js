@@ -1,10 +1,10 @@
 import {
   View,
-  FlatList,
   StyleSheet,
   ImageBackground,
   Dimensions,
   Platform,
+  ScrollView,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import HomePageFlatListItem from "../components/HomePageFlatListItem";
@@ -21,19 +21,23 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const HomeScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const [venues, setVenues] = useState([]);
+  const [page, setPage] = useState(1);
+
   const windowHeight = Dimensions.get("window").height;
 
   const { loading: userLoading, setLoading: setUserLoading } = useUser();
-  const { data: fetchedVenues, isLoading, isError, refetch } = useFetchVenues();
+  const {
+    data: fetchedVenues,
+    isLoading,
+    isError,
+    refetch,
+  } = useFetchVenues(search, page);
 
   useEffect(() => {
     if (!isLoading && !isError) {
       setVenues(fetchedVenues || []);
     }
   }, [fetchedVenues, isLoading, isError]);
-
-  // For the search bar
-  const result = filterVenues(venues, search);
 
   // use effect that reads route params when the page is opened
   useFocusEffect(
@@ -73,7 +77,7 @@ const HomeScreen = ({ navigation, route }) => {
           placeholder="Search A Venue"
           value={search}
           placeholderTextColor={myColors.beige}
-          onChangeText={(search) => setSearch(search)}
+          onChangeText={(text) => setSearch(text)} // Use the new handler
           style={{
             flex: 1,
             fontFamily: regFont.fontFamily,
@@ -101,21 +105,23 @@ const HomeScreen = ({ navigation, route }) => {
           searchIcon={<Icon name="search" size={17} color={myColors.beige} />}
         />
         {!userLoading && !isLoading && (
-          <FlatList
-            contentContainerStyle={{
-              flex: 1,
-            }}
-            data={result.map((fuseResult) => fuseResult?.item || fuseResult)}
-            renderItem={({ item, index }) => (
-              <HomePageFlatListItem item={item} navigation={navigation} />
-            )}
-            ItemSeparatorComponent={<FlatListSeparator />}
-            keyExtractor={(item, index) => item?._id || index.toString()}
-          />
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            {venues.map((venue, index) => (
+              <View key={index}>
+                <HomePageFlatListItem
+                  item={venue?.item || venue}
+                  navigation={navigation}
+                />
+                {index < venues.length - 1 && <FlatListSeparator />}
+              </View>
+            ))}
+          </ScrollView>
         )}
         <View
           style={{
-            paddingBottom: windowHeight / 13,
+            paddingBottom: windowHeight / 18,
+            // backgroundColor: "red",
+            paddingTop: 10,
           }}
         >
           <MyButton
