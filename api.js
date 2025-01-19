@@ -1,18 +1,12 @@
 import { useMutation, useQuery } from "react-query";
 
 // const apiUrl = "http://localhost:8001/api";
+import venuesData from "./venues.json"; // Adjust the path as needed
 const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = (searchQuery, page) => {
   return useQuery(["venues", searchQuery, page], async () => {
-    const res = await fetch(
-      `${apiUrl}/venues/getallvenues?searchQuery=${searchQuery}&page=${page}`
-    );
-    if (!res.ok) {
-      const errorResponse = await res.json();
-      throw new Error(errorResponse.message || "Failed to get venues");
-    }
-    return res.json();
+    return venuesData;
   });
 };
 

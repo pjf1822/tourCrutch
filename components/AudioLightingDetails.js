@@ -246,7 +246,7 @@ const AudioLightingDetails = ({
         );
       })}
       <View style={{ height: 10 }}></View>
-      <MyButton
+      {/* <MyButton
         title={editing ? "Update" : "Edit"}
         onPress={() => {
           if (editing) {
@@ -267,7 +267,7 @@ const AudioLightingDetails = ({
           }}
           width={"80%"}
         />
-      )}
+      )} */}
     </View>
   );
 };

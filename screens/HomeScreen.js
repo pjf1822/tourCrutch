@@ -124,12 +124,12 @@ const HomeScreen = ({ navigation, route }) => {
             paddingTop: 10,
           }}
         >
-          <MyButton
+          {/* <MyButton
             title="Create New Venue"
             onPress={() => navigation.navigate("NewVenue")}
             warning={false}
             width={"80%"}
-          />
+          /> */}
         </View>
       </View>
     </ImageBackground>

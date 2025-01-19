@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tour Crutch",
     "slug": "tourCrutch",
-    "version": "2.0.10",
+    "version": "2.1.3",
     "orientation": "portrait",
     "icon": "./assets/nailed-it.jpg",
     "userInterfaceStyle": "light",
@@ -31,31 +31,50 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pjf1822.tourCrutch",
-      "buildNumber": "1",
-      "icon": "./assets/nailed-it.jpg",  
+      "buildNumber": "3",
+      "icon": "./assets/nailed-it.jpg",
       "config": {
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
         "CFBundleIconName": "logito",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "I am not using any user location data nor do i have access to it",
-        "NSLocationWhenInUseUsageDescription":"I am not using any user location data nor do i have access to it",
+        "NSLocationWhenInUseUsageDescription": "I am not using any user location data nor do i have access to it",
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
-            "NSPrivacyAccessedAPITypeReasons": ["DDA9.1", "C617.1", "3B52.1", "0A2A.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "DDA9.1",
+              "C617.1",
+              "3B52.1",
+              "0A2A.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
-            "NSPrivacyAccessedAPITypeReasons": ["35F9.1", "8FFB.1", "3D61.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "35F9.1",
+              "8FFB.1",
+              "3D61.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
-            "NSPrivacyAccessedAPITypeReasons": ["85F4.1", "E174.1", "7D9E.1", "B728.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "85F4.1",
+              "E174.1",
+              "7D9E.1",
+              "B728.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1", "1C8F.1", "C56D.1", "AC6B.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1",
+              "1C8F.1",
+              "C56D.1",
+              "AC6B.1"
+            ]
           }
         ]
       }
@@ -67,7 +86,8 @@
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.pjf1822.tourCrutch"
     },
     "web": {
       "favicon": "./assets/nailed-it.jpg"

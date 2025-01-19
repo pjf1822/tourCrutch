@@ -159,7 +159,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         }}
         style={{ borderRadius: 10 }}
       >
-        <ContactSection
+        {/* <ContactSection
           updatedVenueData={updatedVenueData}
           updateVenueInfoMutation={updateVenueInfoMutation}
           venueId={venueId}
@@ -171,7 +171,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
         <AddContact
           toggleContactModal={toggleContactModal}
           updatedVenueData={updatedVenueData}
-        />
+        /> */}
 
         {updatedVenueData?.coordinates?.longitude && (
           <GoogleMapComp coordinates={updatedVenueData.coordinates} />
@@ -211,22 +211,22 @@ const VenueDetailScreen = ({ route, navigation }) => {
           iphoneFontSize={19}
         />
         <View style={{ height: 5 }}></View>
-        <MyButton
+        {/* <MyButton
           title="Update Venue Address/URL"
           onPress={toggleVenueDataModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        />
+        /> */}
         <View style={{ height: 5 }}></View>
 
-        <MyButton
+        {/* <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        />
+        /> */}
       </View>
 
       <FilesModal

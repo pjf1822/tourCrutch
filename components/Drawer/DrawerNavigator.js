@@ -106,7 +106,7 @@ const DrawerNavigator = ({ user }) => {
         }}
         component={HomeScreen}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="NewVenue"
         options={{
           ...commonDrawerStyles,
@@ -118,7 +118,7 @@ const DrawerNavigator = ({ user }) => {
           },
         }}
         component={NewVenueScreen}
-      />
+      /> */}
       <Drawer.Screen
         options={{
           ...commonDrawerStyles,
