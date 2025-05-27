@@ -10,6 +10,7 @@ const AudioLightingDetails = ({
   venueId,
   setUpdatedVenueData,
   user,
+  refetch,
 }) => {
   const [editing, setEditing] = useState(false);
 
@@ -70,7 +71,9 @@ const AudioLightingDetails = ({
         productionInfo: formData,
       }
     );
-    setUpdatedVenueData(response.venue);
+    refetch();
+    // navigation.navigate("Home", { venueUpdated: true });
+    // setUpdatedVenueData(response.venue);
   };
   // this is used strictly for order
   const fieldOrder = [

@@ -182,6 +182,7 @@ const VenueDetailScreen = ({ route, navigation }) => {
           venueId={venueId}
           setUpdatedVenueData={setUpdatedVenueData}
           user={user}
+          refetch={refetch}
         />
 
         {updatedVenueData?.coordinates?.longitude && (
@@ -203,13 +204,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
           paddingTop: 8,
         }}
       >
-        <MyButton
+        {/* <MyButton
           title="Tech Packs"
           onPress={togglePDFModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        />
+        /> */}
         <View style={{ height: 5 }}></View>
         <MyButton
           title="Update Venue Address/URL"
@@ -220,13 +221,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
         />
         <View style={{ height: 5 }}></View>
 
-        <MyButton
+        {/* <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        />
+        /> */}
       </View>
 
       <FilesModal

@@ -47,8 +47,9 @@ export const createVenue = async (
 
     const result = await createVenueMutation.mutateAsync({
       ...values,
-      userUID: user.uid,
+      createdByUID: user.uid,
     });
+
     showToast("Created new venue!", true, "top");
     resetForm();
     navigation.navigate("Home", { venueCreated: true });
@@ -107,6 +108,11 @@ export const handleDelete = async (
   navigation,
   deleteVenueMutation
 ) => {
+  console.log(
+    createdByUID,
+    userUID,
+    "createdByUID and userUID in delete function"
+  );
   try {
     if (!createdByUID) {
       throw new Error("Venue createdByUID not found. Unable to delete venue.");

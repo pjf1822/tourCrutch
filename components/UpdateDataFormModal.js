@@ -79,10 +79,10 @@ const UpdateDataFormModal = ({
         }
       );
 
-      setUpdatedVenueData(response.venue);
+      // setUpdatedVenueData(response.venue);
       toggleVenueDataModal();
       refetch();
-      navigation.navigate("Home", { venueUpdated: true });
+      // navigation.navigate("Home", { venueUpdated: true });
     } else {
       showToast("You didnt change anything bozo", false, "top");
     }
@@ -95,7 +95,8 @@ const UpdateDataFormModal = ({
         updatedVenueData?.createdByUID,
         user?.uid,
         navigation,
-        deleteVenueMutation
+        deleteVenueMutation,
+        refetch
       );
 
       toggleVenueDataModal();
