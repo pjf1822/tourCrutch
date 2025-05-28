@@ -221,13 +221,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
         />
         <View style={{ height: 5 }}></View>
 
-        {/* <MyButton
+        <MyButton
           title="Comment Section"
           onPress={toggleCommentsModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        /> */}
+        />
       </View>
 
       <FilesModal
