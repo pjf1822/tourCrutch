@@ -50,7 +50,6 @@ const CommentSection = ({ venueId, userId, displayName }) => {
       fetchUserProfilePic();
     }
   }, [allComments]);
-  console.log(allComments, "hey");
   return (
     <View>
       <ScrollView>

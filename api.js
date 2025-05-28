@@ -59,7 +59,6 @@ export const useUpdateVenueInfo = () => {
       .eq("id", id)
       .single();
 
-    console.log(data, error, "show me the fucking thing");
     if (error) {
       throw new Error(error.message);
     }
