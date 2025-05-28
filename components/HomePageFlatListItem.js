@@ -11,7 +11,7 @@ import { myColors, regFont } from "../theme";
 
 const HomePageFlatListItem = ({ item, navigation }) => {
   const navigateToVenueDetail = () => {
-    navigation.navigate("VenueDetail", { venueId: item._id });
+    navigation.navigate("VenueDetail", { venueId: item.id });
   };
 
   return (

@@ -2,35 +2,33 @@ import { Platform, View } from "react-native";
 import React, { useState } from "react";
 import MyTextInput from "./MyComponents/MyTextInput";
 import MyButton from "./MyComponents/MyButton";
-import { createComment } from "../api";
-import { addComment } from "../crudUtils/comment";
 import { showToast } from "../helpers";
+import { addComment } from "../api";
 
 const AddComment = ({
   venueId,
   userId,
   displayName,
-  setAllComments,
+  // setAllComments,
+  refetchComments,
   allComments,
 }) => {
   const [newComment, setNewComment] = useState("");
 
-  const addCommentMutation = createComment(venueId, {
-    userUid: userId,
-    comment: newComment,
-    userDisplayName: displayName,
-  });
-
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (newComment.trim() === "") {
       showToast("Youre comment cant be blank", false, "top");
     } else {
-      addComment(
-        addCommentMutation,
-        allComments,
-        setNewComment,
-        setAllComments
+      const response = await addComment(
+        venueId,
+        userId,
+        displayName,
+        newComment
       );
+      const updatedComments = [...allComments, response];
+      // setAllComments(updatedComments);
+      refetchComments();
+      setNewComment("");
     }
   };
 

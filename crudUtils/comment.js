@@ -4,7 +4,7 @@ export const deleteCommentHandler = async (
   venueId,
   commentId,
   deleteCommentMutation,
-  setAllComments
+  refetch
 ) => {
   try {
     const response = await deleteCommentMutation.mutateAsync({
@@ -12,10 +12,11 @@ export const deleteCommentHandler = async (
       commentId,
     });
 
-    setAllComments((prevComments) =>
-      prevComments.filter((comment) => comment._id !== response._id)
-    );
+    // setAllComments((prevComments) =>
+    //   prevComments.filter((comment) => comment._id !== response._id)
+    // );
     showToast("Comment deleted successfully", true, "top");
+    refetch();
   } catch (error) {
     console.error("Failed to delete comment:", error);
   }

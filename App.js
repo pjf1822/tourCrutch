@@ -1,3 +1,8 @@
+import "react-native-url-polyfill/auto";
+import { Buffer } from "buffer";
+global.Buffer = global.Buffer || Buffer;
+import "react-native-get-random-values";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";

@@ -20,20 +20,14 @@ import { useStorage } from "../Contexts/StorageContext";
 const CommentSection = ({ venueId, userId, displayName }) => {
   const { getUserProfilePic } = useStorage();
   const [userPhotos, setUserPhotos] = useState({});
-  const [allComments, setAllComments] = useState([]);
   const deleteCommentMutation = deleteComment();
 
   const {
-    data: venueCommentsData,
+    data: allComments = [],
     error,
     isLoading,
+    refetch,
   } = useFetchVenueComments(venueId);
-
-  useEffect(() => {
-    if (venueCommentsData && venueCommentsData.venueComments) {
-      setAllComments(venueCommentsData.venueComments);
-    }
-  }, [venueCommentsData]);
 
   useEffect(() => {
     if (allComments?.length !== 0) {
@@ -56,13 +50,13 @@ const CommentSection = ({ venueId, userId, displayName }) => {
       fetchUserProfilePic();
     }
   }, [allComments]);
-
+  console.log(allComments, "hey");
   return (
     <View>
       <ScrollView>
         {allComments?.map((comment, index) => (
           <View key={index} style={styles.commentWrapper}>
-            {userId === comment.userUid && (
+            {userId === comment?.userUid && (
               <TouchableOpacity
                 onPress={() =>
                   showToast("Hold down to delete comment", false, "top")
@@ -70,9 +64,9 @@ const CommentSection = ({ venueId, userId, displayName }) => {
                 onLongPress={() =>
                   deleteCommentHandler(
                     venueId,
-                    comment._id,
+                    comment.id,
                     deleteCommentMutation,
-                    setAllComments
+                    refetch
                   )
                 }
               >
@@ -108,7 +102,7 @@ const CommentSection = ({ venueId, userId, displayName }) => {
         venueId={venueId}
         userId={userId}
         displayName={displayName}
-        setAllComments={setAllComments}
+        refetchComments={refetch}
         allComments={allComments}
       />
     </View>

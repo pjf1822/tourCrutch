@@ -1,131 +1,145 @@
 import { useMutation, useQuery } from "react-query";
+import { supabase } from "./utils/SupabaseClient";
 
 // const apiUrl = "http://localhost:8001/api";
 const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = (searchQuery, page) => {
-  return useQuery(["venues", searchQuery, page], async () => {
-    const res = await fetch(
-      `${apiUrl}/venues/getallvenues?searchQuery=${searchQuery}&page=${page}`
-    );
-    if (!res.ok) {
-      const errorResponse = await res.json();
-      throw new Error(errorResponse.message || "Failed to get venues");
+  return useQuery(["venues", searchQuery], async () => {
+    let query = supabase.from("venues").select("*");
+    if (searchQuery) {
+      query = query.ilike("name", `%${searchQuery}%`);
     }
-    return res.json();
+    const { data, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   });
 };
 
 export const useFetchVenueById = (venueId) => {
   return useQuery(["venue", venueId], async () => {
-    const res = await fetch(`${apiUrl}/venues/${venueId}`);
-    if (!res.ok) {
-      const errorResponse = await res.json();
-      throw new Error(errorResponse.message || "Failed to get venue");
+    const { data, error } = await supabase
+      .from("venues")
+      .select("*")
+      .eq("id", venueId)
+      .single();
+    if (error) {
+      throw error;
     }
-    return res.json();
+
+    return data;
   });
 };
 
 export const useCreateVenue = () => {
   return useMutation(async (venueData) => {
-    return fetch(`${apiUrl}/venues/createvenue`, {
-      method: "POST",
-      body: JSON.stringify(venueData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to create venue");
-      }
-      return res.json();
-    });
+    const { data, error } = await supabase
+      .from("venues")
+      .insert(venueData)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message || "Failed to create venue");
+    }
+
+    return data;
   });
 };
+
 export const useUpdateVenueInfo = () => {
   return useMutation(async ({ id, updatedData }) => {
-    return fetch(`${apiUrl}/venues/editvenue/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    }).then(async (res) => {
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to update venue");
-      }
-      return res.json();
-    });
+    const { data, error } = await supabase
+      .from("venues")
+      .update(updatedData)
+      .eq("id", id)
+      .single();
+
+    console.log(data, error, "show me the fucking thing");
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
   });
 };
 
 export const useDeleteVenue = () => {
   return useMutation(async (venueId) => {
-    return fetch(`${apiUrl}/venues/deletevenue/${venueId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to delete venue");
-      }
-      return res.json();
-    });
+    const { error } = await supabase.from("venues").delete().eq("id", venueId);
+
+    if (error) {
+      throw new Error(error.message || "Failed to delete venue");
+    }
+
+    return { success: true, id: venueId };
   });
 };
-
 export const useFetchVenueComments = (venueId) => {
   return useQuery(
     ["venueComments", venueId],
     async () => {
-      const res = await fetch(`${apiUrl}/comments/getVenueComments/${venueId}`);
-      if (!res.ok) {
-        throw new Error(`Failed to fetch comments for venue ${venueId}`);
+      if (!venueId) return [];
+
+      const { data, error } = await supabase
+        .from("comments")
+        .select("*")
+        .eq("venueId", venueId)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        throw new Error(error.message);
       }
-      return res.json();
+
+      return data;
     },
     {
+      enabled: !!venueId,
       onError: (error) => {
-        console.error("Error fetching venue comments:", error);
+        console.error("Error fetching venue comments:", error.message);
       },
     }
   );
 };
 
-export const createComment = (venueId, commentData) => {
-  return useMutation(async () => {
-    return fetch(`${apiUrl}/comments/createcomment/${venueId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(commentData),
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed to create comment");
-      }
-      return res.json();
-    });
-  }, {});
+export const addComment = async (venueId, userId, displayName, commentText) => {
+  try {
+    const { data, error } = await supabase
+      .from("comments")
+      .insert([
+        {
+          venueId: venueId,
+          userUid: userId,
+          userDisplayName: displayName,
+          comment: commentText,
+        },
+      ])
+      .select(); // This returns the inserted data
+
+    if (error) throw error;
+    return data[0]; // Return the first (and only) inserted comment
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw error;
+  }
 };
 
 export const deleteComment = () => {
   return useMutation(async ({ venueId, commentId }) => {
-    return fetch(`${apiUrl}/comments/deletecomment/${venueId}/${commentId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed to delete comment");
-      }
-      return res.json();
-    });
-  }, {});
+    const { error } = await supabase
+      .from("comments")
+      .delete()
+      .eq("id", commentId)
+      .eq("venueId", venueId);
+
+    if (error) {
+      throw new Error(error.message || "Failed to delete comment");
+    }
+
+    return { success: true };
+  });
 };

@@ -42,27 +42,24 @@ const HomeScreen = ({ navigation, route }) => {
   // use effect that reads route params when the page is opened
   useFocusEffect(
     useCallback(() => {
-      if (route?.params?.venueCreated || route?.params?.venueUpdated) {
+      if (
+        route?.params?.venueCreated ||
+        route?.params?.venueUpdated ||
+        route?.params?.venueDeleted
+      ) {
         refetch();
+
         navigation.setParams({
           venueCreated: false,
           venueUpdated: false,
-        });
-      }
-      if (route?.params?.venueDeleted) {
-        const deletedVenueId = route?.params?.venueId;
-        setVenues((prevVenues) =>
-          prevVenues.filter((venue) => venue?._id !== deletedVenueId)
-        );
-        navigation.setParams({
           venueDeleted: false,
           venueId: null,
         });
       }
     }, [
       route.params?.venueCreated,
+      route.params?.venueUpdated,
       route.params?.venueDeleted,
-      route?.params?.venueUpdated,
     ])
   );
 
