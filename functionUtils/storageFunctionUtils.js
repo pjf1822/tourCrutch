@@ -121,7 +121,7 @@ export const getVenuePDF = async (venueId, pdf) => {
       dialogTitle: "Download PDF",
     });
   } catch (error) {
-    console.log(error);
+    console.log(error, "whats ups");
   }
 };
 
@@ -145,7 +145,7 @@ export const uploadPDF = async (
 
     const { uri, mimeType, size, name } = result.assets[0];
 
-    console.log(result.assets[0]);
+    // console.log(result.assets[0]);
     // error catching section
     if (result.canceled === true) {
       showToast("Error uploading PDF", false, "top");

@@ -6,7 +6,7 @@ const apiUrl = "https://tour-crutch-server.onrender.com/api";
 
 export const useFetchVenues = (searchQuery, page) => {
   return useQuery(["venues", searchQuery], async () => {
-    let query = supabase.from("venues").select("*");
+    let query = supabase.from("venues").select("id, name, address");
     if (searchQuery) {
       query = query.ilike("name", `%${searchQuery}%`);
     }

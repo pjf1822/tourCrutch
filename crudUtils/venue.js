@@ -108,11 +108,6 @@ export const handleDelete = async (
   navigation,
   deleteVenueMutation
 ) => {
-  console.log(
-    createdByUID,
-    userUID,
-    "createdByUID and userUID in delete function"
-  );
   try {
     if (!createdByUID) {
       throw new Error("Venue createdByUID not found. Unable to delete venue.");

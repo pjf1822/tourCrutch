@@ -126,11 +126,11 @@ const UpdateDataFormModal = ({
           initialValues={initialVenueData}
         />
 
-        <MyLongPressButton
+        {/* <MyLongPressButton
           title="Delete Venue"
           onPress={() => showToast("Hold down to delete", false, "top")}
           onLongPress={handleDeleteVenue}
-        />
+        /> */}
       </View>
     </Modal>
   );

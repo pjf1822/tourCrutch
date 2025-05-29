@@ -39,7 +39,6 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [fetchedVenues, isLoading, isError]);
 
-  // use effect that reads route params when the page is opened
   useFocusEffect(
     useCallback(() => {
       if (

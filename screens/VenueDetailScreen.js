@@ -134,7 +134,8 @@ const VenueDetailScreen = ({ route, navigation }) => {
       if (updatedInfo === undefined) {
         return;
       }
-      setUpdatedVenueData(updatedInfo.venue);
+      refetch();
+      // setUpdatedVenueData(updatedInfo.venue);
     } catch (error) {
       console.error(error);
     }
@@ -204,13 +205,13 @@ const VenueDetailScreen = ({ route, navigation }) => {
           paddingTop: 8,
         }}
       >
-        {/* <MyButton
+        <MyButton
           title="Tech Packs"
           onPress={togglePDFModal}
           warning={false}
           width={"80%"}
           iphoneFontSize={19}
-        /> */}
+        />
         <View style={{ height: 5 }}></View>
         <MyButton
           title="Update Venue Address/URL"
